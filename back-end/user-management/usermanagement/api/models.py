@@ -40,6 +40,7 @@ class Friendship(models.Model):
 	status = models.CharField(max_length=10, choices=STATUS, default='Pending')
 	sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
 	receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+	friends_since = models.DateTimeField(null=True)
 
 	def __str__(self):
 		return f'{self.sender} | {self.receiver}: {self.status}'
@@ -49,10 +50,14 @@ class Friendship(models.Model):
 		friendships = Friendship.objects.filter((Q(sender=user) | Q(receiver=user)) & Q(status='Friends'))
 		friends = []
 		for friendship in friendships:
+			friend = {}
 			if friendship.sender == user:
-				friends.append(friendship.receiver.username)
+				friend['username'] = friendship.receiver.username
+				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
 			else:
-				friends.append(friendship.sender.username)
+				friend['username'] = friendship.sender.username
+				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
+			friends.append(friend)
 		return friends
 	
 	@staticmethod
