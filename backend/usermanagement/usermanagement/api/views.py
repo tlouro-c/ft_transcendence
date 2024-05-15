@@ -104,14 +104,14 @@ class RejectFriendRequestView(APIView):
 		try:
 			sender = User.objects.get(id=user_id)
 			receiver = User.objects.get(id=user_id_from_token(request))
-		except:
-			return Response({'Error': 'User not found'}, 404)
-		
-		try:
+
 			friendship = Friendship.objects.get(receiver=receiver, sender=sender)
 			friendship.delete()
+
 			return Response({'Success': 'Friend request rejected'}, 201)
-		except:
+		except User.DoesNotExist:
+			return Response({'Error': 'User not found'}, 404)
+		except Friendship.DoesNotExist:
 			return Response({'Error': 'Friend request not found'}, 404)
 
 
@@ -121,16 +121,16 @@ class AcceptFriendRequestView(APIView):
 		try:
 			sender = User.objects.get(id=user_id)
 			receiver = User.objects.get(id=user_id_from_token(request))
-		except:
-			return Response({'Error': 'User not found'}, 404)
-				
-		try:
+
 			friendship = Friendship.objects.get(receiver=receiver, sender=sender)
 			friendship.status = 'Friends'
 			friendship.friends_since = datetime.datetime.now(datetime.UTC)
 			friendship.save()
+
 			return Response({'Success': 'Friend request accepted'}, 201)
-		except:
+		except User.DoesNotExist:
+			return Response({'Error': 'User not found'}, 404)
+		except Friendship.DoesNotExist:
 			return Response({'Error': 'Friend request not found'}, 404)
 
 
@@ -140,14 +140,14 @@ class RemoveFriendView(APIView):
 		try:
 			user = User.objects.get(id=user_id_from_token(request))
 			friend = User.objects.get(id=user_id)
-		except:
-			return Response({'Error': 'User not found'}, 404)
-				
-		try:
+
 			friendship = Friendship.objects.get(Q(receiver=user, sender=friend) | Q(receiver=friend, sender=user))
 			friendship.delete()
+
 			return Response({'Success': 'Friend removed'}, 201)
-		except:
+		except User.DoesNotExist:
+			return Response({'Error': 'User not found'}, 404)
+		except Friendship.DoesNotExist:
 			return Response({'Error': 'Friendship not found'}, 404)
 
 
