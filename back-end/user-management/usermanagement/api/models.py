@@ -52,9 +52,11 @@ class Friendship(models.Model):
 		for friendship in friendships:
 			friend = {}
 			if friendship.sender == user:
+				friend['id'] = friendship.reciver.id
 				friend['username'] = friendship.receiver.username
 				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
 			else:
+				friend['id'] = friendship.sender.id
 				friend['username'] = friendship.sender.username
 				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
 			friends.append(friend)
@@ -65,7 +67,8 @@ class Friendship(models.Model):
 		friendships = Friendship.objects.filter(Q(receiver=user) & Q(status='Pending'))
 		pending_friends = []
 		for friendship in friendships:
-			pending_friends.append(friendship.sender.username)
+			pending_friend = {'id':friendship.sender.id, 'username':friendship.sender.username}
+			pending_friends.append(pending_friend)
 		return pending_friends
 
 
