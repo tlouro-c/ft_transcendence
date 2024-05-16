@@ -124,7 +124,7 @@ class AcceptFriendRequestView(APIView):
 
 			friendship = Friendship.objects.get(receiver=receiver, sender=sender)
 			friendship.status = 'Friends'
-			friendship.friends_since = datetime.datetime.now(datetime.UTC)
+			friendship.friends_since = datetime.datetime.now(datetime.timezone.utc)
 			friendship.save()
 
 			return Response({'Success': 'Friend request accepted'}, 201)
