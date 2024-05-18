@@ -1,0 +1,67 @@
+html {
+	color: #FEFEFA;
+}
+
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	cursor: pointer;
+}
+
+nav {
+    position: relative;
+}
+
+nav::after {
+    content: "";
+    position: absolute;
+    left: 25%;
+	right: 25%;
+    bottom: 0;
+    width: 50%;
+    border-bottom: 1px solid white;
+	opacity: 20%;
+	transition: width 0.5s ease, left 0.5s ease;
+}
+
+nav:hover::after {
+	left: 1%;
+	right: 1%;
+	width: 98%;
+}
+
+
+@keyframes fadeIn {
+    0% {
+		opacity: 0;
+		filter:blur(2px);
+		transform: scale(0.98);
+	}
+    100% {
+		opacity: 1;
+		filter:blur(0px);
+	}
+}
+
+.dynamic-page {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.dropdown-item {
+	transition: background-color 0.2s ease;
+}
+
+.nav-item {
+	transition: transform 0.3s ease;
+}
+
+.nav-item:hover {
+	transform: scale(1.1);
+}
+
+.sign-out:active {
+	background-color: #dc3545;
+}
