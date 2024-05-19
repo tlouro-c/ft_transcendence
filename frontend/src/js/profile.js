@@ -14,10 +14,18 @@ export async function loadProfilePage(userId) {
 	}
 
 	const userInfo = await fetchUser(userId);
+	console.log(userInfo)
 	await loadPage(elements.profilePage);
 
 	const url = API + userInfo.avatar;
 	document.getElementById("user-avatar").setAttribute('src', url);
+	document.getElementById("profileOnlineStatus").classList.add("d-none");
+	document.getElementById("profileOfflineStatus").classList.add("d-none");
+	if (userInfo.online_status == "online") {
+		document.getElementById("profileOnlineStatus").classList.remove("d-none");
+	} else {
+		document.getElementById("profileOfflineStatus").classList.remove("d-none");
+	}
 	document.getElementById("profile-username").textContent = userInfo.username;
 
 	const friendsList = document.getElementById("friends-list");
@@ -46,7 +54,6 @@ export async function loadProfilePage(userId) {
 	
 	document.getElementById("pending-friends-counter").textContent = userInfo.pending_friends.length;
 	userInfo.pending_friends.forEach((element) => {
-		console.log(element);
 		const pendingFriend = pendingFriendTemplate.cloneNode(true);
 		pendingFriend.removeAttribute("id");
 		pendingFriend.classList.remove("d-none");

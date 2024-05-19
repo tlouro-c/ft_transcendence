@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime, timezone, timedelta
 
 # Create your models here.
 
@@ -9,6 +10,7 @@ class User(AbstractUser):
 	password = models.CharField(max_length=128)
 	avatar = models.ImageField(upload_to='avatars/', default='avatars/default.jpg')
 	in_game = models.BooleanField(default=False)
+	last_action = models.DateTimeField(auto_now=True)
 
 	USERNAME_FIELD = 'username'
 	REQUIRED_FIELDS = []
@@ -28,9 +30,14 @@ class User(AbstractUser):
 	def blocked(self):
 		return Blocking.blocked(self)
 	
+	def online_status(self):
+		time_since_last_action = datetime.now(timezone.utc) - self.last_action
+		timer = timedelta(minutes=5)
+		if timer > time_since_last_action:
+			return "online"
+		return "offline"
 	
-	#def pending_friends(self):
-
+	
 class Friendship(models.Model):
 	STATUS = (
 		('Pending', 'Pending'),

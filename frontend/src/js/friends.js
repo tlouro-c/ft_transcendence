@@ -1,8 +1,9 @@
 import { TokenVerification } from "./jwt.js";
 import { API, getTokensObj, getUserObj } from "./utils.js"
 import { loadProfilePage } from "./profile.js";
+import { loadSearchResults } from "./search.js";
 
-async function friendFunction(userId, action) {
+async function friendFunction(userId, action, successFunction = () => {}) {
 
 	try {
 		await TokenVerification();
@@ -17,7 +18,7 @@ async function friendFunction(userId, action) {
 			alert(response.status);
 		}
 		else {
-			loadProfilePage(getUserObj().id);
+			successFunction();
 		}
 	}
 	catch (error) {
@@ -30,15 +31,21 @@ export async function sendFriendRequest(userId) {
 }
 
 export async function acceptFriendRequest(userId) {
-	await friendFunction(userId, 'accept_friend_request');
+	await friendFunction(userId, 'accept_friend_request', () => loadProfilePage(getUserObj().id));
 }
 
 export async function rejctFriendRequest(userId) {
-	await friendFunction(userId, 'reject_friend_request');
+	await friendFunction(userId, 'reject_friend_request', () => loadProfilePage(getUserObj().id));
 }
 
 export async function removeFriend(userId) {
-	await friendFunction(userId, 'friend_remove');
+	await friendFunction(userId, 'friend_remove', () => loadProfilePage(getUserObj().id));
 }
 
+export async function blockUser(userID) {
+	await friendFunction(userID, 'block_user');
+}
 
+export async function unblockUser(userId) {
+	await friendFunction(userId, 'unblock_user');
+}

@@ -1,4 +1,3 @@
-import { logoutUser } from "./auth.js";
 import { isTokenAccessExpired, refreshAccessToken } from "./jwt.js"
 
 export const API = 'http://localhost:8000';
@@ -8,6 +7,7 @@ export const elements = {
 	registerPage : document.getElementById("register-page"),
 	homePage : document.getElementById("home-page"),
 	profilePage: document.getElementById("profile-page"),
+	searchPage: document.getElementById("search-page"),
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
