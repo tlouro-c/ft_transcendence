@@ -2,13 +2,8 @@ html {
 	color: #FEFEFA;
 }
 
-
-a {
-	text-decoration: none;
-}
-
 a:hover {
-	cursor: pointer;
+	cursor: pointer !important; 
 }
 
 nav {
@@ -22,7 +17,7 @@ nav::after {
 	right: 25%;
     bottom: 0;
     width: 50%;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid #FEFEFA;
 	opacity: 20%;
 	transition: width 0.5s ease, left 0.5s ease;
 }
@@ -64,4 +59,51 @@ nav:hover::after {
 
 .sign-out:active {
 	background-color: #dc3545;
+}
+
+
+.smooth-hover {
+	transition: filter 0.3s ease;
+}
+
+.smooth-hover:hover {
+	filter: brightness(1.1);
+}
+
+
+.friend-link {
+	position: relative; 
+    color: #FEFEFA;
+    text-decoration: none;
+}
+
+.friend-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+	right: 50%;
+    bottom: 0;
+    width: 0%;
+    border-bottom: 1px solid #FEFEFA;
+	opacity: 100%;
+	transition: width 0.5s ease, left 0.5s ease;
+}
+
+.friend-link:hover::after {
+	left: 0%;
+	right: 0%;
+	width: 100%;
+}
+
+#pending-friends-list li, #friends-list li {
+	height: 75px;
+}
+
+#pending-friends-list li div, #friends-list li div {
+	height: 100%;
+}
+
+.friend-avatar {
+	height: 100%;
+	aspect-ratio: 1/1;
 }
