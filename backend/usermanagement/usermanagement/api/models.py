@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
 	username = models.CharField(max_length=128, unique=True)
 	password = models.CharField(max_length=128)
-	avatar = models.ImageField(upload_to='avatars/', default='media/avatars/default.jpg')
+	avatar = models.ImageField(upload_to='avatars/', default='avatars/default.jpg')
 	in_game = models.BooleanField(default=False)
 
 	USERNAME_FIELD = 'username'
@@ -52,10 +52,12 @@ class Friendship(models.Model):
 		for friendship in friendships:
 			friend = {}
 			if friendship.sender == user:
+				friend['avatar'] = friendship.receiver.avatar.url
 				friend['id'] = friendship.receiver.id
 				friend['username'] = friendship.receiver.username
 				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
 			else:
+				friend['avatar'] = friendship.sender.avatar.url
 				friend['id'] = friendship.sender.id
 				friend['username'] = friendship.sender.username
 				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
@@ -67,7 +69,7 @@ class Friendship(models.Model):
 		friendships = Friendship.objects.filter(Q(receiver=user) & Q(status='Pending'))
 		pending_friends = []
 		for friendship in friendships:
-			pending_friend = {'id':friendship.sender.id, 'username':friendship.sender.username}
+			pending_friend = {'avatar':friendship.sender.avatar.url, 'id':friendship.sender.id, 'username':friendship.sender.username}
 			pending_friends.append(pending_friend)
 		return pending_friends
 

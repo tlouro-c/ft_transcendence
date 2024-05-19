@@ -1,5 +1,4 @@
-import { elements, capitalizeFirstLetter, loadPage, getTokensObj } from "./utils.js";
-
+import { elements, capitalizeFirstLetter, loadPage, getTokensObj, API } from "./utils.js";
 
 async function proccessAuthForm(url, form, type) {
 
@@ -62,7 +61,7 @@ async function proccessAuthForm(url, form, type) {
 
 export async function loginUser(optionalForm) {
 	const loginForm = optionalForm ? optionalForm :  document.getElementById('login-form');
-	const responseJson = await proccessAuthForm('http://localhost:8000/user_management/login/', loginForm, 'login');
+	const responseJson = await proccessAuthForm(`${API}/user_management/login/`, loginForm, 'login');
 	if (!responseJson) {
 		return;
 	}
@@ -76,7 +75,7 @@ export async function loginUser(optionalForm) {
 
 export async function registerUser() {
 	const registerForm = document.getElementById('register-form');
-	const responseJson = await proccessAuthForm('http://localhost:8000/user_management/register/', registerForm, 'register');
+	const responseJson = await proccessAuthForm(`${API}/user_management/register/`, registerForm, 'register');
 	if (responseJson) {
 		loginUser(registerForm);
 	}
@@ -88,7 +87,7 @@ export async function logoutUser() {
 	localStorage.clear();
 
 	try {
-		const response = await fetch("http://localhost:8000/user_management/logout/", {
+		const response = await fetch(`${API}/user_management/logout/`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
@@ -97,38 +96,9 @@ export async function logoutUser() {
 			body: JSON.stringify(refreshToken),
 		});
 	}
-	catch {
-		alert("Logout failed, try again later...");
-	}
+	catch {}
 	loadPage(elements.loginPage);
 }
 
 
-export async function refreshAccessToken() {
 
-	const refreshToken = getTokensObj().refresh;
-
-	try {
-		const response = await fetch("http://localhost:8000/user_management/refresh_token/", {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(refreshToken),
-		});
-		if (response.status >= 400) {
-			logoutUser();
-		} else {
-			const json = await response.json();
-
-			const tokens = { 'refresh': refreshToken, 'access': json.access };
-			localStorage.setItem('tokens', JSON.stringify(tokens));
-			return true;
-		}
-	}
-	catch (error) {
-		console.error('Error during token refresh, logging out...', error);
-		logoutUser();
-	}
-}

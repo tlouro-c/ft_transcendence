@@ -8,6 +8,8 @@ from .models import User, Friendship, Blocking
 from . import serializers
 from .utils import user_id_from_token
 import datetime
+import os
+import time
 
 
 class RegisterView(APIView):
@@ -62,9 +64,11 @@ class UserView(APIView):
 	def get(self, request, user_id):
 		try:
 			user = User.objects.get(id=user_id)
+			serializedData = serializers.UserSerializer(user).data
+			return Response(serializedData, 200)
 		except:
 			return Response({'Error': 'User not found'}, 404)
-		return Response(serializers.UserSerializer(user).data)
+		
 	
 	def patch(self, request, user_id):
 		try :
@@ -74,6 +78,11 @@ class UserView(APIView):
 
 		if user.id != user_id_from_token(request):
 			return Response({'Error': 'Unauthorized'}, 401)
+		
+		if user.avatar.name != 'avatars/default.jpg':
+			path = 'media/' + user.avatar.name
+			if (os.path.exists(path)):
+				os.remove(path)
 		serializer = serializers.UserSerializer(instance=user, data=request.data, partial=True)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()

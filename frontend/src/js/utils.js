@@ -1,9 +1,13 @@
-import { logoutUser, refreshAccessToken } from "./auth.js";
+import { logoutUser } from "./auth.js";
+import { isTokenAccessExpired, refreshAccessToken } from "./jwt.js"
+
+export const API = 'http://localhost:8000';
 
 export const elements = {
 	loginPage : document.getElementById("login-page"),
 	registerPage : document.getElementById("register-page"),
 	homePage : document.getElementById("home-page"),
+	profilePage: document.getElementById("profile-page"),
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
@@ -14,15 +18,15 @@ export function clearMain() {
 	});
 }
 
-export function loadPage(page) {
+export async function loadPage(page) {
 	const temporaryMessages = document.querySelectorAll('.temporary-message');
 	temporaryMessages.forEach((element) => element.remove());
 	clearMain();
 	if (page != elements.loginPage && page != elements.registerPage) {
 		const navbar = document.querySelectorAll(".user-navbar");
 		navbar.forEach((element) => element.classList.remove("d-none"));
-		if (isTokenAccessExpired() && !refreshAccessToken()) {
-			logoutUser();
+		if (isTokenAccessExpired()) {
+			await refreshAccessToken();
 		}
 	} else {
 		const navbar = document.querySelectorAll(".user-navbar");
@@ -36,46 +40,20 @@ export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-
-export function isTokenAccessExpired() {
+export function getUserObj() {
 	try {
-		const accessToken = getTokensObj().access;
-		const decodedToken = parseJwt(accessToken);
-		if (!accessToken || !decodedToken || !decodedToken.exp) {
-			return true;
-		}
-		const currentTime = Math.floor(Date.now() / 1000);
-		return currentTime > decodedToken.exp;
-	}
-	catch {
-		return true;
-	}
-}
-
-function parseJwt (token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}
-
-export function getTokensObj() {
-	try {
-		const tokens = JSON.parse(localStorage.getItem('tokens'));
-		return tokens ? tokens : {};
+		const user = JSON.parse(localStorage.getItem('user'));
+		return user ? user : {};
 	}
 	catch {
 		return {};
 	}
 }
 
-export function getUserObj() {
+export function getTokensObj() {
 	try {
-		const user = JSON.parse(localStorage.getItem('user'));
-		return user ? user : {};
+		const tokens = JSON.parse(localStorage.getItem('tokens'));
+		return tokens ? tokens : {};
 	}
 	catch {
 		return {};
