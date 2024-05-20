@@ -57,6 +57,10 @@ nav:hover::after {
 	transform: scale(1.1);
 }
 
+#search-item:hover {
+	transform: scale(1.02);
+}
+
 .sign-out:active {
 	background-color: #dc3545;
 }
@@ -71,13 +75,13 @@ nav:hover::after {
 }
 
 
-.friend-link {
+.friend-link, .user-link {
 	position: relative; 
     color: #FEFEFA;
     text-decoration: none;
 }
 
-.friend-link::after {
+.friend-link::after, .user-link::after {
     content: "";
     position: absolute;
     left: 50%;
@@ -89,21 +93,35 @@ nav:hover::after {
 	transition: width 0.5s ease, left 0.5s ease;
 }
 
-.friend-link:hover::after {
+.friend-link:hover::after, .user-link:hover::after {
 	left: 0%;
 	right: 0%;
 	width: 100%;
 }
 
-#pending-friends-list li, #friends-list li {
-	height: 75px;
-}
-
-#pending-friends-list li div, #friends-list li div {
-	height: 100%;
-}
-
 .friend-avatar {
-	height: 100%;
+	height: 50px;
 	aspect-ratio: 1/1;
+}
+
+.user-search-avatar {
+	height: 75px;
+	aspect-ratio: 1/1;
+}
+
+.profile-avatar {
+	position: relative;
+	max-width: 15em;
+}
+
+.user-avatar {
+	position: relative;
+}
+
+.online-icon, .offline-icon {
+	position: absolute;
+	width: 15%;
+	height: auto;
+	top: 80%;
+	left: 15%;
 }

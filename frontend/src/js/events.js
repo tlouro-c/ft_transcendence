@@ -1,6 +1,8 @@
 import { elements, getUserObj, loadPage } from './utils.js'
 import { loginUser, logoutUser, registerUser } from './auth.js'
 import { loadProfilePage, updateUser, updateUserAvatar } from './profile.js';
+import { loadSearchResults } from './search.js';
+import { sendFriendRequest } from './friends.js';
 
 
 export function setupEventListeners() {
@@ -39,5 +41,10 @@ export function setupEventListeners() {
 	document.getElementById("change-password-form").addEventListener("submit", function(event) {
 		event.preventDefault();
 		updateUser(this);
+	});
+
+	document.getElementById("search-form").addEventListener("submit", function(event) {
+		event.preventDefault();
+		loadSearchResults(this);
 	});
 }

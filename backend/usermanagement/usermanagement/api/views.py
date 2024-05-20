@@ -6,10 +6,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.db.models import Q
 from .models import User, Friendship, Blocking
 from . import serializers
-from .utils import user_id_from_token
+from .utils import user_id_from_token, set_last_action
 import datetime
 import os
-import time
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class RegisterView(APIView):
@@ -56,21 +56,26 @@ class LogoutView(APIView):
 class AllUsersView(APIView):
 	permission_classes = [IsAuthenticated]
 	def get(self, request):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		all_users = User.objects.filter(is_staff=False)
 		return Response(serializers.UserSerializer(all_users, many=True).data, 200)
 
 class UserView(APIView):
 	permission_classes = [IsAuthenticated]
 	def get(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			user = User.objects.get(id=user_id)
 			serializedData = serializers.UserSerializer(user).data
 			return Response(serializedData, 200)
-		except:
+		except ObjectDoesNotExist :
 			return Response({'Error': 'User not found'}, 404)
+		except Exception as e:
+			return Response({'Error': str(e)}, 404)
 		
 	
 	def patch(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try :
 			user = User.objects.get(id=user_id)
 		except:
@@ -79,7 +84,7 @@ class UserView(APIView):
 		if user.id != user_id_from_token(request):
 			return Response({'Error': 'Unauthorized'}, 401)
 		
-		if user.avatar.name != 'avatars/default.jpg':
+		if 'avatar' in self.request.data and user.avatar.name != 'avatars/default.jpg':
 			path = 'media/' + user.avatar.name
 			if (os.path.exists(path)):
 				os.remove(path)
@@ -92,6 +97,7 @@ class UserView(APIView):
 class SendFriendRequestView(APIView):
 	permission_classes = [IsAuthenticated]
 	def post(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			sender = User.objects.get(id=user_id_from_token(request))
 			receiver = User.objects.get(id=user_id)
@@ -110,6 +116,7 @@ class SendFriendRequestView(APIView):
 class RejectFriendRequestView(APIView):
 	permission_classes = [IsAuthenticated]
 	def post(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			sender = User.objects.get(id=user_id)
 			receiver = User.objects.get(id=user_id_from_token(request))
@@ -127,6 +134,7 @@ class RejectFriendRequestView(APIView):
 class AcceptFriendRequestView(APIView):
 	permission_classes = [IsAuthenticated]
 	def post(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			sender = User.objects.get(id=user_id)
 			receiver = User.objects.get(id=user_id_from_token(request))
@@ -146,6 +154,7 @@ class AcceptFriendRequestView(APIView):
 class RemoveFriendView(APIView):
 	permission_classes = [IsAuthenticated]
 	def post(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			user = User.objects.get(id=user_id_from_token(request))
 			friend = User.objects.get(id=user_id)
@@ -163,6 +172,7 @@ class RemoveFriendView(APIView):
 class BlockUserView(APIView):
 	permission_classes = [IsAuthenticated]
 	def post(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			user = User.objects.get(id=user_id_from_token(request))
 			to_block = User.objects.get(id=user_id)
@@ -180,6 +190,7 @@ class BlockUserView(APIView):
 class UnblockUserView(APIView):
 	permission_classes = [IsAuthenticated]
 	def post(self, request, user_id):
+		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			user = User.objects.get(id=user_id_from_token(request))
 			blocked_user = User.objects.get(id=user_id)

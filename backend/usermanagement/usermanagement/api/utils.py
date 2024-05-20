@@ -10,3 +10,6 @@ def user_id_from_token(request):
 	else:
 		return None
 
+
+def set_last_action(user):
+	user.save()
