@@ -30,8 +30,8 @@ export async function sendFriendRequest(userId) {
 	await friendFunction(userId, 'send_friend_request');
 }
 
-export async function acceptFriendRequest(userId) {
-	await friendFunction(userId, 'accept_friend_request', () => loadProfilePage(getUserObj().id));
+export async function acceptFriendRequest(userId, successFunction = () => loadProfilePage(getUserObj().id)) {
+	await friendFunction(userId, 'accept_friend_request', successFunction);
 }
 
 export async function rejctFriendRequest(userId) {

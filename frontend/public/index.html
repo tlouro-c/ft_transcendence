@@ -34,7 +34,7 @@
 						</a>
 					</li>
 					<li class="nav-item p-3 d-flex align-items-center justify-content-center">
-						<a id="navbar-home-link"> 
+						<a id="navbar-play-link"> 
 							<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 604.051 604.051" xml:space="preserve">
 								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
 								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
@@ -42,9 +42,18 @@
 							</svg>
 						</a>
 					</li>
+					<li class="nav-item p-3 d-flex align-items-center justify-content-center">
+						<a id="navbar-chat-link"> 
+							<svg fill="#FEFEFA" height="25px" width="25px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60" xml:space="preserve">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+								<g id="SVGRepo_iconCarrier"> <g> <path d="M26,9.586C11.664,9.586,0,20.09,0,33c0,4.499,1.418,8.856,4.106,12.627c-0.51,5.578-1.86,9.712-3.813,11.666 c-0.304,0.304-0.38,0.768-0.188,1.153C0.276,58.789,0.625,59,1,59c0.046,0,0.093-0.003,0.14-0.01 c0.349-0.049,8.432-1.213,14.317-4.585c3.33,1.333,6.874,2.009,10.544,2.009c14.336,0,26-10.503,26-23.414S40.337,9.586,26,9.586z"/> <path d="M55.894,37.042C58.582,33.27,60,28.912,60,24.414C60,11.503,48.337,1,34,1c-8.246,0-15.968,3.592-20.824,9.42 C17.021,8.614,21.38,7.586,26,7.586c15.439,0,28,11.4,28,25.414c0,5.506-1.945,10.604-5.236,14.77 c4.946,1.887,9.853,2.6,10.096,2.634c0.047,0.006,0.094,0.01,0.14,0.01c0.375,0,0.724-0.211,0.895-0.554 c0.192-0.385,0.116-0.849-0.188-1.153C57.753,46.753,56.403,42.619,55.894,37.042z"/> </g> </g>
+							</svg>
+						</a>
+					</li>
 					<li class="nav-item p-3 d-flex align-items-center justify-content-center d-none user-navbar" id="search-item">
 						<form class="d-flex h-100" role="search" id="search-form">
-							<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-input" name="inputText">
+							<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-input" name="inputText" autocomplete="off">
 							<button class="btn btn-sm btn-outline-success" type="submit">Search</button>
 						  </form>
 					</li>
@@ -75,11 +84,11 @@
 					<form id="login-form">
 						<h1 class="h3 mb-3">Please sign in</h1>
 						<div class="form-floating mb-3">
-							<input type="text" class="form-control" id="loginInput" placeholder="Username" name="username" required>
+							<input type="text" class="form-control" id="loginInput" placeholder="Username" name="username" required autocomplete="off>
 							<label for="loginInput">Username</label>
 						</div>
 						<div class="form-floating mb-3" id="login-password-box">
-							<input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" required>
+							<input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" required autocomplete="off>
 							<label for="loginPassword">Password</label>
 						</div>
 						<button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
@@ -97,15 +106,15 @@
 					<form id="register-form">
 						<h1 class="h3 mb-3">Create an account</h1>
 						<div class="form-floating mb-3">
-							<input type="text" class="form-control" id="registerInput" placeholder="Username" name="username" required>
+							<input type="text" class="form-control" id="registerInput" placeholder="Username" name="username" required autocomplete="off">
 							<label for="registerInput">Username</label>
 						</div>
 						<div class="form-floating mb-3">
-							<input type="password" class="form-control" id="registerPassword" placeholder="Password" name="password" required>
+							<input type="password" class="form-control" id="registerPassword" placeholder="Password" name="password" required autocomplete="off">
 							<label for="registerPassword">Password</label>
 						</div>
 						<div class="form-floating mb-3" id="register-password-box">
-							<input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirm Password" name="confirm-password" required>
+							<input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirm Password" name="confirm-password" required autocomplete="off">
 							<label for="registerConfirmPassword">Confirm Password</label>
 						</div>
 						<button class="btn btn-light w-100 py-2" type="submit">Sign up</button>
@@ -121,16 +130,16 @@
 			<div class="row">
 				<div class="col-sm-4 p-4 d-flex flex-column justify-content-center align-items-center">
 					<div class="text-center ratio ratio-1x1 mb-3 profile-avatar">
-						<img src="" class="rounded-circle img-thumbnail object-fit-cover" id="user-avatar" alt="User avatar">
-						<svg class="online-icon" id="profileOnlineStatus" viewBox="-0.72 -0.72 13.44 13.44" xmlns="http://www.w3.org/2000/svg" fill="#FEFEFA" stroke="#FEFEFA">
+						<img src="" class="rounded-circle  object-fit-cover" id="user-avatar" alt="User avatar">
+						<svg class="online-icon" id="profileOnlineStatus" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
 							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#e8e8e8" stroke-width="1.488"> <circle cx="6" cy="6" r="6" fill="#69e871"/> </g>
-							<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#69e871"/> </g>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+							<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#32d25a"/> </g>
 						</svg>
-						<svg class="offline-icon" id="profileOfflineStatus" viewBox="-0.72 -0.72 13.44 13.44" xmlns="http://www.w3.org/2000/svg" fill="#FEFEFA" stroke="#FEFEFA">
+						<svg class="offline-icon" id="profileOfflineStatus" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
 							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#e8e8e8" stroke-width="1.488"> <circle cx="6" cy="6" r="6" fill="#d9d9d9"/> </g>
-							<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#d9d9d9"/> </g>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+							<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#b0b0b0"/> </g>
 						</svg>
 					</div>
 					<button type="button" class="btn btn-outline-light btn-sm mb-4 private-profile" data-bs-toggle="modal" data-bs-target="#change-avatar">Upload</button>
@@ -172,7 +181,7 @@
 										<form id="change-username-form" class="form-floating">
 											<div class="modal-body">
 												<div class="form-floating mb-3" id="new-username-box">
-													<input type="text" class="form-control" id="newUsername" placeholder="New username" name="new_username" required>
+													<input type="text" class="form-control" id="newUsername" placeholder="New username" name="new_username" required autocomplete="off">
 													<label for="newUsername">New username</label>
 												</div>
 												<div class="modal-footer">
@@ -202,8 +211,8 @@
 										<form id="change-password-form" class="form-floating">
 											<div class="modal-body">
 												<div class="mb-3">
-													<input type="text" class="form-control mb-3" placeholder="New password" name="new_password" required>
-													<input type="text" class="form-control" placeholder="Confirm password" name="new_password_confirm" required>
+													<input type="text" class="form-control mb-3" placeholder="New password" name="new_password" required autocomplete="off">
+													<input type="text" class="form-control" placeholder="Confirm password" name="new_password_confirm" required autocomplete="off">
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -291,11 +300,95 @@
 		</div>
 
 
-		<div class="dynamic-page" id="home-page">
-			<p class="fs-2 m-5">Home (TODO)</p>
+		<div class="dynamic-page container text-center mt-4" id="home-page">
+			HOME
 		</div>
-		
 
+		<div class="dynamic-page container-fluid text-center" id="chat-page">
+			<h3 class="mt-4">Chat</h3>
+			<div class="container text-center mt-4 chat-container">
+				<div class="row h-100">
+					<div class="col-12 p-0 col-md-4 container d-flex flex-column chat-column z-2 vh-100 right-shadow">
+							<div class="row z-2 d-flex flex-column justify-content-start">
+								<div class="col d-flex p-3 z-1 d-flex justify-content-center">
+									<h5 class="m-0">Friends</h5>
+								</div>
+							</div>
+							<div class="row position-relative overflow-hidden h-100">
+								<div class="col mh-100" data-bs-spy="scroll" data-bs-offset="50" id="chat-friends-box">
+									
+									<div class="smooth-hover p-2 d-none" id="chat-friend-template">
+										<div class="d-flex justify-content-start align-items-center h-100">
+											<img src="" class="rounded-circle img-thumbnail object-fit-cover m-2 chat-user-avatar" alt="...">
+											<a class="user-link m-0"><p class="m-0 username">Username</p></a>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+					</div>
+					<div class="col-12 col-md-8 container d-flex flex-column chat-column z-1 vh-100">
+						<div class="row rounded d-flex justify-content-center down-shadow">
+							 <div class="col d-flex p-3 justify-content-center align-items-center" style="height: 56px;">
+								<svg class="me-2 d-none" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+								<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#32d25a"/> </g>
+								</svg>
+								<svg class="me-2 d-none" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+									<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+									<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+									<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#b0b0b0"/> </g>
+								</svg>
+								<h5 class="m-0">Username</h5>
+							</div>
+						</div>
+						<div class="row d-flex flex-grow-1 p-4">
+							<div class="col container flex-column" data-bs-spy="scroll" data-bs-offset="50" id="chat-box">
+
+								<div class="row d-none" id="current-user-message-template">
+									<div class="col d-flex justify-content-end m-2">
+										<div class="bg-primary rounded d-flex shadow chat-message-box">
+											<p class="m-0 p-2 pe-3 ps-3 message-content">Hello World</p>
+											<p class="m-1 me-2 message-date align-self-end message-time">22:30</p>
+										</div>
+									</div>
+								</div>
+
+								<div class="row d-none" id="other-user-message-template">
+									<div class="col d-flex justify-content-start m-2">
+										<div class="bg-dark-subtle rounded d-flex shadow chat-message-box">
+											<p class="m-0 p-2 pe-3 ps-3 message-content">Hello World</p>
+											<p class="m-1 me-2 message-date align-self-end message-time">22:30</p>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="row p-3 top-shadow">
+							<div class="col">
+								<form class="d-flex">
+									<div class="form-floating flex-grow-1">
+										<input class="form-control chat-container" placeholder="Send a message" id="floatingTextarea" autocomplete="off">
+										<label for="floatingTextarea">Send a message</label>
+									</div>
+									<div class="ms-4 flex-grow-2 d-flex align-items-center justify-content-center">
+										<button class="btn btn-dark chat-container" style="height: 58px;">
+											<svg width="35px" height="35px" viewBox="-2.8 -2.8 33.60 33.60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FEFEFA" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)">
+												<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+												<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="2.016"/>
+												<g id="SVGRepo_iconCarrier"><title>ic_fluent_send_28_filled</title> <desc>Created with Sketch.</desc> <g id="🔍-Product-Icons" stroke-width="0.00028" fill="none" fill-rule="evenodd"> <g id="ic_fluent_send_28_filled" fill="#FEFEFA" fill-rule="nonzero"> <path d="M3.78963301,2.77233335 L24.8609339,12.8499121 C25.4837277,13.1477699 25.7471402,13.8941055 25.4492823,14.5168992 C25.326107,14.7744476 25.1184823,14.9820723 24.8609339,15.1052476 L3.78963301,25.1828263 C3.16683929,25.4806842 2.42050372,25.2172716 2.12264586,24.5944779 C1.99321184,24.3238431 1.96542524,24.015685 2.04435886,23.7262618 L4.15190935,15.9983421 C4.204709,15.8047375 4.36814355,15.6614577 4.56699265,15.634447 L14.7775879,14.2474874 C14.8655834,14.2349166 14.938494,14.177091 14.9721837,14.0981464 L14.9897199,14.0353553 C15.0064567,13.9181981 14.9390703,13.8084248 14.8334007,13.7671556 L14.7775879,13.7525126 L4.57894108,12.3655968 C4.38011873,12.3385589 4.21671819,12.1952832 4.16392965,12.0016992 L2.04435886,4.22889788 C1.8627142,3.56286745 2.25538645,2.87569101 2.92141688,2.69404635 C3.21084015,2.61511273 3.51899823,2.64289932 3.78963301,2.77233335 Z" id="🎨-Color"> </path> </g> </g> </g>
+											</svg>
+										</button>
+									</div>
+								</form>
+							</div>							  
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</main>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
