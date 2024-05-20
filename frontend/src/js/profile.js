@@ -14,7 +14,6 @@ export async function loadProfilePage(userId) {
 	}
 
 	const userInfo = await fetchUser(userId);
-	console.log(userInfo)
 	await loadPage(elements.profilePage);
 
 	const url = API + userInfo.avatar;
@@ -52,24 +51,30 @@ export async function loadProfilePage(userId) {
 		friendsList.appendChild(friend);
 	});
 	
-	document.getElementById("pending-friends-counter").textContent = userInfo.pending_friends.length;
+	let pending_friends_counter = 0;
 	userInfo.pending_friends.forEach((element) => {
-		const pendingFriend = pendingFriendTemplate.cloneNode(true);
-		pendingFriend.removeAttribute("id");
-		pendingFriend.classList.remove("d-none");
-		pendingFriend.classList.add("tmp-friend");
-		pendingFriend.querySelector(".friend-avatar").setAttribute('src', API + element.avatar);
-		pendingFriend.querySelector(".friend-username").textContent = element.username;
-		pendingFriend.querySelector(".friend-link").addEventListener("click", () => {
-			loadProfilePage(element.id);
-		});
-		pendingFriend.querySelector(".btn-reject").addEventListener("click", () => {
-			rejctFriendRequest(element.id);
-		});
-		pendingFriend.querySelector(".btn-accept").addEventListener("click", () => {
-			acceptFriendRequest(element.id);
-		});
-		pendingFriendsList.appendChild(pendingFriend);
+		const isBlocked = userInfo.blocked.find(u => u == element.username)
+		console.log(userInfo.blocked);
+		if (!isBlocked) {
+			pending_friends_counter++;
+			const pendingFriend = pendingFriendTemplate.cloneNode(true);
+			pendingFriend.removeAttribute("id");
+			pendingFriend.classList.remove("d-none");
+			pendingFriend.classList.add("tmp-friend");
+			pendingFriend.querySelector(".friend-avatar").setAttribute('src', API + element.avatar);
+			pendingFriend.querySelector(".friend-username").textContent = element.username;
+			pendingFriend.querySelector(".friend-link").addEventListener("click", () => {
+				loadProfilePage(element.id);
+			});
+			pendingFriend.querySelector(".btn-reject").addEventListener("click", () => {
+				rejctFriendRequest(element.id);
+			});
+			pendingFriend.querySelector(".btn-accept").addEventListener("click", () => {
+				acceptFriendRequest(element.id);
+			});
+			pendingFriendsList.appendChild(pendingFriend);
+		}
+		document.getElementById("pending-friends-counter").textContent = pending_friends_counter;
 	});
 }
 

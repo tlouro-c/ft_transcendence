@@ -3,6 +3,7 @@ import { loginUser, logoutUser, registerUser } from './auth.js'
 import { loadProfilePage, updateUser, updateUserAvatar } from './profile.js';
 import { loadSearchResults } from './search.js';
 import { sendFriendRequest } from './friends.js';
+import { loadChatPage } from './chat.js';
 
 
 export function setupEventListeners() {
@@ -27,6 +28,8 @@ export function setupEventListeners() {
 		() => loadProfilePage(getUserObj().id));
 	document.getElementById("navbar-home-link").addEventListener("click",
 		() => loadPage(elements.homePage));
+	document.getElementById("navbar-chat-link").addEventListener("click",
+		() => loadChatPage());
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();

@@ -8,6 +8,7 @@ export const elements = {
 	homePage : document.getElementById("home-page"),
 	profilePage: document.getElementById("profile-page"),
 	searchPage: document.getElementById("search-page"),
+	chatPage: document.getElementById("chat-page"),
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
