@@ -76,7 +76,7 @@
 			</div>
 		</nav>
 	</header>
-	<main class="d-flex justify-content-center min-vh-100" id="main-content">
+	<main class="d-flex justify-content-center" id="main-content">
 
 		<div class="dynamic-page container" id="login-page">
 			<div class="row pt-5 mt-5" >
@@ -84,11 +84,11 @@
 					<form id="login-form">
 						<h1 class="h3 mb-3">Please sign in</h1>
 						<div class="form-floating mb-3">
-							<input type="text" class="form-control" id="loginInput" placeholder="Username" name="username" required autocomplete="off>
+							<input type="text" class="form-control" id="loginInput" placeholder="Username" name="username" required autocomplete="off">
 							<label for="loginInput">Username</label>
 						</div>
 						<div class="form-floating mb-3" id="login-password-box">
-							<input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" required autocomplete="off>
+							<input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" required autocomplete="off">
 							<label for="loginPassword">Password</label>
 						</div>
 						<button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
@@ -126,9 +126,9 @@
 			</div>
 		</div>
 
-		<div class="dynamic-page container" id="profile-page">
-			<div class="row">
-				<div class="col-sm-4 p-4 d-flex flex-column justify-content-center align-items-center">
+		<div class="dynamic-page container d-flex flex-column" id="profile-page">
+			<div class="row justify-content-center">
+				<div class="col-md-4 p-4 d-flex flex-column justify-content-start align-items-center">
 					<div class="text-center ratio ratio-1x1 mb-3 profile-avatar">
 						<img src="" class="rounded-circle  object-fit-cover" id="user-avatar" alt="User avatar">
 						<svg class="online-icon" id="profileOnlineStatus" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
@@ -226,11 +226,11 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col-sm-8 p-4 text-center">
+				<div class="col-md-8 p-4 text-center">
 					<div class="container">
 						<div class="row justify-content-center">
-							<div class="col-12 col-xl-6">
-								<h3 class="m-0">Friends (<span id="friends-counter">10</span>)</h3>
+							<div class="col-12 pb-3">
+								<h3 class="m-0 pb-3">Friends (<span id="friends-counter">10</span>)</h3>
 								<ul class="list-group list-group-flush w-100 p-3" id="friends-list">
 									<li class="list-group-item d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover d-none" id="friend-template">
 										<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center">
@@ -242,8 +242,8 @@
 									</li>
 								</ul>
 							</div>
-							<div class="col private-profile">
-								<h3 class="m-0">Pending (<span id="pending-friends-counter">3</span>)</h3>
+							<div class="col private-profile pb-3">
+								<h3 class="m-0 mb-3">Pending (<span id="pending-friends-counter">3</span>)</h3>
 								<ul class="list-group list-group-flush w-100 p-3" id="pending-friends-list">
 									<li class="w-100 list-group-item d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover d-none" id="pending-friend-template">
 										<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center">
@@ -300,15 +300,36 @@
 		</div>
 
 
-		<div class="dynamic-page container text-center mt-4" id="home-page">
-			HOME
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content-center" id="home-page">
+			<h1>Home Page</h1>
+			<p class="fs-4 fw-lighter text-center pe-5 ps-5"> This project as developed by tlouro-c and lleiria-</p>
+			<ul class="navbar-nav user-navbar d-none d-flex flex-row">
+				<li class="nav-item d-flex align-items-center justify-content-center p-3">
+					<a id="home-page-play-link"> 
+						<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="45px" height="45px" viewBox="0 0 604.051 604.051" xml:space="preserve">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+							<g id="SVGRepo_iconCarrier"> <g> <g> <path d="M545.412,198.294H323.445v-97.301c0-11.83-9.59-21.42-21.419-21.42c-11.83,0-21.42,9.59-21.42,21.42v97.301H58.64 c-32.058,0-58.14,26.082-58.14,58.14v209.904c0,32.059,26.082,58.139,58.14,58.139h486.772c32.059,0,58.139-26.08,58.139-58.139 V256.435C603.551,224.376,577.471,198.294,545.412,198.294z M560.711,466.339c0,8.449-6.85,15.299-15.299,15.299H58.64 c-8.45,0-15.3-6.85-15.3-15.299V256.435c0-8.45,6.85-15.3,15.3-15.3h486.772c8.449,0,15.299,6.851,15.299,15.3V466.339 L560.711,466.339z"/> <path d="M545.412,524.978H58.64C26.306,524.978,0,498.672,0,466.339V256.435c0-32.334,26.306-58.64,58.64-58.64h221.466v-96.801 c0-12.087,9.833-21.92,21.92-21.92c12.086,0,21.919,9.833,21.919,21.92v96.801h221.467c32.333,0,58.639,26.306,58.639,58.64 v209.904C604.051,498.672,577.745,524.978,545.412,524.978z M58.64,198.794c-31.783,0-57.64,25.857-57.64,57.64v209.904 c0,31.782,25.857,57.639,57.64,57.639h486.772c31.782,0,57.639-25.856,57.639-57.639V256.435c0-31.783-25.856-57.64-57.639-57.64 H322.945v-97.801c0-11.535-9.385-20.92-20.919-20.92c-11.535,0-20.92,9.385-20.92,20.92v97.801H58.64z M545.412,482.138H58.64 c-8.712,0-15.8-7.087-15.8-15.799V256.435c0-8.712,7.088-15.8,15.8-15.8h486.772c8.712,0,15.799,7.088,15.799,15.8v209.904 C561.211,475.051,554.124,482.138,545.412,482.138z M58.64,241.634c-8.161,0-14.8,6.64-14.8,14.8v209.904 c0,8.16,6.639,14.799,14.8,14.799h486.772c8.16,0,14.799-6.639,14.799-14.799V256.435c0-8.161-6.639-14.8-14.799-14.8H58.64z"/> </g> <g> <path d="M230.178,339.966h-41.612v-41.612c0-8.45-6.85-15.3-15.3-15.3h-12.24c-8.45,0-15.3,6.85-15.3,15.3v41.612h-41.613 c-8.45,0-15.3,6.852-15.3,15.301v12.24c0,8.449,6.85,15.299,15.3,15.299h41.613v41.613c0,8.449,6.85,15.299,15.3,15.299h12.24 c8.45,0,15.3-6.85,15.3-15.299v-41.613h41.612c8.45,0,15.3-6.85,15.3-15.299v-12.24 C245.478,346.817,238.627,339.966,230.178,339.966z"/> <path d="M173.265,440.218h-12.24c-8.712,0-15.8-7.087-15.8-15.799v-41.113h-41.113c-8.712,0-15.8-7.087-15.8-15.799v-12.24 c0-8.713,7.088-15.801,15.8-15.801h41.113v-41.112c0-8.712,7.088-15.8,15.8-15.8h12.24c8.712,0,15.8,7.088,15.8,15.8v41.112 h41.112c8.712,0,15.8,7.088,15.8,15.801v12.24c0,8.712-7.088,15.799-15.8,15.799h-41.112v41.113 C189.065,433.131,181.978,440.218,173.265,440.218z M104.113,340.466c-8.161,0-14.8,6.64-14.8,14.801v12.24 c0,8.16,6.639,14.799,14.8,14.799h42.113v42.113c0,8.16,6.639,14.799,14.8,14.799h12.24c8.161,0,14.8-6.639,14.8-14.799v-42.113 h42.112c8.161,0,14.8-6.639,14.8-14.799v-12.24c0-8.161-6.639-14.801-14.8-14.801h-42.112v-42.112c0-8.161-6.639-14.8-14.8-14.8 h-12.24c-8.161,0-14.8,6.639-14.8,14.8v42.112H104.113z"/> </g> <g> <circle cx="429.895" cy="409.694" r="21.42"/> <path d="M429.895,431.614c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S441.981,431.614,429.895,431.614z M429.895,388.774c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S441.43,388.774,429.895,388.774z"/> </g> <g> <circle cx="429.895" cy="313.765" r="21.42"/> <path d="M429.895,335.685c-12.087,0-21.92-9.833-21.92-21.919c0-12.087,9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 C451.814,325.852,441.981,335.685,429.895,335.685z M429.895,292.845c-11.535,0-20.92,9.385-20.92,20.92 s9.385,20.919,20.92,20.919s20.92-9.384,20.92-20.919S441.43,292.845,429.895,292.845z"/> </g> <g> <circle cx="381.93" cy="361.729" r="21.42"/> <path d="M381.93,383.649c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S394.017,383.649,381.93,383.649z M381.93,340.81c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S393.465,340.81,381.93,340.81z"/> </g> <g> <circle cx="477.859" cy="361.729" r="21.42"/> <path d="M477.859,383.649c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S489.946,383.649,477.859,383.649z M477.859,340.81c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S489.395,340.81,477.859,340.81z"/> </g> </g> </g>
+						</svg>
+					</a>
+				</li>
+				<li class="nav-item p-3 d-flex align-items-center justify-content-center">
+					<a id="home-page-chat-link"> 
+						<svg fill="#FEFEFA" height="45px" width="45px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60" xml:space="preserve">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+							<g id="SVGRepo_iconCarrier"> <g> <path d="M26,9.586C11.664,9.586,0,20.09,0,33c0,4.499,1.418,8.856,4.106,12.627c-0.51,5.578-1.86,9.712-3.813,11.666 c-0.304,0.304-0.38,0.768-0.188,1.153C0.276,58.789,0.625,59,1,59c0.046,0,0.093-0.003,0.14-0.01 c0.349-0.049,8.432-1.213,14.317-4.585c3.33,1.333,6.874,2.009,10.544,2.009c14.336,0,26-10.503,26-23.414S40.337,9.586,26,9.586z"/> <path d="M55.894,37.042C58.582,33.27,60,28.912,60,24.414C60,11.503,48.337,1,34,1c-8.246,0-15.968,3.592-20.824,9.42 C17.021,8.614,21.38,7.586,26,7.586c15.439,0,28,11.4,28,25.414c0,5.506-1.945,10.604-5.236,14.77 c4.946,1.887,9.853,2.6,10.096,2.634c0.047,0.006,0.094,0.01,0.14,0.01c0.375,0,0.724-0.211,0.895-0.554 c0.192-0.385,0.116-0.849-0.188-1.153C57.753,46.753,56.403,42.619,55.894,37.042z"/> </g> </g>
+						</svg>
+					</a>
+				</li>
+			</ul>
 		</div>
 
 		<div class="dynamic-page container-fluid text-center" id="chat-page">
 			<h3 class="mt-4">Chat</h3>
-			<div class="container text-center mt-4 chat-container">
+			<div class="container text-center mt-4 chat-container rounded">
 				<div class="row h-100">
-					<div class="col-12 p-0 col-md-4 container d-flex flex-column chat-column z-2 vh-100 right-shadow">
+					<div class="col-12 p-0 col-md-4 container d-flex flex-column chat-column z-2 right-shadow rounded">
 							<div class="row z-2 d-flex flex-column justify-content-start">
 								<div class="col d-flex p-3 z-1 d-flex justify-content-center">
 									<h5 class="m-0">Friends</h5>
@@ -323,32 +344,34 @@
 											<a class="user-link m-0"><p class="m-0 username">Username</p></a>
 										</div>
 									</div>
-									
+
 								</div>
 							</div>
 					</div>
-					<div class="col-12 col-md-8 container d-flex flex-column chat-column z-1 vh-100">
-						<div class="row rounded d-flex justify-content-center down-shadow">
-							 <div class="col d-flex p-3 justify-content-center align-items-center" style="height: 56px;">
-								<svg class="me-2 d-none" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+					<div class="col-12 col-md-8 container d-flex flex-column chat-column z-1">
+						<div class="row rounded d-flex justify-content-center down-shadow rounded">
+							 <div class="col d-flex p-3 justify-content-center align-items-center header" style="height: 56px;" id="chat-tmp-header">
+								<svg class="me-2 d-none online" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
 								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
 								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
 								<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#32d25a"/> </g>
 								</svg>
-								<svg class="me-2 d-none" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+								<svg class="me-2 d-none offline" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
 									<g id="SVGRepo_bgCarrier" stroke-width="0"/>
 									<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
 									<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#b0b0b0"/> </g>
 								</svg>
-								<h5 class="m-0">Username</h5>
+								<h5 class="m-0" ></h5>
 							</div>
 						</div>
-						<div class="row d-flex flex-grow-1 p-4">
-							<div class="col container flex-column" data-bs-spy="scroll" data-bs-offset="50" id="chat-box">
+						<div class="row d-flex flex-grow-1 p-4 position-relative overflow-hidden h-100">
+							<div class="col container flex-column mh-100" data-bs-spy="scroll" data-bs-offset="50" id="chat-box">
+
+								<p style="font-size: small; opacity: 35%;">Start of the conversation</p>
 
 								<div class="row d-none" id="current-user-message-template">
 									<div class="col d-flex justify-content-end m-2">
-										<div class="bg-primary rounded d-flex shadow chat-message-box">
+										<div class="bg-primary rounded d-flex shadow chat-message-box rounded">
 											<p class="m-0 p-2 pe-3 ps-3 message-content">Hello World</p>
 											<p class="m-1 me-2 message-date align-self-end message-time">22:30</p>
 										</div>
@@ -366,15 +389,15 @@
 
 							</div>
 						</div>
-						<div class="row p-3 top-shadow">
+						<div class="row p-3 top-shadow rounded">
 							<div class="col">
-								<form class="d-flex">
+								<form class="d-flex" id="send-msg-form">
 									<div class="form-floating flex-grow-1">
-										<input class="form-control chat-container" placeholder="Send a message" id="floatingTextarea" autocomplete="off">
-										<label for="floatingTextarea">Send a message</label>
+										<input class="form-control chat-container" placeholder="Send a message" id="chatMessageInput" autocomplete="off" name="message">
+										<label for="chatMessageInput">Send a message</label>
 									</div>
 									<div class="ms-4 flex-grow-2 d-flex align-items-center justify-content-center">
-										<button class="btn btn-dark chat-container" style="height: 58px;">
+										<button class="btn btn-dark chat-container" style="height: 58px;" type="submit" id="send-msg-btn">
 											<svg width="35px" height="35px" viewBox="-2.8 -2.8 33.60 33.60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FEFEFA" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)">
 												<g id="SVGRepo_bgCarrier" stroke-width="0"/>
 												<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="2.016"/>

@@ -63,6 +63,7 @@ class AllUsersView(APIView):
 class UserView(APIView):
 	permission_classes = [IsAuthenticated]
 	def get(self, request, user_id):
+		
 		set_last_action(User.objects.get(id=user_id_from_token(request)))
 		try:
 			user = User.objects.get(id=user_id)

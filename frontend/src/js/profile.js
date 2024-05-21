@@ -51,10 +51,10 @@ export async function loadProfilePage(userId) {
 		friendsList.appendChild(friend);
 	});
 	
-	let pending_friends_counter = 0;
+	const pending_friends_counter = 0
 	userInfo.pending_friends.forEach((element) => {
+		console.log(element);
 		const isBlocked = userInfo.blocked.find(u => u == element.username)
-		console.log(userInfo.blocked);
 		if (!isBlocked) {
 			pending_friends_counter++;
 			const pendingFriend = pendingFriendTemplate.cloneNode(true);
@@ -74,8 +74,8 @@ export async function loadProfilePage(userId) {
 			});
 			pendingFriendsList.appendChild(pendingFriend);
 		}
-		document.getElementById("pending-friends-counter").textContent = pending_friends_counter;
 	});
+	document.getElementById("pending-friends-counter").textContent = pending_friends_counter;
 }
 
 

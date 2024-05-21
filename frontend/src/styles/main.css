@@ -67,11 +67,15 @@ nav:hover::after {
 
 
 .smooth-hover {
-	transition: filter 0.5s ease;
+	transition: filter 0.3s ease;
 }
 
 .smooth-hover:hover {
 	filter: brightness(1.1);
+}
+
+div.active {
+	filter: brightness(1.3) !important;
 }
 
 
@@ -126,12 +130,17 @@ nav:hover::after {
 	left: 10%;
 }
 
+#friends-list, #pending-friends-list {
+	max-height: 249px;
+	overflow-y: scroll;
+}
+
 #chat-box, #chat-friends-box  {
 	overflow-y: auto;
 }
 
 .chat-column {
-	min-height: 100%;
+	height: 80vh;
 }
 
 .message-date {
@@ -171,4 +180,6 @@ nav:hover::after {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px -15px 15px -10px;
 }
 
-
+#home-page {
+	height: 89vh;
+}

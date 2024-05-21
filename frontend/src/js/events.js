@@ -30,6 +30,8 @@ export function setupEventListeners() {
 		() => loadPage(elements.homePage));
 	document.getElementById("navbar-chat-link").addEventListener("click",
 		() => loadChatPage());
+	document.getElementById("home-page-chat-link").addEventListener("click",
+		() => loadChatPage());
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();
