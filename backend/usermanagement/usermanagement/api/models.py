@@ -59,11 +59,13 @@ class Friendship(models.Model):
 		for friendship in friendships:
 			friend = {}
 			if friendship.sender == user:
+				friend['online_status'] = friendship.receiver.online_status()
 				friend['avatar'] = friendship.receiver.avatar.url
 				friend['id'] = friendship.receiver.id
 				friend['username'] = friendship.receiver.username
 				friend['since'] = friendship.friends_since.strftime('%Y-%m-%d %H:%M')
 			else:
+				friend['online_status'] = friendship.sender.online_status()
 				friend['avatar'] = friendship.sender.avatar.url
 				friend['id'] = friendship.sender.id
 				friend['username'] = friendship.sender.username

@@ -58,7 +58,6 @@ export async function refreshAccessToken() {
 		}
 	}
 	catch (error) {
-		console.error('Error during token refresh, logging out...', error);
 		logoutUser();
 	}
 }

@@ -12,7 +12,6 @@ export const elements = {
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
-
 export function clearMain() {
 	elements.dynamicPages.forEach(function(element) {
 		element.classList.add("d-none");
@@ -22,6 +21,7 @@ export function clearMain() {
 export async function loadPage(page) {
 	const temporaryMessages = document.querySelectorAll('.temporary-message');
 	temporaryMessages.forEach((element) => element.remove());
+	Array.from(document.getElementById('chat-tmp-header').children).forEach(element => element.classList.add('d-none'));
 	clearMain();
 	if (page != elements.loginPage && page != elements.registerPage) {
 		const navbar = document.querySelectorAll(".user-navbar");
@@ -35,7 +35,6 @@ export async function loadPage(page) {
 	}
 	page.classList.remove("d-none");
 }
-
 
 export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

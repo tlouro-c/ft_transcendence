@@ -1,7 +1,6 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from . import views
-from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
 	path('user_management/register/', views.RegisterView.as_view(), name="register"),

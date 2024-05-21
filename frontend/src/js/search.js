@@ -51,8 +51,6 @@ export async function loadSearchResults(form) {
 			const isBlocked = currentUser.blocked.find((blocker) => blocker == user.username);
 			const isFriend = currentUser.friends.find((friend) => friend.id == user.id)
 
-			console.log(user.pending_friends)
-
 			const addFriendButton = userEntry.querySelector(".add-friend-button");
 			const blockButton = userEntry.querySelector(".block-button");
 			const unblockButton = userEntry.querySelector(".unblock-button");
