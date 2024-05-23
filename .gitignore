@@ -1,3 +1,4 @@
-backend/usermanagement/env
-backend/livechat/env
+**/env/
 *.pyc
+**/__pycache__/
+*.bak
