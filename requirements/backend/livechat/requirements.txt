@@ -1,0 +1,15 @@
+asgiref
+Django
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+psycopg==3.1.19
+psycopg2-binary
+PyJWT
+python-dotenv
+pytz
+sqlparse
+typing_extensions
+httpx
+channels==4
+daphne==4
