@@ -179,6 +179,19 @@ div.active {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px -15px 15px -10px;
 }
 
-#home-page {
+#home-page, #game-page {
 	height: 89vh;
+}
+
+
+.game-page-column {
+	height: 400px;
+}
+
+.width-85 {
+	width: 85%;
+}
+
+#invite-template {
+	overflow-x: auto;
 }

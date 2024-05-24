@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
 from .models import Message
-from time import sleep
 import logging
 
 logger = logging.getLogger(__name__)
