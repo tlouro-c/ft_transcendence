@@ -1,10 +1,12 @@
 import { loadPage, elements } from './utils.js'
 import { setupEventListeners } from './events.js';
+import { TokenVerification } from './jwt.js';
 
 
 function initialize() {
 	setupEventListeners();
-	loadPage(elements.homePage);
+	TokenVerification();
+	loadPage(elements.gamePage);
 }
 
 window.onload = initialize;

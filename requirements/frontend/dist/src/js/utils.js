@@ -9,6 +9,8 @@ export const elements = {
 	profilePage: document.getElementById("profile-page"),
 	searchPage: document.getElementById("search-page"),
 	chatPage: document.getElementById("chat-page"),
+	gamePage: document.getElementById("game-page"),
+	localPlayPage: document.getElementById("local-play-page"),
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
@@ -19,6 +21,7 @@ export function clearMain() {
 }
 
 export async function loadPage(page) {
+	console.log("Loading page...")
 	const temporaryMessages = document.querySelectorAll('.temporary-message');
 	temporaryMessages.forEach((element) => element.remove());
 	Array.from(document.getElementById('chat-tmp-header').children).forEach(element => element.classList.add('d-none'));

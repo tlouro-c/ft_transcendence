@@ -28,10 +28,14 @@ export function setupEventListeners() {
 		() => loadProfilePage(getUserObj().id));
 	document.getElementById("navbar-home-link").addEventListener("click",
 		() => loadPage(elements.homePage));
+	document.getElementById("navbar-play-link").addEventListener("click",
+		() => loadPage(elements.gamePage));
 	document.getElementById("navbar-chat-link").addEventListener("click",
 		() => loadChatPage());
 	document.getElementById("home-page-chat-link").addEventListener("click",
 		() => loadChatPage());
+	document.getElementById("home-page-play-link").addEventListener("click",
+		() => loadPage(elements.gamePage));
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();
@@ -51,5 +55,11 @@ export function setupEventListeners() {
 	document.getElementById("search-form").addEventListener("submit", function(event) {
 		event.preventDefault();
 		loadSearchResults(this);
+	});
+
+
+	document.getElementById("play-against-ai-btn").addEventListener("click", function(event) {
+		event.preventDefault();
+		loadPage(elements.localPlayPage);
 	});
 }
