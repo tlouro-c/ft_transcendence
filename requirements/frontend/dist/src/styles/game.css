@@ -1,5 +1,4 @@
 #gameCanvas {
-	background-color: black;
 	display: none; /* Inicialmente oculto */
 }
 #scoreboard {
@@ -14,45 +13,16 @@
 	color: white;
 }
 #title {
-	background-color: white;
 	color: black;
+	background-color: #FEFEFA;
 }
 #menu {
-	position: fixed;
-	top: 0;
-	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: black;
-	color: white;
+	color: #FEFEFA;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
-#menu h1 {
-	font-size: 3em;
-	margin-bottom: 20px;
-}
-.menu-item {
-	margin: 20px 0;
-	font-size: 2em;
-}
-.menu-item input {
-	transform: scale(1.5);
-	margin-right: 10px;
-}
-button {
-	padding: 20px 40px;
-	font-size: 2em;
-	background-color: #007BFF;
-	color: white;
-	border: none;
-	border-radius: 10px;
-	cursor: pointer;
-	transition: background-color 0.3s, transform 0.3s;
-}
-button:hover {
-	background-color: #0056b3;
-	transform: scale(1.05);
-}
+

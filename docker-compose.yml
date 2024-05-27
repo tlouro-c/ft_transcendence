@@ -41,24 +41,27 @@ services:
       - docker-network
     ports: 
       - 9000:9000
-   
-  # game:
-  #   container_name: game-service
-  #   image: game-service-img
-  #   build: requirements/backend/game
-  #   environment:
-  #     - DB: ${POSTGRES_DB_GAME}
-  #     - DB_HOST: ${POSTGRES_DB_GAME_HOST}
-  #     - DB_PORT: ${POSTGRES_DB_GAME_PORT}
-  #     - DB_USER: ${POSTGRES_USER}
-  #     - DB_PASSWORD: ${POSTGRES_PASSWORD}
-  #     - DJANGO_SUPERUSER_USERNAME=${LIVE_CHAT_USER}
-  #     - DJANGO_SUPERUSER_PASSWORD=${DJANGO_PASSWORD}
-  #     - DJANGO_SUPERUSER_EMAIL=${DJANGO_EMAIL}
-  #   depends_on:
-  #     - game-db
-  #   networks:
-  #     - docker-network
+
+  game:
+    container_name: game-service
+    image: game-service-img
+    build: requirements/backend/game
+    environment:
+      - DB=${POSTGRES_DB_GAME}
+      - DB_HOST=${POSTGRES_DB_GAME_HOST}
+      - DB_PORT=${POSTGRES_DB_GAME_PORT}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DJANGO_SUPERUSER_USERNAME=${GAME_USER}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_EMAIL}
+    depends_on:
+      live-chat-db:
+        condition: service_healthy
+    networks:
+      - docker-network
+    ports: 
+      - 8001:8001
     
   frontend:
     container_name: frontend-dist
@@ -67,7 +70,7 @@ services:
     depends_on:
       - user-management
       - live-chat
-      #- game
+      - game
     networks:
       - docker-network
     ports:
@@ -109,22 +112,28 @@ services:
       timeout: 2s
       retries: 5
 
-  # game-db:
-  #   image: postgres
-  #   environment:
-  #     POSTGRES_DB: ${POSTGRES_DB_GAME}
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #   expose:
-  #     - '3306'
-  #   volumes:
-  #     - game-db-data:/var/lib/postgresql/data
+  game-db:
+    container_name: game-db-container
+    image: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_GAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - game-db-data:/var/lib/postgresql/data
+    networks:
+      - docker-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
 
 volumes:
   user-management-db-data: 
   live-chat-db-data:
+  game-db-data: 
   media:
-    # game-db-data: 
 
 
 networks:

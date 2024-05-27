@@ -131,7 +131,7 @@ div.active {
 
 #friends-list, #pending-friends-list {
 	max-height: 249px;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 #chat-box, #chat-friends-box  {
@@ -195,3 +195,20 @@ div.active {
 #invite-template {
 	overflow-x: auto;
 }
+
+
+
+.match-background {
+	position: absolute;
+	opacity: 10%;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+	z-index: 0;
+}
+
+#game-template .z-1 {
+	flex: 1;
+}
+

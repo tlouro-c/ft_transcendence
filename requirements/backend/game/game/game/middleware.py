@@ -26,6 +26,7 @@ class JwtAuthMiddleware(BaseMiddleware):
 		token = query_string.get('token', [None])[0] or None
 		
 		user_id = user_id_from_token(token)
+		logger.debug(f"User ID: {user_id}")
 
 		try:
 			request_headers = {'Authorization': f'Bearer {token}'}

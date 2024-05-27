@@ -10,7 +10,9 @@ export const elements = {
 	searchPage: document.getElementById("search-page"),
 	chatPage: document.getElementById("chat-page"),
 	gamePage: document.getElementById("game-page"),
+	waitingPage: document.getElementById("waiting-page"),
 	localPlayPage: document.getElementById("local-play-page"),
+	remotePlayPage: document.getElementById("remote-play-page"),
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
@@ -21,7 +23,6 @@ export function clearMain() {
 }
 
 export async function loadPage(page) {
-	console.log("Loading page...")
 	const temporaryMessages = document.querySelectorAll('.temporary-message');
 	temporaryMessages.forEach((element) => element.remove());
 	Array.from(document.getElementById('chat-tmp-header').children).forEach(element => element.classList.add('d-none'));

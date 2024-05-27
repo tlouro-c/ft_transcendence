@@ -21,7 +21,7 @@ var Key = {
   
   onKeydown: function(event) {
     this._pressed[event.keyCode] = true;
-    console.log("Key pressed: " + event.key + ", Keycode: " + event.keyCode);
+    //console.log("Key pressed: " + event.key + ", Keycode: " + event.keyCode);
   },
   
   onKeyup: function(event) {

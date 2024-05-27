@@ -6,7 +6,7 @@ import { API, elements, loadPage } from "./utils.js";
 import { getTokensObj, getUserObj } from "./utils.js";
 
 
-async function fetchAllUsers() {
+export async function fetchAllUsers() {
 
 	try {
 		TokenVerification();

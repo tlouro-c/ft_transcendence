@@ -25,8 +25,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(WIDTH, HEIGHT);
 
 // attach the render-supplied DOM element (the gameCanvas)
-var c = document.getElementById("gameCanvas");
-c.appendChild(renderer.domElement);
+
 
 var camera1 = new THREE.PerspectiveCamera(
     45, // VIEW_ANGLE
@@ -91,7 +90,7 @@ var planeWidth = 640,
     planeQuality = 15;
 
 var planeMaterial = new THREE.MeshBasicMaterial({
-    map: new THREE.TextureLoader().load('../imgs/fields/basicField.jpg'), 
+    map: new THREE.TextureLoader().load('src/assets/fields/basicField.jpg'), 
     side: THREE.DoubleSide
 });
 
@@ -240,7 +239,7 @@ function changeField() {
         case 0:
             var newMaterial = new THREE.MeshLambertMaterial({
                 color: 0x4BD121,
-                wireframe: true
+                wireframe: false
             });
             plane.material = newMaterial;
             break;
@@ -281,6 +280,12 @@ function changeField() {
 }
 
 function startGame() {
+
+	var c = document.getElementById("gameCanvas");
+	var canvas = renderer.domElement;
+	canvas.style.width = '100%';
+	canvas.style.height = 'auto';
+	c.appendChild(canvas);
     //checkbox values
     is3D = document.getElementById("3DMode").checked;
     multiPlay = document.getElementById("multiPlayMode").checked;
@@ -288,7 +293,11 @@ function startGame() {
 
     // hides menus
     document.getElementById('menu').style.display = 'none';
-    document.getElementById('gameCanvas').style.display = 'block';
+	document.getElementById('game-menu-column').classList.add('d-none')
+	document.getElementById('game-column').classList.remove('d-none');
+	const gameCanvas = document.getElementById('gameCanvas');
+    gameCanvas.classList.remove('d-none');
+	gameCanvas.style.mixBlendMode = 'lighten'; 
     document.getElementById('scoreboard').style.display = 'block';
 
     // start game
