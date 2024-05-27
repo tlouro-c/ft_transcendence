@@ -9,6 +9,6 @@ RUN pip install -r requirements.txt
 
 ENTRYPOINT [ "sh", "start.sh" ]
 
-CMD ["python", "game/manage.py", "runserver", "0.0.0.0:7000"]
+CMD ["python", "game/manage.py", "runserver", "0.0.0.0:8001"]
 
 
