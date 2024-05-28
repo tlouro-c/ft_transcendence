@@ -16,6 +16,19 @@ export const elements = {
 	dynamicPages : document.querySelectorAll(".dynamic-page"),
 }
 
+export const sockets = {
+	chatSocket: -1,
+	gameSocket: -1
+}
+
+export const gameDict = {
+	instance: -1
+}
+
+export const gameDictRemote = {
+	instance: -1
+}
+
 export function clearMain() {
 	elements.dynamicPages.forEach(function(element) {
 		element.classList.add("d-none");
@@ -61,5 +74,28 @@ export function getTokensObj() {
 	}
 	catch {
 		return {};
+	}
+}
+
+export function closeSocket(socket) {
+	if (socket != -1) {
+		socket.close()
+		socket = -1
+	}
+}
+
+export function closeAllSockets() {
+	closeSocket(sockets.gameSocket)
+	closeSocket(sockets.chatSocket)
+}
+
+
+export function ClearBackgroundResources() {
+	closeAllSockets()
+
+	if (gameDict.instance != -1) {
+		gameDict.instance.Stop()
+		delete gameDict.instance
+		gameDict.instance = -1
 	}
 }

@@ -1,10 +1,11 @@
-import { elements, getUserObj, loadPage } from './utils.js'
+import { elements, getUserObj, loadPage, closeAllSockets, gameDict, ClearBackgroundResources } from './utils.js'
 import { loginUser, logoutUser, registerUser } from './auth.js'
 import { loadProfilePage, updateUser, updateUserAvatar } from './profile.js';
 import { loadSearchResults } from './search.js';
 import { loadChatPage } from './chat.js';
 import { loadGamePage } from './game-page.js';
-
+import { startGame } from './single-player-game/gameDouble.js';
+import { Game } from './single-player-game/gameDouble.js'
 
 export function setupEventListeners() {
 
@@ -23,15 +24,15 @@ export function setupEventListeners() {
 	document.getElementById("create-account-link").addEventListener("click", 
 		() => loadPage(elements.registerPage));
 	document.getElementById("sign-out-link").addEventListener("click", 
-		() => logoutUser());
+		() => {ClearBackgroundResources(); logoutUser()});
 	document.getElementById("profile-link").addEventListener("click",
-		() => loadProfilePage(getUserObj().id));
+		() => {ClearBackgroundResources(); loadProfilePage(getUserObj().id)});
 	document.getElementById("navbar-home-link").addEventListener("click",
-		() => loadPage(elements.homePage));
+		() => {ClearBackgroundResources(); loadPage(elements.homePage)});
 	document.getElementById("navbar-play-link").addEventListener("click",
-		() => loadGamePage());
+		() => {ClearBackgroundResources(); loadGamePage()});
 	document.getElementById("navbar-chat-link").addEventListener("click",
-		() => loadChatPage());
+		() => {ClearBackgroundResources(); loadChatPage()});
 	document.getElementById("home-page-chat-link").addEventListener("click",
 		() => loadChatPage());
 	document.getElementById("home-page-play-link").addEventListener("click",
@@ -48,12 +49,12 @@ export function setupEventListeners() {
 	});
 
 	document.getElementById("change-password-form").addEventListener("submit", function(event) {
-		event.preventDefault();
 		updateUser(this);
 	});
 
 	document.getElementById("search-form").addEventListener("submit", function(event) {
 		event.preventDefault();
+		closeAllSockets()
 		loadSearchResults(this);
 	});
 
@@ -69,7 +70,7 @@ export function setupEventListeners() {
 
 	document.getElementById("start-game-btn").addEventListener("click", (event) => {
 		event.preventDefault();
-		startGame()
+		gameDict.instance = startGame()
 	});
 
 }

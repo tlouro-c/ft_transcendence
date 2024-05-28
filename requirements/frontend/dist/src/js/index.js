@@ -8,8 +8,7 @@ import { loadProfilePage } from './profile.js';
 function initialize() {
 	setupEventListeners();
 	TokenVerification();
-	loadProfilePage(getUserObj().id)
-	//loadPage(elements.homePage);
+	loadPage(elements.homePage);
 }
 
 window.onload = initialize;

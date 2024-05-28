@@ -1,4 +1,4 @@
-import { gameDict } from "../utils.js";
+import { gameDict, getUserObj, sockets } from "../utils.js";
 import { Key } from "./keyboard.js"
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -7,8 +7,8 @@ const HEIGHT = 360 + 0;
 const PADDLEWIDTH = 20, PADDLEHEIGHT = 60, PADDLEDEPTH = 10, PADDLEQUALITY = 1;
 const HAZARDWIDTH = 20, HAZARDHEIGHT = 150, HAZARDDEPTH = 100, HAZARDQUALITY = 1;
 
-export class Game{
-	constructor(){
+export class RemoteGame{
+	constructor(ballOwner){
 		this.initialCameraX = 0;
 		this.initialCameraY = 0;
 		this.is3D = false;
@@ -30,6 +30,13 @@ export class Game{
 		this.lastHitByPlayer1 = false;
 		this.running = false
 		this.Stop = function() { this.running = false }
+		this.moveLeftPaddleUp = false
+		this.moveLeftPaddleDown = false
+		this.moveRightPaddleUp = false
+		this.moveRightPaddleDown = false
+		this.ballDirX = 0
+		this.ballDirY = 0
+		
 		
 		this.init();
 
@@ -90,9 +97,6 @@ export class Game{
 			new THREE.SphereGeometry(radius, segments, rings),
 			sphereMaterial
 		);
-
-		this.ballDirX = 1;
-		this.ballDirY = 1;
 		
 		this.scene.add(this.ball);
 	}
@@ -215,7 +219,7 @@ export class Game{
 	
 	AttachCanvas(){
 		document.querySelectorAll(".old-canvas").forEach(element => element.remove())
-		const c = document.getElementById("gameCanvas");
+		const c = document.getElementById("gameCanvasRemote");
 		const canvas = this.renderer.domElement;
 		canvas.style.width = '100%';
 		canvas.style.height = 'auto';
@@ -223,41 +227,57 @@ export class Game{
 		c.appendChild(canvas);
 	}
 
-	StartGame() {
+	StartGame(ballOwner) {
 		this.running = true
 		this.score1 = 0
 		this.score2 = 0
 
-		window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
-		window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
+		if (ballOwner == getUserObj().id) {
+			this.ballDirX = -1
+		} else {
+			this.ballDirX = 1
+		}
+		this.ballDirY = 1
+
 
 		//checkbox values
-		this.is3D = document.getElementById("3DMode").checked;
-		this.multiPlay = document.getElementById("multiPlayMode").checked;
-		this.hazardMode = document.getElementById("hazardMode").checked;
-		console.log("3D", this.is3D, "multiplayer", this.multiPlay, "hazard", this.hazardMode)
+		//this.is3D = document.getElementById("3DMode").checked;
+		//this.multiPlay = document.getElementById("multiPlayMode").checked;
+		//this.hazardMode = document.getElementById("hazardMode").checked;
+		//console.log("3D", this.is3D, "multiplayer", this.multiPlay, "hazard", this.hazardMode)
+		let keyPressed = false
 
+		window.addEventListener('keyup', function(event) {
+			keyPressed = false
+			const toSend = {
+				'type': 'action',
+				'action': event.key + " released", 
+			}
 
-		//resets counter and header
-		const playAgainBtn = document.getElementById("scoreboard").querySelector('button')
-		if (playAgainBtn) {
-			playAgainBtn.remove()
-		}
-		document.getElementById("winnerBoard").classList.remove('d-none')
-		document.getElementById("winnerBoard").textContent = "First to 7 wins!"
-		document.getElementById("scores").textContent = "0-0"
+			sockets.gameSocket.send(JSON.stringify(toSend))
+		 }, false);
+
+		window.addEventListener('keydown', function(event) { 
+			if (!keyPressed) {
+				keyPressed = true
+				const toSend = {
+					'type': 'action',
+					'action': event.key + " pressed", 
+				}
+				sockets.gameSocket.send(JSON.stringify(toSend))
+			}
+			
+		 }, false);
+
 		
-
-		// hides menus
-		document.getElementById('menu').style.display = 'none';
-		document.getElementById('game-menu-column').classList.add('d-none')
-		document.getElementById('game-column').classList.remove('d-none');
-		const gameCanvas = document.getElementById('gameCanvas');
+		const gameCanvas = document.getElementById('gameCanvasRemote');
 		gameCanvas.classList.remove('d-none');
 		gameCanvas.style.mixBlendMode = 'lighten'; 
-		document.getElementById('scoreboard').style.display = 'block';
+		//document.getElementById('scoreboard').style.display = 'block';
 		
 		// start game
+		console.log(this.ballDirX)
+		this.multiPlay = true;
 		this.Draw();
 	}
 
@@ -269,7 +289,7 @@ export class Game{
 		this.ChangeField();
 	
 		// double view
-		if (this.is3D && this.multiPlay) {
+		if (this.is3D) {
 			// left player 1
 			this.renderer.setViewport(0, 0, WIDTH / 2, HEIGHT);
 			this.renderer.setScissor(0, 0, WIDTH / 2, HEIGHT);
@@ -295,8 +315,7 @@ export class Game{
 		this.PaddlePlay1();
 		if (this.multiPlay)
 			this.PaddlePlay2();
-		else
-			this.BotPlay();
+
 	
 		if (this.is3D && this.multiPlay)
 			this.CoubleCameraWork3D();
@@ -328,22 +347,19 @@ export class Game{
 			//Player 2 scores a point
 				this.score2++;
 				//update scoreboard
-				document.getElementById("scores").innerHTML = this.score1 + "-" + this.score2;
 				//reset ball
-				this.ResetBall(1);
+				this.ResetBall("me");
 				//check if match is over
-				this.MatchScoreCheck();
 			}
 			//Player 1 scores
 		if (this.ball.position.x >= PLANEWIDTH / 2) {
 			//Player 1 scores a point
 			this.score1++;
 			//update scoreboard
-			document.getElementById("scores").innerHTML = this.score1 + "-" + this.score2;
+			sockets.gameSocket.send(JSON.stringify({'type': 'point', 'point_winner': getUserObj().id}))
 			//reset ball
-			this.ResetBall(2);
+			this.ResetBall("opponent");
 			//check if match is over
-			this.MatchScoreCheck();
 		}
 		this.ball.position.x += this.ballDirX * this.ballSpeed;
 		this.ball.position.y += this.ballDirY * this.ballSpeed;
@@ -368,7 +384,7 @@ export class Game{
 					//bounce the ball
 					this.ballDirX = -this.ballDirX;
 					//adding angle to the bouncing
-					this.ballDirY = RandomDir()
+					this.ballDirY -= this.paddle1DirY * 0.7;
 				}
 			}
 		}
@@ -475,7 +491,8 @@ export class Game{
 
 	PaddlePlay1() {
 		//left
-		if (Key.isDown(Key.A)) {
+		//if (Key.)
+		if (this.moveLeftPaddleUp) {
 			if (this.paddle1.position.y < PLANEHEIGHT * 0.45) //not touching the side of the SHIFTle
 			this.paddle1DirY = this.paddleSpeed * 0.5;
 			else {
@@ -484,7 +501,7 @@ export class Game{
 			}
 		}
 		//right
-		else if (Key.isDown(Key.D)) {
+		else if (this.moveLeftPaddleDown) {
 			if (this.paddle1.position.y > -PLANEHEIGHT * 0.45)
 				this.paddle1DirY = -this.paddleSpeed * 0.5;
 			else {
@@ -502,7 +519,7 @@ export class Game{
 	
 	PaddlePlay2() {
 		//left
-		if (Key.isDown(Key.RIGHT)) {
+		if (this.moveRightPaddleUp) {
 			if (this.paddle2.position.y < PLANEHEIGHT * 0.45) //not touching the side of the SHIFTle
 			this.paddle2DirY = this.paddleSpeed * 0.5;
 			else {
@@ -511,7 +528,7 @@ export class Game{
 			}
 		}
 		//right
-		else if (Key.isDown(Key.LEFT)) {
+		else if (this.moveRightPaddleDown) {
 			if (this.paddle2.position.y > -PLANEHEIGHT * 0.45)
 				this.paddle2DirY = -this.paddleSpeed * 0.5;
 			else {
@@ -527,62 +544,19 @@ export class Game{
 		this.paddle2.position.y += this.paddle2DirY;
 	}
 
-	BotPlay() {
-		this.paddle2DirY = (this.ball.position.y - this.paddle2.position.y) * this.difficulty;
-		//speed limit
-		if (Math.abs(this.paddle2DirY) <= this.paddleSpeed)
-			this.paddle2.position.y += this.paddle2DirY;
-		else {
-			if (this.paddle2DirY > this.paddleSpeed)
-				this.paddle2.position.y += this.paddleSpeed;
-			else if (this.paddle2DirY < -this.paddleSpeed)
-				this.paddle2.position.y -= this.paddleSpeed;
-		}
-		//strech paddle when hits the end of the SHIFTle
-		this.paddle2.scale.y += (1 - this.paddle2.scale.y) * 0.2;
-	}
-
 	ResetBall(loser) {
+
 		//ball in center
 		this.ball.position.x = 0;
 		this.ball.position.y = 0;
-		
-		//player 1 lost point, ball goes to 2
-		if (loser == 1)
-			this.ballDirX = -1;
-		else //player 2 lost point, ball goes to 1
-		this.ballDirX = 1;
-		
-		this.ballDirY = 1;
-	}
 
-	MatchScoreCheck()
-	{
-		if (this.score1 >= this.maxScore)
-		{
-			//stop ball
-			this.running = false
-			//write to banner
-			document.getElementById("scores").innerHTML = "Player 1 wins!";
-			document.getElementById("winnerBoard").innerHTML = "Refresh to play again";
+		if (loser == "me") {
+			this.ballDirX = -1
+		} else {
+			this.ballDirX = 1
 		}
-		else if (this.score2 >= this.maxScore)
-		{
-			//stop ball
-			this.running = false
-			//write to banner
-			document.getElementById("scores").innerHTML = "Player 2 wins!";
-			document.getElementById("winnerBoard").classList.add('d-none')
-			const playAgainBtn = document.createElement('button')
-			playAgainBtn.classList.add('btn', 'btn-light', 'tmp')
-			playAgainBtn.textContent = "Play Again"
-			playAgainBtn.addEventListener("click", event => {
-				event.preventDefault()
-				this.StartGame()
-			})
-			document.getElementById("scoreboard").appendChild(playAgainBtn)
-			 
-		}
+
+		this.ballDirY = 1
 	}
 	
 	HazardStart()
@@ -633,9 +607,9 @@ function RandomDir(){
 		return (Math.random() * -1);
 }
 
-export function startGame(){
-	const game = new Game();
+export function startRemoteGame(ballOwner){
+	const game = new RemoteGame();
 
-	game.StartGame();
+	game.StartGame(ballOwner);
 	return game
 };
