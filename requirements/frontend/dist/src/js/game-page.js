@@ -1,8 +1,8 @@
 import { logoutUser } from "./auth.js"
 import { TokenVerification } from "./jwt.js"
-import { fetchUser } from "./profile.js"
 import { fetchAllUsers } from "./search.js"
-import { API, elements, getTokensObj, loadPage } from "./utils.js"
+import { startRemoteGame } from "./single-player-game/game-remote.js"
+import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote } from "./utils.js"
 import { getUserObj } from "./utils.js"
 
 
@@ -105,11 +105,27 @@ export async function fetchGameHistory(userId) {
 	}
 }
 
+//! Problems
+async function loadRealTimeGame(opponentId, ballOwner) {
+
+	const allUsers = await fetchAllUsers()
+	const userInfo = allUsers.find(user => user.id == getUserObj().id)
+	const opponentInfo = allUsers.find(user => user.id == opponentId)
+
+	loadPage(elements.remotePlayPage);
+	elements.remotePlayPage.querySelector('.user-avatar').setAttribute('src', API + userInfo.avatar)
+	elements.remotePlayPage.querySelector('.opponent-avatar').setAttribute('src', API + opponentInfo.avatar)
+	document.getElementById("scoreRightRemote").textContent = '0'
+	document.getElementById("scoreLeftRemote").textContent = '0'
+	document.getElementById("winnerBoardRemote").textContent = "First to 7 wins!"
+	gameDictRemote.instance = startRemoteGame(ballOwner)
+}
+
 
 function monitorGame(roomId) {
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	const gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}`)
+	sockets.gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}`)
 
 	document.getElementById("testPoint").addEventListener("click", (event) => {
 		event.preventDefault();
@@ -118,17 +134,14 @@ function monitorGame(roomId) {
 			"type": "point",
 			"point_winner": getUserObj().id
 		}
-		gameSocket.send(JSON.stringify(toSend));
+		sockets.gameSocket.send(JSON.stringify(toSend));
 	});
 
-	gameSocket.onmessage = function(message) {
+	sockets.gameSocket.onmessage = function(message) {
 		const messageObj = JSON.parse(message.data)
-		console.log(messageObj)
 
 		const waitingMessage = elements.waitingPage.querySelector("h1")
 		const counterElements = elements.waitingPage.querySelectorAll(".counter")
-
-		console.log(messageObj.type)
 
 		switch (messageObj.type) {
 			case 'info':
@@ -136,6 +149,7 @@ function monitorGame(roomId) {
 					loadPage(elements.waitingPage)
 					waitingMessage.classList.remove('d-none')
 				} else {
+					const ballOwner = messageObj.ball_owner
 					loadPage(elements.waitingPage)
 					waitingMessage.classList.add('d-none')
 					counterElements.forEach((element, index) => {
@@ -147,11 +161,7 @@ function monitorGame(roomId) {
 						}, index * 1000);
 					})
 					setTimeout(() => {
-						loadPage(elements.remotePlayPage);
-						document.getElementById("scoreRightRemote").textContent = '0'
-						document.getElementById("scoreLeftRemote").textContent = '0'
-						document.getElementById("winnerBoardRemote").textContent = "First to 7 wins!"
-						startGame()
+						loadRealTimeGame(roomId - getUserObj().id, ballOwner)
 					}, 3000);
 				}
 				break
@@ -168,19 +178,49 @@ function monitorGame(roomId) {
 			case 'win':
 				const matchWinner = messageObj.winner
 				if (matchWinner == getUserObj().id) {
-					document.getElementById("winnerBoardRemote").textContent = "You win"
+					document.getElementById("winnerBoardRemote").textContent = "You won"
 				} else {
 					document.getElementById("winnerBoardRemote").textContent = "You lost"
 				}
-				gameSocket.close()
+				gameDictRemote.instance.running = false
+				closeSocket(sockets.gameSocket)
 				break
-				//loadPage(elements.homePage)
-				//* Display Win message and disconnect and redirect to home page
 			case 'action':
-			
-			default:
-			
-		}
+				const action = messageObj.action
+				const userId = messageObj.user
+				
+				if (gameDictRemote.instance.running != true || gameDictRemote.instance == -1) {
+					break
+				}
+				switch (action) {
+					case 'a pressed':
+						if (userId == getUserObj().id) {
+							gameDictRemote.instance.moveLeftPaddleUp = true
+						}
+						else {
+							gameDictRemote.instance.moveRightPaddleUp = true
+						}
+						break
+					case 'd pressed':
+						if (userId == getUserObj().id)
+							gameDictRemote.instance.moveLeftPaddleDown = true
+						else
+							gameDictRemote.instance.moveRightPaddleDown = true
+						break
+					case 'a released':
+						if (userId == getUserObj().id)
+							gameDictRemote.instance.moveLeftPaddleUp = false
+						else
+							gameDictRemote.instance.moveRightPaddleUp = false
+						break
+					case 'd released':
+						if (userId == getUserObj().id)
+							gameDictRemote.instance.moveLeftPaddleDown = false
+						else
+							gameDictRemote.instance.moveRightPaddleDown = false
+						break
+				}
+			}
 	}
 		
 

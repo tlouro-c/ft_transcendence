@@ -5,6 +5,7 @@ from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
 from .models import Game
 import logging
+from random import choice, shuffle
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "info",
 					"info": "Start",
+					"ball_owner": choice(list(self.users_in_room[self.room_id]))
 				});
 
 
@@ -86,9 +88,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
+		logger.debug(text_data_json)
 		type_of_event = text_data_json["type"]
 		user = self.scope["user"]
 
+		#! Problems
 		if type_of_event == "point":
 			point_winner = text_data_json["point_winner"]
 			await self.channel_layer.group_send(self.group_room_name,
@@ -105,7 +109,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"type": "win",
 					"winner": match_winner
 				});
-			
+		elif type_of_event == "action":
+			for key in text_data_json:
+				print(key)
+			await self.channel_layer.group_send(self.group_room_name,
+			{
+				"type": "action",
+				"action": text_data_json["action"],
+				"user": user
+			});
 
 
 	async def action(self, event):
@@ -117,7 +129,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def info(self, event):
 		type_of_event = event['type']
 		info = event['info']
-		await self.send(text_data=json.dumps({'type':type_of_event, "info": info}))
+		if 'ball_owner' in event:
+			ball_owner = event['ball_owner']
+			await self.send(text_data=json.dumps({'type':type_of_event, "info": info, "ball_owner": ball_owner}))
+		else:
+			await self.send(text_data=json.dumps({'type':type_of_event, "info": info}))
 
 	async def point(self, event):
 		type_of_event = event['type']
@@ -172,3 +188,56 @@ class GameConsumer(AsyncWebsocketConsumer):
 			return point_winner
 		else:
 			return None
+
+
+
+class TournamentConsumer(AsyncWebsocketConsumer):
+
+	users_in_room = {}
+	room_db_entry = {}
+
+	async def connect(self):
+
+		self.room_id = self.scope['url_route']['kwargs']['room_id']
+		self.group_room_name = "chat_" + self.room_id
+
+		user = self.scope.get('user')
+		if user == AnonymousUser():
+			await self.close()
+			return
+		
+
+		await self.channel_layer.group_add(
+			self.group_room_name,
+			self.channel_name
+		)
+		await self.accept()
+
+
+		if self.room_id not in self.users_in_room:
+			self.users_in_room[self.room_id] = set()
+		if self.room_id not in self.room_db_entry:
+			self.room_db_entry[self.room_id] = int()
+		self.users_in_room[self.room_id].add(user)
+
+
+		self.user_count = len(self.users_in_room[self.room_id])
+		if self.user_count < 4:
+			self.room_db_entry[self.room_id] = await self.new_game_on_db()
+			await self.channel_layer.group_send(self.group_room_name,
+			{
+				"type": "info",
+				"info": f'Wait, you need {4 - self.user_count} more {"player" if self.user_count == 3 else "players"}',
+			});
+		else:
+			randomized_participants = shuffle(list(self.users_in_room[self.room_id]))
+			await self.start_game_on_db();
+			await self.channel_layer.group_send(self.group_room_name,
+				{
+					"type": "info",
+					"info": "The tournament will start",
+					"game_1_user_1": randomized_participants[0],
+					"game_1_user_1": randomized_participants[1],
+					"game_2_user_2": randomized_participants[2],
+					"game_2_user_2": randomized_participants[3]
+				});
