@@ -61,15 +61,16 @@ export function setupEventListeners() {
 
 	document.getElementById("play-against-ai-btn").addEventListener("click", function(event) {
 		event.preventDefault();
+		document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.add('d-none'))
 		document.getElementById('game-column').classList.add('d-none');
 		document.getElementById('game-menu-column').classList.remove('d-none');
 		document.getElementById('menu').style.display ="block";
-		console.log(document.getElementById('game-menu-column').classList)
 		loadPage(elements.localPlayPage);
 	});
 
 	document.getElementById("start-game-btn").addEventListener("click", (event) => {
 		event.preventDefault();
+		
 		gameDict.instance = startGame()
 	});
 

@@ -1,4 +1,5 @@
-import { gameDict } from "../utils.js";
+import { fetchUser } from "../profile.js";
+import { gameDict, getUserObj, API } from "../utils.js";
 import { Key } from "./keyboard.js"
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -29,6 +30,7 @@ export class Game{
 		this.fieldOp = 0;
 		this.lastHitByPlayer1 = false;
 		this.running = false
+		this.hazardOnScene = false;
 		this.Stop = function() { this.running = false }
 		
 		this.init();
@@ -192,6 +194,13 @@ export class Game{
 		this.hazardBlock.position.y = HEIGHT/2;
 	}
 
+	RemoveHazard() {
+		if (this.hazardOnScene) {
+			this.scene.remove(this.hazardBlock);
+			this.hazardOnScene = false;
+		}
+	}
+
 	SwitchMode() {
 		if (Key.isDown(Key.SPACE) && !this.keyPressed) {
 			this.is3D = !this.is3D;
@@ -223,10 +232,12 @@ export class Game{
 		c.appendChild(canvas);
 	}
 
-	StartGame() {
+	async StartGame() {
+		this.RemoveHazard()
 		this.running = true
 		this.score1 = 0
 		this.score2 = 0
+
 
 		window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 		window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
@@ -235,7 +246,13 @@ export class Game{
 		this.is3D = document.getElementById("3DMode").checked;
 		this.multiPlay = document.getElementById("multiPlayMode").checked;
 		this.hazardMode = document.getElementById("hazardMode").checked;
-		console.log("3D", this.is3D, "multiplayer", this.multiPlay, "hazard", this.hazardMode)
+
+		if (this.multiPlay == false) {
+			const user = await fetchUser(getUserObj().id);
+			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
+			document.querySelector(".local-play-avatar .user-avatar").setAttribute('src', API + user.avatar)
+			document.querySelector(".local-play-avatar .username").textContent = user.username
+		}
 
 
 		//resets counter and header
@@ -256,6 +273,7 @@ export class Game{
 		gameCanvas.classList.remove('d-none');
 		gameCanvas.style.mixBlendMode = 'lighten'; 
 		document.getElementById('scoreboard').style.display = 'block';
+
 		
 		// start game
 		this.Draw();
@@ -590,6 +608,7 @@ export class Game{
 		if ((this.score1 >= 4 || this.score2 >= 4) && this.hazardMode)
 		{
 			this.scene.add(this.hazardBlock);
+			this.hazardOnScene = true;
 			this.HazardColision();
 		}
 		this.CheckScoreForHazard();

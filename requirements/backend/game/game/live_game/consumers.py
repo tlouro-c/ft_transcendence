@@ -149,8 +149,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 	def new_game_on_db(self):
 		user = self.scope.get('user')
 		invited = str(int(self.room_id) - int(user))
+		mode_3d = self.scope.get('mode_3d') == 'true'
+		mode_hazard = self.scope.get('mode_hazard') == 'true'
 
-		new_game = Game(user1=user, user2=invited, invited=invited, invited_by=user)
+		new_game = Game(user1=user, user2=invited, invited=invited, invited_by=user, mode_3d=mode_3d, mode_hazard=mode_hazard)
 		new_game.save()
 		return new_game.id
 
