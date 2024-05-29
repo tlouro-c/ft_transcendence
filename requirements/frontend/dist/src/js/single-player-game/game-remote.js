@@ -1,11 +1,22 @@
 import { gameDict, getUserObj, sockets } from "../utils.js";
 import { Key } from "./keyboard.js"
+import { InputHandler } from "./input.js"
+
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
 const WIDTH = 640 + 300;
 const HEIGHT = 360 + 0;
 const PADDLEWIDTH = 20, PADDLEHEIGHT = 60, PADDLEDEPTH = 10, PADDLEQUALITY = 1;
 const HAZARDWIDTH = 20, HAZARDHEIGHT = 150, HAZARDDEPTH = 100, HAZARDQUALITY = 1;
+
+var ball_y;
+var ball_x;
+var left_paddle_y;
+var right_paddle_y;
+var score1;
+var score2;
+var hazard_y;
+
 
 export class RemoteGame{
 	constructor(ballOwner){
@@ -16,10 +27,8 @@ export class RemoteGame{
 		this.hazardMode = false;
 		this.difficulty = 0.2;
 		this.score1 = 0;
-		this.score2 = 0;
+		this.score2 = 0; 
 		this.maxScore = 7;
-		this.ballSpeed = 4;
-		this.paddleSpeed = 6;
 		this.hazardSpeed = 3;
 		this.hazardDir = 1;
 		this.keyPressed = false;
@@ -27,16 +36,10 @@ export class RemoteGame{
 		this.hazardPressed = false;
 		this.SHIFTPressed = false;
 		this.fieldOp = 0;
-		this.lastHitByPlayer1 = false;
 		this.running = false
 		this.Stop = function() { this.running = false }
-		this.moveLeftPaddleUp = false
-		this.moveLeftPaddleDown = false
-		this.moveRightPaddleUp = false
-		this.moveRightPaddleDown = false
-		this.ballDirX = 0
-		this.ballDirY = 0
-		
+
+		this.playerInput = new InputHandler("a", "d");
 		
 		this.init();
 
@@ -196,26 +199,6 @@ export class RemoteGame{
 		this.hazardBlock.position.y = HEIGHT/2;
 	}
 
-	SwitchMode() {
-		if (Key.isDown(Key.SPACE) && !this.keyPressed) {
-			this.is3D = !this.is3D;
-			this.keyPressed = true;
-		} else if (!Key.isDown(Key.SPACE))
-			this.keyPressed = false;
-	
-		if (Key.isDown(Key.M) && !this.multiPressed) {
-			this.multiPlay = !this.multiPlay;
-			this.multiPressed = true;
-		} else if (!Key.isDown(Key.M))
-			this.multiPressed = false;
-	
-		if (Key.isDown(Key.H) && !this.hazardPressed) {
-			this.hazardMode = !this.hazardMode;
-			this.hazardPressed = true;
-		} else if (!Key.isDown(Key.H))
-			this.hazardPressed = false;
-	}
-
 	
 	AttachCanvas(){
 		document.querySelectorAll(".old-canvas").forEach(element => element.remove())
@@ -227,24 +210,12 @@ export class RemoteGame{
 		c.appendChild(canvas);
 	}
 
-	StartGame(ballOwner) {
+	StartGame() {
 		this.running = true
 		this.score1 = 0
 		this.score2 = 0
 
-		if (ballOwner == getUserObj().id) {
-			this.ballDirX = -1
-		} else {
-			this.ballDirX = 1
-		}
-		this.ballDirY = 1
 
-
-		//checkbox values
-		//this.is3D = document.getElementById("3DMode").checked;
-		//this.multiPlay = document.getElementById("multiPlayMode").checked;
-		//this.hazardMode = document.getElementById("hazardMode").checked;
-		//console.log("3D", this.is3D, "multiplayer", this.multiPlay, "hazard", this.hazardMode)
 		let keyPressed = false
 
 		window.addEventListener('keyup', function(event) {
@@ -275,8 +246,6 @@ export class RemoteGame{
 		gameCanvas.style.mixBlendMode = 'lighten'; 
 		//document.getElementById('scoreboard').style.display = 'block';
 		
-		// start game
-		console.log(this.ballDirX)
 		this.multiPlay = true;
 		this.Draw();
 	}
@@ -285,127 +254,111 @@ export class RemoteGame{
 		if (this.running == false) {
 			return
 		}
-		this.SwitchMode();
 		this.ChangeField();
 	
-		// double view
-		if (this.is3D) {
-			// left player 1
-			this.renderer.setViewport(0, 0, WIDTH / 2, HEIGHT);
-			this.renderer.setScissor(0, 0, WIDTH / 2, HEIGHT);
-			this.renderer.setScissorTest(true);
-			this.renderer.render(this.scene, this.camera1);
-			
-			// right player 2
-			this.renderer.setViewport(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
-			this.renderer.setScissor(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
-			this.renderer.setScissorTest(true);
-			this.renderer.render(this.scene, this.camera2);
-		} else {
-			this.renderer.setViewport(0, 0, WIDTH, HEIGHT);
-			this.renderer.setScissor(0, 0, WIDTH, HEIGHT);
-			this.renderer.setScissorTest(true);
-			this.renderer.render(this.scene, this.camera1);
-		}
-	
-		// loop the Draw() function
-		requestAnimationFrame(this.Draw);
-	
-		this.BallPhysics();
-		this.PaddlePlay1();
-		if (this.multiPlay)
-			this.PaddlePlay2();
-
-	
-		if (this.is3D && this.multiPlay)
-			this.CoubleCameraWork3D();
-		else if (this.is3D && !this.multiPlay)
+		
+		this.renderer.setViewport(0, 0, WIDTH, HEIGHT);
+		this.renderer.setScissor(0, 0, WIDTH, HEIGHT);
+		this.renderer.setScissorTest(true);
+		this.renderer.render(this.scene, this.camera1);
+		
+		if (this.is3D)
 			this.CameraWork3D();
 		else
 			this.CameraWork2D();
 	
-		this.PaddlesColision();
-		if (this.hazardMode)
-			this.HazardStart();
-		else
-			this.scene.remove(this.hazardBlock);
+		// if (this.hazardMode)
+		// 	this.HazardStart();
+		// else
+		// 	this.scene.remove(this.hazardBlock);
 	}
 	
-	BallPhysics() {
-		//BALL BOUNCING
-		if (this.ball.position.y <= -PLANEHEIGHT / 2){ //bottom side of tablele
-			this.ballDirY = -this.ballDirY;
-			this.ball.position.y = (-PLANEHEIGHT / 2) //+ 20 crank up this value if no fix
+	GameUpdate() {
+		const toSend = {
+			"type": "ball",
 		}
-		if (this.ball.position.y >= PLANEHEIGHT / 2){ //top side of tablele
-			this.ballDirY = -this.ballDirY;
-			this.ball.position.y = (PLANEHEIGHT / 2) //- 20 crank up this value if no fix
-		}
-			
-			//Player 2 scores
-		if (this.ball.position.x <= -PLANEWIDTH / 2) {
-			//Player 2 scores a point
-				this.score2++;
-				//update scoreboard
-				//reset ball
-				this.ResetBall("me");
-				//check if match is over
-			}
-			//Player 1 scores
-		if (this.ball.position.x >= PLANEWIDTH / 2) {
-			//Player 1 scores a point
-			this.score1++;
-			//update scoreboard
-			sockets.gameSocket.send(JSON.stringify({'type': 'point', 'point_winner': getUserObj().id}))
-			//reset ball
-			this.ResetBall("opponent");
-			//check if match is over
-		}
-		this.ball.position.x += this.ballDirX * this.ballSpeed;
-		this.ball.position.y += this.ballDirY * this.ballSpeed;
-	
-		//BALL LIMITS
-		if (this.ballDirY > this.ballSpeed * 2)
-			this.ballDirY = this.ballSpeed * 2;
-		else if (this.ballDirY < -this.ballSpeed * 2)
-			this.ballDirY = -this.ballSpeed * 2;
+		sockets.gameSocket.send(JSON.stringify(toSend))
+		this.update_game_vars();
 	}
 
-	PaddlesColision() {
-		//verification if the ball colides with de dimesions of the paddle1
-		if (this.ball.position.x <= this.paddle1.position.x + PADDLEWIDTH &&
-			this.ball.position.x >= this.paddle1.position.x) {
-				
-				if (this.ball.position.y <= this.paddle1.position.y + PADDLEHEIGHT / 2 &&
-				this.ball.position.y >= this.paddle1.position.y - PADDLEHEIGHT / 2) {
-				if (this.ballDirX < 0) {
-					//strech paddle when hits
-					this.paddle1.scale.y = 3;
-					//bounce the ball
-					this.ballDirX = -this.ballDirX;
-					//adding angle to the bouncing
-					this.ballDirY -= this.paddle1DirY * 0.7;
-				}
-			}
+	CheckKeyInputs() {
+		if (this.playerInput.keys.length > 0 )
+		{
+			game_socket.send(JSON.stringify({
+				"type": "player_input",
+				"keys": this.playerInput.keys,
+			}))
 		}
-		//verification if the ball colides with de dimesions of the paddle2
-		if (this.ball.position.x <= this.paddle2.position.x + PADDLEWIDTH &&
-			this.ball.position.x >= this.paddle2.position.x) {
+		this.update_game_vars();
+	}
 
-				if (this.ball.position.y <= this.paddle2.position.y + PADDLEHEIGHT / 2 &&
-				this.ball.position.y >= this.paddle2.position.y - PADDLEHEIGHT / 2) {
-				if (this.ballDirX > 0) {
-					//strech paddle when hits
-					this.paddle2.scale.y = 3;
-					//bounce the ball
-					this.ballDirX = -this.ballDirX;
-					//adding angle to the bouncing
-					this.ballDirY -= this.paddle2DirY * 0.7;
-				}
-			}
-		}
+
+// HazardStart()
+// {
+// 	// if ((this.score1 >= 4 || this.score2 >= 4) && this.hazardMode)
+// 		// 	{
+// 		// 		this.scene.add(this.hazardBlock);
+// 		// 	this.HazardColision();
+// 		// }
+// 		// this.CheckScoreForHazard();
+// 		this.HazardMove();
+// 	}
+	
+// 	// HazardColision() {
+// 		// 	// Verify colision
+// 		// 	if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
+// 		// 		this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
+// 			// 			if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
+// 	// 			this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
+// 		// 				// bounce the ball;
+// 	// 			this.ballDirX = -this.ballDirX;
+// 	// 		}
+// 	// 	}
+// 	// }
+	
+// 	HazardMove()
+// 	{
+// 		// if (this.hazardBlock.position.y >= PLANEWIDTH / 2 - HAZARDWIDTH / 2) {
+// 			// 	this.hazardDir = -1;
+// 			// } else if (this.hazardBlock.position.y <= -PLANEWIDTH / 2 + HAZARDWIDTH / 2) {
+// 				// 	this.hazardDir = 1;
+// 		// }
+// 		// this.hazardBlock.position.y += this.hazardSpeed * this.hazardDir;
+// 		this.hazardBlock.position.y = hazard_y;
+// 	}
+	
+	// CheckScoreForHazard() {
+		// 	if (this.score1 >= 5 || this.score2 >= 5) {
+			// 		this.hazardSpeed = 5;
+	// 	}
+	// }
+
+	DoubleCameraWork3D() { 
+		this.camera2.position.x = this.paddle2.position.x + 100;
+		this.camera2.position.z = this.paddle2.position.z + 100;
+		this.camera2.rotation.z = 90 * Math.PI / 180;
+		this.camera2.rotation.y = 60 * Math.PI / 180;
+		
+		this.camera1.position.x = this.paddle1.position.x - 100;
+		this.camera1.position.z = this.paddle1.position.z + 100;
+		this.camera1.rotation.z = -90 * Math.PI / 180;
+		this.camera1.rotation.y = -60 * Math.PI / 180;
 	}
 	
+	CameraWork3D() { 
+		this.camera1.position.x = this.paddle1.position.x - 100;
+		this.camera1.position.z = this.paddle1.position.z + 100;
+		this.camera1.rotation.z = -90 * Math.PI / 180;
+		this.camera1.rotation.y = -60 * Math.PI / 180;
+	}
+	
+	CameraWork2D() {
+		this.camera1.position.x = 0;
+		this.camera1.position.z = 500;
+		this.camera1.rotation.z = 0;
+		this.camera1.rotation.y = 0;
+	}
+
 	ChangeField() {
 		if (Key.isDown(Key.SHIFT) && !this.SHIFTPressed) {
 			this.fieldOp++;
@@ -462,154 +415,53 @@ export class RemoteGame{
 				break;
 		}
 	}
-	
-	CoubleCameraWork3D() { 
-		this.camera2.position.x = this.paddle2.position.x + 100;
-		this.camera2.position.z = this.paddle2.position.z + 100;
-		this.camera2.rotation.z = 90 * Math.PI / 180;
-		this.camera2.rotation.y = 60 * Math.PI / 180;
-	
-		this.camera1.position.x = this.paddle1.position.x - 100;
-		this.camera1.position.z = this.paddle1.position.z + 100;
-		this.camera1.rotation.z = -90 * Math.PI / 180;
-		this.camera1.rotation.y = -60 * Math.PI / 180;
-	}
-
-	CameraWork3D() { 
-		this.camera1.position.x = this.paddle1.position.x - 100;
-		this.camera1.position.z = this.paddle1.position.z + 100;
-		this.camera1.rotation.z = -90 * Math.PI / 180;
-		this.camera1.rotation.y = -60 * Math.PI / 180;
-	}
-	
-	CameraWork2D() {
-		this.camera1.position.x = 0;
-		this.camera1.position.z = 500;
-		this.camera1.rotation.z = 0;
-		this.camera1.rotation.y = 0;
-	}
-
-	PaddlePlay1() {
-		//left
-		//if (Key.)
-		if (this.moveLeftPaddleUp) {
-			if (this.paddle1.position.y < PLANEHEIGHT * 0.45) //not touching the side of the SHIFTle
-			this.paddle1DirY = this.paddleSpeed * 0.5;
-			else {
-				this.paddle1DirY = 0;
-				this.paddle1.scale.z += (10 - this.paddle1.scale.z) * 0.2;
-			}
-		}
-		//right
-		else if (this.moveLeftPaddleDown) {
-			if (this.paddle1.position.y > -PLANEHEIGHT * 0.45)
-				this.paddle1DirY = -this.paddleSpeed * 0.5;
-			else {
-				this.paddle1DirY = 0;
-				this.paddle1.scale.z += (10 - this.paddle1.scale.z) * 0.2;
-			}
-		}
-		else
-		this.paddle1DirY = 0;
-	
-	this.paddle1.scale.y += (1 - this.paddle1.scale.y) * 0.2;
-	this.paddle1.scale.z += (1 - this.paddle1.scale.z) * 0.2;
-		this.paddle1.position.y += this.paddle1DirY;
-	}
-	
-	PaddlePlay2() {
-		//left
-		if (this.moveRightPaddleUp) {
-			if (this.paddle2.position.y < PLANEHEIGHT * 0.45) //not touching the side of the SHIFTle
-			this.paddle2DirY = this.paddleSpeed * 0.5;
-			else {
-				this.paddle2DirY = 0;
-				this.paddle2.scale.z += (10 - this.paddle2.scale.z) * 0.2;
-			}
-		}
-		//right
-		else if (this.moveRightPaddleDown) {
-			if (this.paddle2.position.y > -PLANEHEIGHT * 0.45)
-				this.paddle2DirY = -this.paddleSpeed * 0.5;
-			else {
-				this.paddle2DirY = 0;
-				this.paddle2.scale.z += (10 - this.paddle2.scale.z) * 0.2;
-			}
-		} 
-		else
-			this.paddle2DirY = 0;
-	
-		this.paddle2.scale.y += (1 - this.paddle2.scale.y) * 0.2;
-		this.paddle2.scale.z += (1 - this.paddle2.scale.z) * 0.2;
-		this.paddle2.position.y += this.paddle2DirY;
-	}
-
-	ResetBall(loser) {
-
-		//ball in center
-		this.ball.position.x = 0;
-		this.ball.position.y = 0;
-
-		if (loser == "me") {
-			this.ballDirX = -1
-		} else {
-			this.ballDirX = 1
-		}
-
-		this.ballDirY = 1
-	}
-	
-	HazardStart()
+	update_game_vars()
 	{
-		if ((this.score1 >= 4 || this.score2 >= 4) && this.hazardMode)
-		{
-			this.scene.add(this.hazardBlock);
-			this.HazardColision();
-		}
-		this.CheckScoreForHazard();
-		this.HazardMove();
-	}
-
-	HazardColision() {
-		// Verify colision
-		if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
-			this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
-			if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
-			this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
-				// bounce the ball;
-				this.ballDirX = -this.ballDirX;
-			}
-		}
-	}
-	
-	HazardMove()
-	{
-		if (this.hazardBlock.position.y >= PLANEWIDTH / 2 - HAZARDWIDTH / 2) {
-			this.hazardDir = -1;
-		} else if (this.hazardBlock.position.y <= -PLANEWIDTH / 2 + HAZARDWIDTH / 2) {
-			this.hazardDir = 1;
-		}
-		this.hazardBlock.position.y += this.hazardSpeed * this.hazardDir;
-	}
-
-	CheckScoreForHazard() {
-		if (this.score1 >= 5 || this.score2 >= 5) {
-			this.hazardSpeed = 5;
-		}
+		this.padle1.position.y = left_paddle_y;
+		this.padle2.position.y = right_paddle_y;
+		this.ball.x = ball_x;
+		this.ball.y = ball_y;
+		this.score1 = score1;
+		this.score2 = score2;
 	}
 }
 
-function RandomDir(){
-	let random1 = Math.random();
-	if (random1 > 0.5)
-			return Math.random();
-	else
-		return (Math.random() * -1);
+export function update_game_data(data)
+{
+	leftPaddle_y = data["left_coords"];
+	rightPaddle_y = data["right_coords"];
+	ball_x = data["ball_x"];
+	ball_y = data["ball_y"];
+	player1_Score = data["player1_score"];
+	player2_Score = data["player2_score"];
 }
 
 export function startRemoteGame(ballOwner){
 	const game = new RemoteGame();
 
-	game.StartGame(ballOwner);
+	function animate()
+	{
+		requestAnimationFrame(animate())
+		game.Draw();
+		game.CheckKeyInputs();
+		game.GameUpdate();
+	}
+
+	game.StartGame();
+	animate();
 	return game
 };
+
+// keys -> websockets -> funcoes de update -> websockets -> Js placeholder -> update visual -> render -> repeat
+
+//on message
+
+// const data = JSON.parse(event.data);
+// if (data && data['type'])
+// 	{
+// 		let data_type = data['type'];
+// 		if (data_type == "player_input")
+// 			update_game_data(data['data']);
+// 		else if (data_type == "ball_updates")
+// 			update_game_data(data['data']);
+// 	}

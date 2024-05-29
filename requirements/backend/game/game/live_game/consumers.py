@@ -6,6 +6,11 @@ from channels.db import database_sync_to_async
 from .models import Game
 import logging
 from random import choice, shuffle
+##Vera
+from .game_utils.game_utils import get_player_id
+from .game_utils.game_utils import game_map
+##
+
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +42,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if self.room_id not in self.room_db_entry:
 			self.room_db_entry[self.room_id] = int()
 		self.users_in_room[self.room_id].add(user)
+
 
 
 		self.user_count = len(self.users_in_room[self.room_id])
@@ -90,34 +96,24 @@ class GameConsumer(AsyncWebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		logger.debug(text_data_json)
 		type_of_event = text_data_json["type"]
-		user = self.scope["user"]
 
-		#! Problems
-		if type_of_event == "point":
-			point_winner = text_data_json["point_winner"]
-			await self.channel_layer.group_send(self.group_room_name,
-			{
-				"type": "point",
-				"point_winner": point_winner
-			});
-			logger.debug("Point winner -> " + str(point_winner))
-			match_winner = await self.update_result(str(point_winner))
-			if match_winner is not None:
-				await self.finish_game(match_winner)
-				await self.channel_layer.group_send(self.group_room_name,
+		if type_of_event == "player_input":
+			await self.channel_layer.group_send(
+				self.group_room_name,
 				{
-					"type": "win",
-					"winner": match_winner
-				});
-		elif type_of_event == "action":
-			for key in text_data_json:
-				print(key)
-			await self.channel_layer.group_send(self.group_room_name,
-			{
-				"type": "action",
-				"action": text_data_json["action"],
-				"user": user
-			});
+					"type": "player_input",
+					"data": text_data_json
+				}
+			)
+		elif type_of_event == "ball":
+			await self.channel_layer.group_send(
+				self.group_room_name,
+				{
+					"type": "ball",
+					"data": text_data_json
+				}
+			)
+
 
 
 	async def action(self, event):
@@ -177,18 +173,57 @@ class GameConsumer(AsyncWebsocketConsumer):
 			game.delete()
 
 	@database_sync_to_async
-	def update_result(self, point_winner):
+	def update_result(self, game_state):
 		game = Game.objects.get(id=self.room_db_entry[self.room_id])
-		if point_winner == game.user1:
-			game.user1_score += 1
-		else:
-			game.user2_score += 1
+		if game_state["player1_score"] != game.user1_score:
+			game.user1_score = game_state["player1_score"]
+		if game_state["player2_score"] != game.user2_score:
+			game.user2_score = game_state["player2_score"]
 		game.save()
-		if game.user1_score == 7 or game.user2_score == 7:
-			return point_winner
+		if game.user1_score == 7:
+			return game.user1
+		elif game.user2_score == 7:
+			return game.user2
 		else:
 			return None
 
+#VERA WAS HERE
+	async def player_inputs(self, event):
+
+		data = event['data']
+		game_id = int(self.room_id)
+
+		player_id = get_player_id(data.get("keys"), self.users_in_room[self.room_id], self.scope["user"], data)
+
+		game_map[game_id].update_paddles(data.get("keys"), player_id)
+		
+		response_data = game_map[game_id].get_state()
+
+		await self.send(text_data=json.dumps({
+			'type': 'player_input',
+			'data': response_data,
+		}))
+
+	async def ball_updates(self, event):
+
+		game_id = int(self.room_id)
+
+		if game_map[game_id]:
+			game_map[game_id].update_ball()
+			response_data = game_map[game_id].get_state()
+			match_winner = await self.update_result(response_data)
+			if match_winner is not None:
+				await self.finish_game(match_winner)
+				await self.channel_layer.group_send(self.group_room_name,
+				{
+					"type": "win",
+					"winner": match_winner
+				})
+			await self.send(text_data=json.dumps({
+				'type': 'ball_updates',
+				'data': response_data,
+			}))
+## No more Vera
 
 
 class TournamentConsumer(AsyncWebsocketConsumer):
@@ -228,10 +263,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 			{
 				"type": "info",
 				"info": f'Wait, you need {4 - self.user_count} more {"player" if self.user_count == 3 else "players"}',
-			});
+			})
 		else:
 			randomized_participants = shuffle(list(self.users_in_room[self.room_id]))
-			await self.start_game_on_db();
+			await self.start_game_on_db()
 			await self.channel_layer.group_send(self.group_room_name,
 				{
 					"type": "info",
@@ -240,4 +275,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 					"game_1_user_1": randomized_participants[1],
 					"game_2_user_2": randomized_participants[2],
 					"game_2_user_2": randomized_participants[3]
-				});
+				})
+
+
