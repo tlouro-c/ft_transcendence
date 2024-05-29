@@ -24,6 +24,10 @@ class JwtAuthMiddleware(BaseMiddleware):
 	async def __call__(self, scope, receive, send):
 		query_string = parse_qs(scope["query_string"].decode())
 		token = query_string.get('token', [None])[0] or None
+		mode_3d = query_string.get('mode_3d', [None])[0] or None
+		mode_hazard = query_string.get('mode_hazard', [None])[0] or None
+		scope['mode_3d'] = mode_3d or ""
+		scope['mode_hazard'] = mode_hazard or ""
 		
 		user_id = user_id_from_token(token)
 		logger.debug(f"User ID: {user_id}")
