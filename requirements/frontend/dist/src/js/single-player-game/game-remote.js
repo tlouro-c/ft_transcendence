@@ -146,9 +146,9 @@ export class RemoteGame{
 	}
 
 	CreatePlane(){
-		const planeMaterial = new THREE.MeshBasicMaterial({
-			map: new THREE.TextureLoader().load('src/assets/fields/basicField.jpg'), 
-			side: THREE.DoubleSide
+		const planeMaterial = new THREE.MeshLambertMaterial({
+			color: 0x237A3C,
+			wireframe: false
 		});
 
 		this.plane = new THREE.Mesh(
@@ -318,7 +318,7 @@ export class RemoteGame{
 
 	
 		if (this.is3D && this.multiPlay)
-			this.CoubleCameraWork3D();
+			this.DoubleCameraWork3D();
 		else if (this.is3D && !this.multiPlay)
 			this.CameraWork3D();
 		else
@@ -414,19 +414,26 @@ export class RemoteGame{
 			this.SHIFTPressed = false;
 		}
 		
-		if (this.fieldOp < 0 || this.fieldOp > 3)
+		if (this.fieldOp < 0 || this.fieldOp > 5)
 			this.fieldOp = 0;
 		
 		var loader = new THREE.TextureLoader();
 		switch (this.fieldOp) {
 			case 0:
 				var newMaterial = new THREE.MeshLambertMaterial({
-					color: 0x4BD121,
+					color: 0x237A3C,
 					wireframe: false
 				});
 				this.plane.material = newMaterial;
 				break;
 			case 1:
+				var newMaterial = new THREE.MeshLambertMaterial({
+					color: 0x4BD121,
+					wireframe: true
+				});
+				this.plane.material = newMaterial;
+				break;
+			case 2:
 				loader.load('src/assets/fields/basicField.jpg', (texture) => {
 				var newMaterial = new THREE.MeshBasicMaterial({
 					map: texture, 
@@ -437,33 +444,43 @@ export class RemoteGame{
 					console.error('Error loading texture basicField.jpg', err);
 				});
 				break;
-			case 2:
-				loader.load('src/assets/fields/comunCourse.jpg', (texture) => {
+			case 3:
+				loader.load('src/assets/fields/RetroField.jpg', (texture) => {
 					var newMaterial = new THREE.MeshBasicMaterial({
 						map: texture, 
 						side: THREE.DoubleSide
 					});
 					this.plane.material = newMaterial;
 				}, undefined, (err) => {
-					console.error('Error loading texture comunCourse.jpg', err);
+					console.error('Error loading texture RetroField.jpg', err);
 				});
 				break;
-			
-			case 3:
-				loader.load('src/assets/fields/pong42.jpg', (texture) => {
+			case 4:
+				loader.load('src/assets/fields/42Field.jpg', (texture) => {
 					var newMaterial = new THREE.MeshBasicMaterial({
 						map: texture, 
 						side: THREE.DoubleSide
 					});
 					this.plane.material = newMaterial;
 				}, undefined, (err) => {
-					console.error('Error loading texture pong42.jpg', err);
+					console.error('Error loading texture 42Field.jpg', err);
+				});
+				break;
+			case 5:
+				loader.load('src/assets/fields/PacManField.jpg', (texture) => {
+					var newMaterial = new THREE.MeshBasicMaterial({
+						map: texture, 
+						side: THREE.DoubleSide
+					});
+					this.plane.material = newMaterial;
+				}, undefined, (err) => {
+					console.error('Error loading texture PacManField.jpg', err);
 				});
 				break;
 		}
 	}
 	
-	CoubleCameraWork3D() { 
+	DoubleCameraWork3D() { 
 		this.camera2.position.x = this.paddle2.position.x + 100;
 		this.camera2.position.z = this.paddle2.position.z + 100;
 		this.camera2.rotation.z = 90 * Math.PI / 180;
