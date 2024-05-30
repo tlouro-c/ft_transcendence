@@ -1,7 +1,6 @@
 export class InputHandler {
 	constructor(down, up) {
 		this.keys = [];
-		this.id = id;
 		window.addEventListener('keydown', e => {this.keyDown(e)});
 		window.addEventListener('keyup', e => {this.keyUp(e)});
 		this.key = [down, up];

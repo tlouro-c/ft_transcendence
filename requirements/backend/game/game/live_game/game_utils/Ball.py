@@ -6,12 +6,13 @@ class Ball:
 
 	def __init__(self):
 
-		self.x = 400
-		self.y = 250
+		self.x = 1
+		self.y = 1
 		self.x_dir = 1
 		self.y_dir = self.random_start_pos()
 		self.speed = 4
 		self.last_call = int(round(time.time() * 1000))
+		
 
 
 	def update(self, Left_paddle, Right_paddle, score: int, game_paused: int):
@@ -54,16 +55,16 @@ class Ball:
 
 	def _check_border_collision(self, score):
 
-		if ((self.x + self.x_dir + BALL_RADIUS >= CANVAS_WIDTH) or (self.x + self.x_dir - BALL_RADIUS <= 0)):
-			if self.x + self.x_dir - BALL_RADIUS <= 0:
+		if ((self.x + self.x_dir <= (-CANVAS_WIDTH / 2)) or (self.x + self.x_dir  >= (CANVAS_WIDTH / 2))):
+			if self.x + self.x_dir - BALL_RADIUS <= (-CANVAS_WIDTH / 2):
 				score[1] +=1
-			if self.x + self.x_dir + BALL_RADIUS >= CANVAS_WIDTH:
+			if self.x + self.x_dir + BALL_RADIUS >= (CANVAS_WIDTH / 2):
 				score[0] +=1
 			self.x_dir *= -1
-			self.x = CANVAS_WIDTH / 2
-			self.y = CANVAS_HEIGHT / 2
+			self.x = 1
+			self.y = 1
 			self.speed = BALL_START_SPEED
-		if (self.y + self.y_dir + BALL_RADIUS >= CANVAS_HEIGHT or self.y + self.y_dir - BALL_RADIUS <= 0):
+		if ((self.y + self.y_dir + BALL_RADIUS) >= (CANVAS_HEIGHT / 2) or (self.y + self.y_dir - BALL_RADIUS) <= (-CANVAS_HEIGHT / 2)):
 			self.y_dir *= -1
 
 
@@ -74,11 +75,11 @@ class Ball:
 		future_x += self.x_dir * (self.speed * ((self.time_now - self.last_call) / 20))
 		future_y += self.y_dir * (self.speed * ((self.time_now - self.last_call) / 20))
 
-		if future_y >= CANVAS_HEIGHT or future_y <=0 :
+		if future_y >=  (CANVAS_HEIGHT /2) or future_y <= (-CANVAS_HEIGHT /2) :
 			self._correct_position_y()
 		else:
 			self.y = future_y
-		if future_x >= 780 or future_x <= 10:
+		if future_x >= 290 or future_x <= -290:
 			self._correct_position_x(score)
 		else:
 			self.x = future_x
@@ -91,7 +92,7 @@ class Ball:
 		while (time_divided > 0):
 			self.y += self.y_dir * (self.speed / 20)
 			time_divided -= 1
-			if (self.y > CANVAS_HEIGHT or self.y < 0):
+			if (self.y > (CANVAS_HEIGHT /2) or self.y < (-CANVAS_HEIGHT /2)):
 				self.y_dir *= -1
 				break
 		self.y += self.y_dir * (self.speed/20) * time_divided
@@ -104,12 +105,12 @@ class Ball:
 		while (time_divided > 0):
 			self.x += self.x_dir * (self.speed / 20)
 			time_divided -= 1
-			if (self.x <= 10 or self.x >= 780):
+			if (self.x <= -290 or self.x >= 290):
 				self._check_paddle_collision()
 				break
 		self.x += self.x_dir * (self.speed/20) * time_divided
 		self._check_border_collision(score)
 	
 	def random_start_pos(self):
-		random.uniform(-1,1)
+		return random.uniform(-1,1)
 		

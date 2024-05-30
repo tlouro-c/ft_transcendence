@@ -6,9 +6,11 @@ from channels.db import database_sync_to_async
 from .models import Game
 import logging
 from random import choice, shuffle
+
 ##Vera
-from .game_utils.game_utils import get_player_id
-from .game_utils.game_utils import game_map
+import asyncio
+from asgiref.sync import sync_to_async
+from .game_utils.GameLogic import GameLogic
 ##
 
 
@@ -18,6 +20,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	users_in_room = {}
 	room_db_entry = {}
+	game_map = {}
 
 	async def connect(self):
 
@@ -41,7 +44,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.users_in_room[self.room_id] = set()
 		if self.room_id not in self.room_db_entry:
 			self.room_db_entry[self.room_id] = int()
+		if self.room_id not in self.game_map:
+			logger.debug("I was here")
+			self.game_map[self.room_id] = GameLogic()
+			logger.debug(self.game_map[self.room_id].get_state())
+			logger.debug(self.room_id)
 		self.users_in_room[self.room_id].add(user)
+		logger.debug(self.game_map)
 
 
 
@@ -60,7 +69,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"type": "info",
 					"info": "Start",
 					"ball_owner": choice(list(self.users_in_room[self.room_id]))
-				});
+				})
+			# self.game_map[self.room.id].start_game()
 
 
 	async def disconnect(self, code):
@@ -73,7 +83,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.group_room_name,
 			self.channel_name
 		)
-
 		logger.debug(len(self.users_in_room[self.room_id]))
 
 		users_counter = len(self.users_in_room[self.room_id])
@@ -90,6 +99,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.clear_if_invalid_game()
 			del self.users_in_room[self.room_id]
 			del self.room_db_entry[self.room_id]
+			del self.game_map[self.room_id]
 
 
 	async def receive(self, text_data):
@@ -101,7 +111,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.channel_layer.group_send(
 				self.group_room_name,
 				{
-					"type": "player_input",
+					"type": "player_inputs",
 					"data": text_data_json
 				}
 			)
@@ -109,11 +119,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.channel_layer.group_send(
 				self.group_room_name,
 				{
-					"type": "ball",
+					"type": "ball_updates",
 					"data": text_data_json
 				}
 			)
-
 
 
 	async def action(self, event):
@@ -180,24 +189,33 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if game_state["player2_score"] != game.user2_score:
 			game.user2_score = game_state["player2_score"]
 		game.save()
-		if game.user1_score == 7:
+		if game_state["player1_score"] == 7:
 			return game.user1
-		elif game.user2_score == 7:
+		elif game_state["player2_score"] == 7:
 			return game.user2
 		else:
 			return None
+		
+	@database_sync_to_async
+	def get_player_id(self, user):
+		game = Game.objects.get(id=self.room_db_entry[self.room_id])
+		if game.user1 == user:
+			return 0
+		else:
+			return 1
 
 #VERA WAS HERE
 	async def player_inputs(self, event):
 
 		data = event['data']
-		game_id = int(self.room_id)
+		logger.debug("that happened")
+		game_id = self.room_id
 
-		player_id = get_player_id(data.get("keys"), self.users_in_room[self.room_id], self.scope["user"], data)
+		player_id = await self.get_player_id(self.scope["user"]) #CHANGE THIS IN CASE GAME IS TOO HEAVY
 
-		game_map[game_id].update_paddles(data.get("keys"), player_id)
+		self.game_map[game_id].update_paddles(data.get("keys"), player_id)
+		response_data = self.game_map[game_id].get_state()
 		
-		response_data = game_map[game_id].get_state()
 
 		await self.send(text_data=json.dumps({
 			'type': 'player_input',
@@ -206,11 +224,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def ball_updates(self, event):
 
-		game_id = int(self.room_id)
-
-		if game_map[game_id]:
-			game_map[game_id].update_ball()
-			response_data = game_map[game_id].get_state()
+		game_id = self.room_id
+		if self.game_map[game_id]:
+			logger.debug("POGGERS")
+			logger.debug(self.game_map.keys)
+			self.game_map[game_id].update_ball()
+			response_data = self.game_map[game_id].get_state()
 			match_winner = await self.update_result(response_data)
 			if match_winner is not None:
 				await self.finish_game(match_winner)

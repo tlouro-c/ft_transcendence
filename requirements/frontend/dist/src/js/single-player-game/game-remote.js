@@ -1,6 +1,7 @@
 import { gameDict, getUserObj, sockets } from "../utils.js";
 import { Key } from "./keyboard.js"
 import { InputHandler } from "./input.js"
+import { gameDictRemote } from "../utils.js"
 
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -8,15 +9,6 @@ const WIDTH = 640 + 300;
 const HEIGHT = 360 + 0;
 const PADDLEWIDTH = 20, PADDLEHEIGHT = 60, PADDLEDEPTH = 10, PADDLEQUALITY = 1;
 const HAZARDWIDTH = 20, HAZARDHEIGHT = 150, HAZARDDEPTH = 100, HAZARDQUALITY = 1;
-
-var ball_y;
-var ball_x;
-var left_paddle_y;
-var right_paddle_y;
-var score1;
-var score2;
-var hazard_y;
-
 
 export class RemoteGame{
 	constructor(ballOwner){
@@ -100,7 +92,8 @@ export class RemoteGame{
 			new THREE.SphereGeometry(radius, segments, rings),
 			sphereMaterial
 		);
-		
+		this.ball.position.x = 0;
+		this.ball.position.y = -175;
 		this.scene.add(this.ball);
 	}
 
@@ -278,20 +271,18 @@ export class RemoteGame{
 			"type": "ball",
 		}
 		sockets.gameSocket.send(JSON.stringify(toSend))
-		this.update_game_vars();
 	}
 
 	CheckKeyInputs() {
 		if (this.playerInput.keys.length > 0 )
 		{
-			game_socket.send(JSON.stringify({
+			console.log("yuumi:", this.playerInput.Keys);
+			sockets.gameSocket.send(JSON.stringify({
 				"type": "player_input",
 				"keys": this.playerInput.keys,
 			}))
 		}
-		this.update_game_vars();
 	}
-
 
 // HazardStart()
 // {
@@ -415,40 +406,51 @@ export class RemoteGame{
 				break;
 		}
 	}
-	update_game_vars()
+	// update_game_vars()
+	// {
+	// 	this.padle1.position.y = left_paddle_y;
+	// 	this.padle2.position.y = right_paddle_y;
+	// 	this.ball.position.x = this.ball_x;
+	// 	this.ball.position.y = this.ball_y;
+	// }
+	update_game_data(data)
 	{
-		this.padle1.position.y = left_paddle_y;
-		this.padle2.position.y = right_paddle_y;
-		this.ball.x = ball_x;
-		this.ball.y = ball_y;
-		this.score1 = score1;
-		this.score2 = score2;
+		if (data)
+		{
+			this.paddle1.position.y = data["left_coords"];
+			this.paddle2.position.y = data["right_coords"];
+			this.ball.position.x = data["ball_x"];
+			this.ball.position.y = data["ball_y"];
+			this.score1 = data["player1_score"];
+			this.score2 = data["player2_score"];
+			console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.position.x, this.ball.position.y, this.score1, this.score2)
+			document.getElementById("scoreLeftRemote").textContent = this.score1
+			document.getElementById("scoreRightRemote").textContent = this.score2
+		}
+		else
+			console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.position.x, this.ball.position.y, this.score1, this.score2)
 	}
 }
 
-export function update_game_data(data)
-{
-	leftPaddle_y = data["left_coords"];
-	rightPaddle_y = data["right_coords"];
-	ball_x = data["ball_x"];
-	ball_y = data["ball_y"];
-	player1_Score = data["player1_score"];
-	player2_Score = data["player2_score"];
-}
+var game;
 
 export function startRemoteGame(ballOwner){
-	const game = new RemoteGame();
-
+	game = new RemoteGame();
+	
+	game.StartGame();
+	console.log(game.update_game_data())
+	animate()
+	
+	
 	function animate()
 	{
-		requestAnimationFrame(animate())
+		requestAnimationFrame(animate)
 		game.Draw();
 		game.CheckKeyInputs();
 		game.GameUpdate();
+		if (gameDictRemote.instance.running == false)
+			return ;
 	}
-
-	game.StartGame();
-	animate();
 	return game
 };
 

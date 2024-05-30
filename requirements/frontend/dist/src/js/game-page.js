@@ -4,7 +4,7 @@ import { fetchAllUsers } from "./search.js"
 import { startRemoteGame } from "./single-player-game/game-remote.js"
 import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote } from "./utils.js"
 import { getUserObj } from "./utils.js"
-import { update_game_data } from "./single-player-game/game-remote.js"
+// import { update_game_data } from "./single-player-game/game-remote.js"
 
 
 export async function loadGamePage() {
@@ -122,7 +122,6 @@ async function loadRealTimeGame(opponentId, ballOwner) {
 	gameDictRemote.instance = startRemoteGame(ballOwner)
 }
 
-
 function monitorGame(roomId) {
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
@@ -184,13 +183,20 @@ function monitorGame(roomId) {
 					} else {
 						document.getElementById("winnerBoardRemote").textContent = "You lost"
 					}
-					gameDictRemote.instance.running = false
+					gameDictRemote.instance.running = false;
 					closeSocket(sockets.gameSocket)
 					break
 				case "ball_updates":
 				case "player_input":
-					update_game_data(data['data']);
+					console.log(gameDictRemote.instance.running)
+					gameDictRemote.instance.update_game_data(messageObj['data']);
+
 			}
 		}
+	}
+	sockets.gameSocket.onerror = function(err) {
+		console.log("WebSocket encountered an error: " + err.message);
+		console.log("Closing the socket.");
+		game_socket.close();
 	}
 }

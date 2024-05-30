@@ -5,7 +5,7 @@ class Paddle:
 	def __init__(self, X: int):
 	
 		self.x = X
-		self.y = 250
+		self.y = 0
 		self.speed = 0
 
 
@@ -13,17 +13,17 @@ class Paddle:
 
 		self.speed = self._direction(key) * PADDLE_MAX_SPEED
 		self.y += self.speed
-		if self.y < 0:
-			self.y = 0
-		elif (self.y > CANVAS_HEIGHT - PADDLE_HEIGHT):
-			self.y = CANVAS_HEIGHT - PADDLE_HEIGHT
+		if self.y < 175 - PADDLE_HEIGHT /2:
+			self.y = 175 - PADDLE_HEIGHT /2
+		elif (self.y >= 175 - PADDLE_HEIGHT):
+			self.y = 175 - PADDLE_HEIGHT
 
 
 	def _direction(self, key) :
 
 		if key[0]:
-			if key[0] == 'w' or key[0] == 'ArrowUp':
+			if key[0] == 'a':
 				return -1
-			if key[0] == 's' or key[0] == 'ArrowDown':
+			if key[0] == 'd':
 				return 1
 		return 0
