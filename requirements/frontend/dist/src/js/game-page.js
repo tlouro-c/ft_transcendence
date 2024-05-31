@@ -188,7 +188,7 @@ function monitorGame(roomId) {
 					break
 				case "ball_updates":
 				case "player_input":
-					console.log(gameDictRemote.instance.running)
+					// console.log(gameDictRemote.instance.running)
 					gameDictRemote.instance.update_game_data(messageObj['data']);
 
 			}

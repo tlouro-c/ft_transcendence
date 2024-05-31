@@ -46,7 +46,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.room_db_entry[self.room_id] = int()
 		if self.room_id not in self.game_map:
 			logger.debug("I was here")
-			self.game_map[self.room_id] = GameLogic()
+			self.game_map[self.room_id] = GameLogic(self.scope.get('user'))
 			logger.debug(self.game_map[self.room_id].get_state())
 			logger.debug(self.room_id)
 		self.users_in_room[self.room_id].add(user)
@@ -104,18 +104,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
-		logger.debug(text_data_json)
+		# logger.debug(text_data_json)
 		type_of_event = text_data_json["type"]
 
-		if type_of_event == "player_input":
-			await self.channel_layer.group_send(
-				self.group_room_name,
-				{
-					"type": "player_inputs",
-					"data": text_data_json
-				}
-			)
-		elif type_of_event == "ball":
+		if type_of_event == "ball":
 			await self.channel_layer.group_send(
 				self.group_room_name,
 				{
@@ -205,39 +197,36 @@ class GameConsumer(AsyncWebsocketConsumer):
 			return 1
 
 #VERA WAS HERE
-	async def player_inputs(self, event):
-
-		data = event['data']
-		logger.debug("that happened")
-		game_id = self.room_id
-
-		player_id = await self.get_player_id(self.scope["user"]) #CHANGE THIS IN CASE GAME IS TOO HEAVY
-
-		self.game_map[game_id].update_paddles(data.get("keys"), player_id)
-		response_data = self.game_map[game_id].get_state()
-		
-
-		await self.send(text_data=json.dumps({
-			'type': 'player_input',
-			'data': response_data,
-		}))
 
 	async def ball_updates(self, event):
 
 		game_id = self.room_id
 		if self.game_map[game_id]:
-			logger.debug("POGGERS")
-			logger.debug(self.game_map.keys)
+
+			data = event['data']
+			temp_data = self.game_map[game_id].get_state()
+			if (data.get("moveUp") or data.get("moveDown")):
+				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), self.scope.get('user'))
+				logger.debug("I WAS HEREE")
+				logger.debug("----------")
+				logger.debug(self.game_map[game_id].get_player_id(self.scope.get('user')))
+				logger.debug("----------")
+				logger.debug(self.scope.get('user'))
+				logger.debug("----------")
+				logger.debug(self.game_map[game_id].get_user1())
+				logger.debug("----------")
 			self.game_map[game_id].update_ball()
 			response_data = self.game_map[game_id].get_state()
-			match_winner = await self.update_result(response_data)
-			if match_winner is not None:
-				await self.finish_game(match_winner)
-				await self.channel_layer.group_send(self.group_room_name,
-				{
-					"type": "win",
-					"winner": match_winner
-				})
+			logger.debug(response_data)
+			if temp_data["player1_score"] != response_data["player1_score"] or temp_data["player2_score"] != response_data["player2_score"]:
+				match_winner = await self.update_result(response_data)
+				if match_winner is not None:
+					await self.finish_game(match_winner)
+					await self.channel_layer.group_send(self.group_room_name,
+					{
+						"type": "win",
+						"winner": match_winner
+					})
 			await self.send(text_data=json.dumps({
 				'type': 'ball_updates',
 				'data': response_data,

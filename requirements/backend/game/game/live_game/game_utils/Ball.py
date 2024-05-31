@@ -33,23 +33,22 @@ class Ball:
 		self.last_call = self.time_now
 
 	def _check_paddle_collision(self):
-
-		if (((self.y + BALL_RADIUS >= self.left_paddle.y and self.y - BALL_RADIUS <= self.left_paddle.y + PADDLE_HEIGHT)
-			and self.x + self.x_dir - BALL_RADIUS <= self.left_paddle.x + PADDLE_WIDTH) or
-			((self.y + BALL_RADIUS >= self.right_paddle.y and self.y - BALL_RADIUS <= self.right_paddle.y + PADDLE_HEIGHT)
-			and self.x + self.x_dir + BALL_RADIUS >= self.right_paddle.x)):
-				if (self.x < CANVAS_WIDTH / 2):
+		if (((self.y + BALL_RADIUS >= self.left_paddle.y - PADDLE_HEIGHT / 2 and self.y - BALL_RADIUS <= self.left_paddle.y + PADDLE_HEIGHT / 2)
+				and self.x + self.x_dir - BALL_RADIUS <= self.left_paddle.x + PADDLE_WIDTH) or
+				((self.y + BALL_RADIUS >= self.right_paddle.y - PADDLE_HEIGHT / 2 and self.y - BALL_RADIUS <= self.right_paddle.y + PADDLE_HEIGHT / 2)
+				 and self.x + self.x_dir + BALL_RADIUS >= self.right_paddle.x)):
+				if (self.x < 0):
 					target_paddle = self.left_paddle
-					self.x = target_paddle.x + PADDLE_WIDTH + BALL_RADIUS
+					self.x = target_paddle.x + BALL_RADIUS + 15
 				else:
 					target_paddle = self.right_paddle
-					self.x = self.right_paddle.x - BALL_RADIUS
+					self.x = target_paddle.x - PADDLE_WIDTH - BALL_RADIUS
 				self.x_dir *= -1
 				if self.speed < BALL_MAX_SPEED:
 					self.speed += 1
-				if self.y >= (target_paddle.y + (PADDLE_HEIGHT / 2)):
+				if self.y >= target_paddle.y:
 					self.y_dir = random.uniform(0.01,1)
-				elif self.y < (target_paddle.y + (PADDLE_HEIGHT / 2)):
+				elif self.y < target_paddle.y:
 					self.y_dir = random.uniform(-0.01, -1)
 
 

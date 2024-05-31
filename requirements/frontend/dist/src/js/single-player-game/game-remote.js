@@ -266,22 +266,27 @@ export class RemoteGame{
 		// 	this.scene.remove(this.hazardBlock);
 	}
 	
-	GameUpdate() {
+	GameUpdate(moveUp, moveDown) {
 		const toSend = {
 			"type": "ball",
+			"moveUp": moveUp,
+			"moveDown": moveDown
 		}
 		sockets.gameSocket.send(JSON.stringify(toSend))
 	}
 
 	CheckKeyInputs() {
+		let moveDown = false;
+		let moveUp = false;
 		if (this.playerInput.keys.length > 0 )
 		{
-			console.log("yuumi:", this.playerInput.Keys);
-			sockets.gameSocket.send(JSON.stringify({
-				"type": "player_input",
-				"keys": this.playerInput.keys,
-			}))
+			console.log("yuumi:", this.playerInput.keys[0]);
+			if (this.playerInput.keys[0] == 'a')
+				moveUp = true;
+			if (this.playerInput.keys[0] == 'd')
+				moveDown = true
 		}
+		this.GameUpdate(moveUp,moveDown)
 	}
 
 // HazardStart()
@@ -423,12 +428,11 @@ export class RemoteGame{
 			this.ball.position.y = data["ball_y"];
 			this.score1 = data["player1_score"];
 			this.score2 = data["player2_score"];
-			console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.position.x, this.ball.position.y, this.score1, this.score2)
+			console.log(this.paddle1.position.y, this.paddle2.position.y)
 			document.getElementById("scoreLeftRemote").textContent = this.score1
 			document.getElementById("scoreRightRemote").textContent = this.score2
 		}
-		else
-			console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.position.x, this.ball.position.y, this.score1, this.score2)
+			// console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.1position.x, this.ball.position.y, this.score1, this.score2)
 	}
 }
 
@@ -447,7 +451,7 @@ export function startRemoteGame(ballOwner){
 		requestAnimationFrame(animate)
 		game.Draw();
 		game.CheckKeyInputs();
-		game.GameUpdate();
+		// game.GameUpdate();
 		if (gameDictRemote.instance.running == false)
 			return ;
 	}
