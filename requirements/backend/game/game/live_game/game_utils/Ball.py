@@ -12,6 +12,7 @@ class Ball:
 		self.y_dir = self.random_start_pos()
 		self.speed = 4
 		self.last_call = int(round(time.time() * 1000))
+		self.last_col = int(round(time.time() * 1000))
 		
 
 
@@ -33,23 +34,43 @@ class Ball:
 		self.last_call = self.time_now
 
 	def _check_paddle_collision(self):
-		if (((self.y + BALL_RADIUS >= self.left_paddle.y - PADDLE_HEIGHT / 2 and self.y - BALL_RADIUS <= self.left_paddle.y + PADDLE_HEIGHT / 2)
-				and self.x + self.x_dir - BALL_RADIUS <= self.left_paddle.x + PADDLE_WIDTH) or
-				((self.y + BALL_RADIUS >= self.right_paddle.y - PADDLE_HEIGHT / 2 and self.y - BALL_RADIUS <= self.right_paddle.y + PADDLE_HEIGHT / 2)
-				 and self.x + self.x_dir + BALL_RADIUS >= self.right_paddle.x)):
-				if (self.x < 0):
-					target_paddle = self.left_paddle
-					self.x = target_paddle.x + BALL_RADIUS + 15
-				else:
-					target_paddle = self.right_paddle
-					self.x = target_paddle.x - PADDLE_WIDTH - BALL_RADIUS
+
+		flag = 0
+		if self.time_now - self.last_col > 100:
+			if (self.x <= self.left_paddle.x + PADDLE_WIDTH and
+				self.x >= self.left_paddle.x):
+				if (self.y <= self.left_paddle.y + PADDLE_HEIGHT / 2 and
+				self.y >= self.left_paddle.y - PADDLE_HEIGHT / 2):
+					if (self.x_dir < 0):
+						target_paddle = self.left_paddle
+						flag = 1
+						self.last_col = self.time_now
+	
+			if (self.x <= self.right_paddle.x + PADDLE_WIDTH and
+				self.x >= self.right_paddle.x):
+				if (self.y <= self.right_paddle.y + PADDLE_HEIGHT / 2 and
+				self.y >= self.right_paddle.y - PADDLE_HEIGHT / 2):
+					if self.x_dir > 0:
+						target_paddle = self.right_paddle
+						flag = 1
+						self.last_col = self.time_now
+	
+	
+			if (flag == 1):
 				self.x_dir *= -1
-				if self.speed < BALL_MAX_SPEED:
-					self.speed += 1
 				if self.y >= target_paddle.y:
 					self.y_dir = random.uniform(0.01,1)
 				elif self.y < target_paddle.y:
 					self.y_dir = random.uniform(-0.01, -1)
+				if self.speed < BALL_MAX_SPEED:
+					self.speed += 1
+				flag = 0
+					# if (self.x < 0):
+				# 	target_paddle = self.left_paddle
+				# 	self.x = target_paddle.x + PADDLE_WIDTH + BALL_RADIUS
+				# else:
+				# 	target_paddle = self.right_paddle
+				# 	self.x = target_paddle.x - PADDLE_WIDTH - BALL_RADIUS
 
 
 	def _check_border_collision(self, score):

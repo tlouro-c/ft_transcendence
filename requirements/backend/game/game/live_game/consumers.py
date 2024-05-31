@@ -47,7 +47,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if self.room_id not in self.game_map:
 			logger.debug("I was here")
 			self.game_map[self.room_id] = GameLogic(self.scope.get('user'))
-			logger.debug(self.game_map[self.room_id].get_state())
 			logger.debug(self.room_id)
 		self.users_in_room[self.room_id].add(user)
 		logger.debug(self.game_map)
@@ -70,7 +69,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"info": "Start",
 					"ball_owner": choice(list(self.users_in_room[self.room_id]))
 				})
-			# self.game_map[self.room.id].start_game()
+			await self.game_map[self.room_id].start_game()
 
 
 	async def disconnect(self, code):
@@ -99,7 +98,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.clear_if_invalid_game()
 			del self.users_in_room[self.room_id]
 			del self.room_db_entry[self.room_id]
-			del self.game_map[self.room_id]
 
 
 	async def receive(self, text_data):
@@ -115,7 +113,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"data": text_data_json
 				}
 			)
-
+		if type_of_event == "StartGame":
+			self.game_map[self.room_id].start_game()
+			
 
 	async def action(self, event):
 		type_of_event = event['type']
@@ -151,11 +151,33 @@ class GameConsumer(AsyncWebsocketConsumer):
 		new_game.save()
 		return new_game.id
 
+	# @database_sync_to_async
+	# def new_game_on_db(self):
+	# 	user1 = self.scope.get('user')
+	# 	invited = self.scope.get('invited')
+	# 	mode_hazard = self.scope.get('mode_hazard')
+	# 	tournament = self.scope.get('tournament')
+
+	# 	if tournament:
+	# 		new_game = Game(user1=user1, mode_hazard=mode_hazard)
+	# 	else:
+	# 		new_game = Game(user1=user1, invited=invited, invited_by=user1, mode_hazard=mode_hazard)
+	# 	new_game.save()
+	# 	return new_game.id
+
 	@database_sync_to_async
 	def start_game_on_db(self):
 		game = Game.objects.get(id=self.room_db_entry[self.room_id])
 		game.status = 'On Going'
 		game.save()
+
+	# @database_sync_to_async
+	# def start_game_on_db(self):
+	# 	user2 = self.scope.get('user')
+	# 	game = Game.objects.get(id=self.room_db_entry[self.room_id])
+	# 	game.user2 = user2
+	# 	game.status = 'On Going'
+	# 	game.save()
 
 	@database_sync_to_async
 	def finish_game(self, winner):
@@ -166,6 +188,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			game.winner = winner
 			game.finish_time = datetime.now(timezone.utc)
 			game.save()
+			del self.game_map[self.room_id]
 
 	@database_sync_to_async
 	def clear_if_invalid_game(self):
@@ -196,6 +219,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 		else:
 			return 1
 
+
+
 #VERA WAS HERE
 
 	async def ball_updates(self, event):
@@ -204,20 +229,20 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if self.game_map[game_id]:
 
 			data = event['data']
-			temp_data = self.game_map[game_id].get_state()
-			if (data.get("moveUp") or data.get("moveDown")):
-				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), self.scope.get('user'))
-				logger.debug("I WAS HEREE")
-				logger.debug("----------")
-				logger.debug(self.game_map[game_id].get_player_id(self.scope.get('user')))
-				logger.debug("----------")
-				logger.debug(self.scope.get('user'))
-				logger.debug("----------")
-				logger.debug(self.game_map[game_id].get_user1())
-				logger.debug("----------")
+			temp_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
+			logger.debug("======")
+			logger.debug(type(data.get("moveUp")))
+			logger.debug(type(data.get("moveDown")))
+			logger.debug("======")
+			if ((data.get("moveUp") or data.get("moveDown")) and data.get("user_id") == self.scope.get('user')):
+				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), data.get("user_id"))
+
 			self.game_map[game_id].update_ball()
-			response_data = self.game_map[game_id].get_state()
+
+			response_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
 			logger.debug(response_data)
+
+			# logger.debug(response_data)
 			if temp_data["player1_score"] != response_data["player1_score"] or temp_data["player2_score"] != response_data["player2_score"]:
 				match_winner = await self.update_result(response_data)
 				if match_winner is not None:

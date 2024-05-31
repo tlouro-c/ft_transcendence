@@ -259,18 +259,50 @@ export class RemoteGame{
 			this.CameraWork3D();
 		else
 			this.CameraWork2D();
+
+		this.CheckHit();
 	
 		// if (this.hazardMode)
 		// 	this.HazardStart();
 		// else
 		// 	this.scene.remove(this.hazardBlock);
 	}
+
+	CheckHit() {
+		//verification if the ball colides with de dimesions of the paddle1
+		if (this.ball.position.x <= this.paddle1.position.x + PADDLEWIDTH &&
+			this.ball.position.x >= this.paddle1.position.x) {
+				
+				if (this.ball.position.y <= this.paddle1.position.y + PADDLEHEIGHT / 2 &&
+				this.ball.position.y >= this.paddle1.position.y - PADDLEHEIGHT / 2) {
+				if (this.ballDirX < 0) {
+					//strech paddle when hits
+					this.paddle1.scale.y = 3;
+					console.log("hello there funny man")
+				}
+			}
+		}
+		//verification if the ball colides with de dimesions of the paddle2
+		if (this.ball.position.x <= this.paddle2.position.x + PADDLEWIDTH &&
+			this.ball.position.x >= this.paddle2.position.x) {
+
+				if (this.ball.position.y <= this.paddle2.position.y + PADDLEHEIGHT / 2 &&
+				this.ball.position.y >= this.paddle2.position.y - PADDLEHEIGHT / 2) {
+				if (this.ballDirX > 0) {
+					//strech paddle when hits
+					this.paddle2.scale.y = 3;
+					console.log("hello there funny man")
+				}
+			}
+		}
+	}
 	
 	GameUpdate(moveUp, moveDown) {
 		const toSend = {
 			"type": "ball",
 			"moveUp": moveUp,
-			"moveDown": moveDown
+			"moveDown": moveDown,
+			"user_id": getUserObj().id
 		}
 		sockets.gameSocket.send(JSON.stringify(toSend))
 	}
@@ -280,7 +312,6 @@ export class RemoteGame{
 		let moveUp = false;
 		if (this.playerInput.keys.length > 0 )
 		{
-			console.log("yuumi:", this.playerInput.keys[0]);
 			if (this.playerInput.keys[0] == 'a')
 				moveUp = true;
 			if (this.playerInput.keys[0] == 'd')
@@ -411,28 +442,40 @@ export class RemoteGame{
 				break;
 		}
 	}
-	// update_game_vars()
-	// {
-	// 	this.padle1.position.y = left_paddle_y;
-	// 	this.padle2.position.y = right_paddle_y;
-	// 	this.ball.position.x = this.ball_x;
-	// 	this.ball.position.y = this.ball_y;
-	// }
+
+
 	update_game_data(data)
 	{
 		if (data)
 		{
-			this.paddle1.position.y = data["left_coords"];
-			this.paddle2.position.y = data["right_coords"];
-			this.ball.position.x = data["ball_x"];
+			if (data["player1_id"] == getUserObj().id){
+				this.paddle1.position.y = data["player1_paddle"];
+				this.ball.position.x = data["ball_x"];
+				this.paddle2.position.y = data["player2_paddle"];
+				this.score1 = data["player1_score"];
+				this.score2 = data["player2_score"];
+			}
+			else if (data["player2_id"] == getUserObj().id){
+				this.paddle2.position.y = data["player1_paddle"];
+				this.ball.position.x = data["ball_x"] * -1;
+				this.paddle1.position.y = data["player2_paddle"];
+				this.score2 = data["player1_score"];
+				this.score1 = data["player2_score"];
+			}
 			this.ball.position.y = data["ball_y"];
-			this.score1 = data["player1_score"];
-			this.score2 = data["player2_score"];
-			console.log(this.paddle1.position.y, this.paddle2.position.y)
-			document.getElementById("scoreLeftRemote").textContent = this.score1
-			document.getElementById("scoreRightRemote").textContent = this.score2
+			console.log(this.paddle1.position.y, this.paddle2.position.y, data["player1_id"], data["player2_id"]);
+			document.getElementById("scoreLeftRemote").textContent = this.score1;
+			document.getElementById("scoreRightRemote").textContent = this.score2;
 		}
 			// console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.1position.x, this.ball.position.y, this.score1, this.score2)
+	}
+
+	StartOnBG()
+	{
+		const toSend = {
+			"type": "StartGame",
+		}
+		sockets.gameSocket.send(JSON.stringify(toSend))
 	}
 }
 
@@ -443,6 +486,7 @@ export function startRemoteGame(ballOwner){
 	
 	game.StartGame();
 	console.log(game.update_game_data())
+	game.StartOnBG();
 	animate()
 	
 	
