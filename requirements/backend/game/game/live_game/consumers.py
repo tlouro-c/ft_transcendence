@@ -69,8 +69,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 					"info": "Start",
 					"ball_owner": choice(list(self.users_in_room[self.room_id]))
 				})
-			await self.game_map[self.room_id].start_game()
-
 
 	async def disconnect(self, code):
 		user = self.scope.get('user')
