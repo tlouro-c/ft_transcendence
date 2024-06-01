@@ -3,7 +3,6 @@
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 python game/manage.py makemigrations
 python game/manage.py migrate
-python game/manage.py createcachetable
 
 if [ "$DJANGO_SUPERUSER_USERNAME" ]
 then

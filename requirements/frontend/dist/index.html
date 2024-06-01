@@ -56,7 +56,7 @@
 						<form class="d-flex h-100" role="search" id="search-form">
 							<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-input" name="inputText" autocomplete="off">
 							<button class="btn btn-sm btn-outline-success" type="submit">Search</button>
-						  </form>
+						</form>
 					</li>
 				</ul>
 				<div class="dropdown d-flex align-items-center justify-content-center user-navbar d-none p-3">
@@ -265,7 +265,14 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								<h3>Match History</h3>
+								<div class="d-flex align-items-center justify-content-center">
+									<h3 class="m-0">Match History</h3>
+									<h3 class="m-0" >&nbsp;(</h3>
+									<h3 class="m-0" id="win-count">Wins</h3>
+									<h3 class="m-0">/</h3>
+									<h3 class="m-0" id="loss-count">Losses</h3>
+									<h3 class="m-0" >)</h3>
+								</div>
 								<ul class="list-group list-group-flush w-100 p-3" id="match-history">
 									<li class="w-100 list-group-item d-flex justify-content-between align-items-center smooth-hover d-none" id="game-template">
 										<div class="match-background bg-gradient">
@@ -318,7 +325,7 @@
 
 		<div class="dynamic-page d-flex flex-column align-items-center justify-content-center" id="home-page">
 			<h1>Home Page</h1>
-			<p class="fs-4 fw-lighter text-center pe-5 ps-5"> This project as developed by tlouro-c and lleiria-</p>
+			<p class="fs-4 fw-lighter text-center pe-5 ps-5"> This project as developed by tlouro-c, lleiria- and pcoimbra</p>
 			<ul class="navbar-nav user-navbar d-none d-flex flex-row">
 				<li class="nav-item d-flex align-items-center justify-content-center p-3">
 					<a id="home-page-play-link"> 
@@ -592,13 +599,21 @@
 						</div>
 						
 					</div>
-					<div class="col-12 col-sm-10 col-md-8 d-none" id="game-column">
-						<div id="gameCanvas" class="p-0 rounded shadow-lg d-flex d-none"></div>
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center local-play-avatar">
+						<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2 user-avatar" alt="...">
+						<p class="m-0 username"></p>
+					</div>
+					<div class="col-8 d-none" id="game-column">
+						<div id="gameCanvas" class="p-0 rounded shadow-lg d-flex"></div>
 						<div id="scoreboard">
 							<h1 id="scores">0-0</h1>
 							<h1 id="title">3D PONG</h1>
 							<h2 id="winnerBoard">First to 7 wins!</h2>
 						</div>
+					</div>
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center local-play-avatar">
+						<img src="./src/assets/AI-Avatar.png" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
+						<p class="m-0">Marvin</p>
 					</div>	
 				</div>
 			</div>
@@ -607,8 +622,9 @@
 		<div class="dynamic-page d-flex flex-column align-items-center justify-content w-100 vh-100" id="remote-play-page">
 			<div class="container-fluid h-100 mt-4"> 
 				<div class="row d-flex justify-content-center align-items-center h-100"> 
-					<div class="col-2 d-flex align-items-center justify-content-center">
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center">
 						<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2 user-avatar" alt="...">
+						<p class="m-0 user-name"></p>
 					</div>
 					<div class="col-8 d-flex flex-column align-items-center justify-content-center" id="game-column">
 						<div>
@@ -626,8 +642,9 @@
 							<h2 id="winnerBoardRemote">First to 7 wins!</h2>
 						</div>
 					</div>
-					<div class="col-2 d-flex align-items-center justify-content-center">
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center">
 						<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2 opponent-avatar" alt="...">
+						<p class="m-0 opponent-name"></p>
 					</div>	
 				</div>
 			</div>

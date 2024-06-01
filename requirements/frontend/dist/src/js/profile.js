@@ -84,6 +84,9 @@ export async function loadProfilePage(userId) {
 	})
 	document.getElementById("pending-friends-counter").textContent = pending_friends_counter
 
+	let winCount = 0
+	let lossCount = 0
+
 	matchHistory.forEach(match => {
 
 		const user1 = allUsers.find(user => user.id == match.user1)
@@ -100,13 +103,16 @@ export async function loadProfilePage(userId) {
 		matchElement.querySelector(".user-1-avatar").setAttribute('src', API + user1.avatar)
 		matchElement.querySelector(".user-2-avatar").setAttribute('src', API + user2.avatar)
 		if (match.winner == userId) {
+			winCount++
 			matchElement.querySelector('.match-background').classList.add('bg-info')
 		} else {
+			lossCount++
 			matchElement.querySelector('.match-background').classList.add('bg-danger')
 		}
-
 		matchHistoryList.appendChild(matchElement)
 	})
+	document.getElementById("win-count").textContent = winCount
+	document.getElementById("loss-count").textContent = lossCount
 }
 
 
