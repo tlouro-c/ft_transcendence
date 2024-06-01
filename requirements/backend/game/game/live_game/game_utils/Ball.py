@@ -32,6 +32,7 @@ class Ball:
 	def unpause(self):
 		self.time_now = int(round(time.time() * 1000))
 		self.last_call = self.time_now
+		self.last_col = self.time_now
 
 	def _check_paddle_collision(self):
 

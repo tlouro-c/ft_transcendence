@@ -26,17 +26,22 @@ export class RemoteGame{
 		this.keyPressed = false;
 		this.multiPressed = false;
 		this.hazardPressed = false;
-		this.SHIFTPressed = false;
-		this.fieldOp = 0;
 		this.running = false
+		this.fieldop = 0;
 		this.Stop = function() { this.running = false }
 
 		this.playerInput = new InputHandler("a", "d");
-		
+
 		this.init();
 
 		// Binding the Draw function to ensure it maintains the correct context
 		this.Draw = this.Draw.bind(this);
+		this.CheckKeyInputs = this.CheckKeyInputs.bind(this);
+		this.ChangeField = this.ChangeField.bind(this);
+		// this.handleKeyDown = this.handleKeyDown.bind(this);  // Add this line
+		// this.handleKeyUp = this.handleKeyUp.bind(this); 
+		// window.addEventListener('keydown', this.handleKeyDown, false);
+		// window.addEventListener('keyup', this.handleKeyUp, false);
 	}
 	
 	init(){
@@ -208,32 +213,6 @@ export class RemoteGame{
 		this.score1 = 0
 		this.score2 = 0
 
-
-		let keyPressed = false
-
-		window.addEventListener('keyup', function(event) {
-			keyPressed = false
-			const toSend = {
-				'type': 'action',
-				'action': event.key + " released", 
-			}
-
-			sockets.gameSocket.send(JSON.stringify(toSend))
-		 }, false);
-
-		window.addEventListener('keydown', function(event) { 
-			if (!keyPressed) {
-				keyPressed = true
-				const toSend = {
-					'type': 'action',
-					'action': event.key + " pressed", 
-				}
-				sockets.gameSocket.send(JSON.stringify(toSend))
-			}
-			
-		 }, false);
-
-		
 		const gameCanvas = document.getElementById('gameCanvasRemote');
 		gameCanvas.classList.remove('d-none');
 		gameCanvas.style.mixBlendMode = 'lighten'; 
@@ -244,10 +223,15 @@ export class RemoteGame{
 	}
 
 	Draw() {
+
 		if (this.running == false) {
 			return
 		}
-		this.ChangeField();
+		if (this.playerInput.field != this.fieldop)
+		{
+			this.ChangeField();
+			this.fieldop = this.playerInput.field;
+		}
 	
 		
 		this.renderer.setViewport(0, 0, WIDTH, HEIGHT);
@@ -255,7 +239,7 @@ export class RemoteGame{
 		this.renderer.setScissorTest(true);
 		this.renderer.render(this.scene, this.camera1);
 		
-		if (this.is3D)
+		if (this.playerInput.is3d)
 			this.CameraWork3D();
 		else
 			this.CameraWork2D();
@@ -310,6 +294,7 @@ export class RemoteGame{
 	CheckKeyInputs() {
 		let moveDown = false;
 		let moveUp = false;
+
 		if (this.playerInput.keys.length > 0 )
 		{
 			if (this.playerInput.keys[0] == 'a')
@@ -319,6 +304,9 @@ export class RemoteGame{
 		}
 		this.GameUpdate(moveUp,moveDown)
 	}
+
+
+	// Rest of the class implementation
 
 // HazardStart()
 // {
@@ -387,18 +375,9 @@ export class RemoteGame{
 	}
 
 	ChangeField() {
-		if (Key.isDown(Key.SHIFT) && !this.SHIFTPressed) {
-			this.fieldOp++;
-			this.SHIFTPressed = true;
-		} else if (!Key.isDown(Key.SHIFT)) {
-			this.SHIFTPressed = false;
-		}
-		
-		if (this.fieldOp < 0 || this.fieldOp > 3)
-			this.fieldOp = 0;
-		
+
 		var loader = new THREE.TextureLoader();
-		switch (this.fieldOp) {
+		switch (this.playerInput.field) {
 			case 0:
 				var newMaterial = new THREE.MeshLambertMaterial({
 					color: 0x4BD121,
@@ -501,17 +480,3 @@ export function startRemoteGame(ballOwner){
 	}
 	return game
 };
-
-// keys -> websockets -> funcoes de update -> websockets -> Js placeholder -> update visual -> render -> repeat
-
-//on message
-
-// const data = JSON.parse(event.data);
-// if (data && data['type'])
-// 	{
-// 		let data_type = data['type'];
-// 		if (data_type == "player_input")
-// 			update_game_data(data['data']);
-// 		else if (data_type == "ball_updates")
-// 			update_game_data(data['data']);
-// 	}
