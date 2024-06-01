@@ -31,7 +31,6 @@ class JwtAuthMiddleware(BaseMiddleware):
 		scope['mode_hazard'] = mode_hazard == 'true'
 		scope['tournament'] = tournament == 'true'
 		scope['invited'] = invited or ""
-
 		
 		user_id = user_id_from_token(token)
 		logger.debug(f"User ID: {user_id}")

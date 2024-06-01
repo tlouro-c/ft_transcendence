@@ -56,7 +56,7 @@ export async function loadGamePage() {
 				const mode3D = formData.get('mode3D') == ''
 				const modeHazard = formData.get('modeHazard') == ''
 				
-				monitorGame(userInfo.id + friend.id)
+				monitorGame(userInfo.id + friend.id, mode3D, modeHazard)
 			})
 			oneVsOneList.appendChild(friendElement)
 		}
@@ -115,17 +115,20 @@ async function loadRealTimeGame(opponentId, ballOwner) {
 
 	loadPage(elements.remotePlayPage);
 	elements.remotePlayPage.querySelector('.user-avatar').setAttribute('src', API + userInfo.avatar)
+	elements.remotePlayPage.querySelector('.user-name').textContent = userInfo.username
 	elements.remotePlayPage.querySelector('.opponent-avatar').setAttribute('src', API + opponentInfo.avatar)
+	elements.remotePlayPage.querySelector('.opponent-name').textContent = opponentInfo.username
 	document.getElementById("scoreRightRemote").textContent = '0'
 	document.getElementById("scoreLeftRemote").textContent = '0'
 	document.getElementById("winnerBoardRemote").textContent = "First to 7 wins!"
 	gameDictRemote.instance = startRemoteGame(ballOwner)
 }
 
-function monitorGame(roomId) {
+
+function monitorGame(roomId, mode3D, modeHazard) {
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	sockets.gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}`)
+	sockets.gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}&mode_3d=${mode3D}&mode_hazard=${modeHazard}`)
 
 	document.getElementById("testPoint").addEventListener("click", (event) => {
 		event.preventDefault();
