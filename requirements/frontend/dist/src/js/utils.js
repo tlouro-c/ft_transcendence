@@ -26,7 +26,8 @@ export const gameDict = {
 }
 
 export const gameDictRemote = {
-	instance: -1
+	instance: -1,
+
 }
 
 export function clearMain() {

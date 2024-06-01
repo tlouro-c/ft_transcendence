@@ -4,6 +4,7 @@ import { fetchAllUsers } from "./search.js"
 import { startRemoteGame } from "./single-player-game/game-remote.js"
 import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote } from "./utils.js"
 import { getUserObj } from "./utils.js"
+// import { update_game_data } from "./single-player-game/game-remote.js"
 
 
 export async function loadGamePage() {
@@ -145,85 +146,60 @@ function monitorGame(roomId, mode3D, modeHazard) {
 		const waitingMessage = elements.waitingPage.querySelector("h1")
 		const counterElements = elements.waitingPage.querySelectorAll(".counter")
 
-		switch (messageObj.type) {
-			case 'info':
-				if (messageObj.info == "Wait") {
-					loadPage(elements.waitingPage)
-					waitingMessage.classList.remove('d-none')
-				} else {
-					const ballOwner = messageObj.ball_owner
-					loadPage(elements.waitingPage)
-					waitingMessage.classList.add('d-none')
-					counterElements.forEach((element, index) => {
+		if(messageObj){
+			switch (messageObj.type) {
+				case 'info':
+					if (messageObj.info == "Wait") {
+						loadPage(elements.waitingPage)
+						waitingMessage.classList.remove('d-none')
+					} else {
+						const ballOwner = messageObj.ball_owner
+						loadPage(elements.waitingPage)
+						waitingMessage.classList.add('d-none')
+						counterElements.forEach((element, index) => {
+							setTimeout(() => {
+								if (index > 0) {
+									counterElements[index - 1].classList.add('d-none');
+								}
+								element.classList.remove('d-none');
+							}, index * 1000);
+						})
 						setTimeout(() => {
-							if (index > 0) {
-								counterElements[index - 1].classList.add('d-none');
-							}
-							element.classList.remove('d-none');
-						}, index * 1000);
-					})
-					setTimeout(() => {
-						loadRealTimeGame(roomId - getUserObj().id, ballOwner)
-					}, 3000);
-				}
-				break
-			case 'point':
-				const pointWinner = messageObj.point_winner
-				if (pointWinner == getUserObj().id) {
-					const current_score = parseInt(document.getElementById("scoreLeftRemote").textContent, 10)
-					document.getElementById("scoreLeftRemote").textContent = current_score + 1
-				} else {
-					const current_score = parseInt(document.getElementById("scoreRightRemote").textContent, 10)
-					document.getElementById("scoreRightRemote").textContent = current_score + 1
-				}
-				break
-			case 'win':
-				const matchWinner = messageObj.winner
-				if (matchWinner == getUserObj().id) {
-					document.getElementById("winnerBoardRemote").textContent = "You won"
-				} else {
-					document.getElementById("winnerBoardRemote").textContent = "You lost"
-				}
-				gameDictRemote.instance.running = false
-				closeSocket(sockets.gameSocket)
-				break
-			case 'action':
-				const action = messageObj.action
-				const userId = messageObj.user
-				
-				if (gameDictRemote.instance.running != true || gameDictRemote.instance == -1) {
+							loadRealTimeGame(roomId - getUserObj().id, ballOwner)
+						}, 3000);
+					}
 					break
-				}
-				switch (action) {
-					case 'a pressed':
-						if (userId == getUserObj().id) {
-							gameDictRemote.instance.moveLeftPaddleUp = true
-						}
-						else {
-							gameDictRemote.instance.moveRightPaddleUp = true
-						}
-						break
-					case 'd pressed':
-						if (userId == getUserObj().id)
-							gameDictRemote.instance.moveLeftPaddleDown = true
-						else
-							gameDictRemote.instance.moveRightPaddleDown = true
-						break
-					case 'a released':
-						if (userId == getUserObj().id)
-							gameDictRemote.instance.moveLeftPaddleUp = false
-						else
-							gameDictRemote.instance.moveRightPaddleUp = false
-						break
-					case 'd released':
-						if (userId == getUserObj().id)
-							gameDictRemote.instance.moveLeftPaddleDown = false
-						else
-							gameDictRemote.instance.moveRightPaddleDown = false
-						break
-				}
-			}
-	}
-		
+				case 'point':
+					const pointWinner = messageObj.point_winner
+					if (pointWinner == getUserObj().id) {
+						const current_score = parseInt(document.getElementById("scoreLeftRemote").textContent, 10)
+						document.getElementById("scoreLeftRemote").textContent = current_score + 1
+					} else {
+						const current_score = parseInt(document.getElementById("scoreRightRemote").textContent, 10)
+						document.getElementById("scoreRightRemote").textContent = current_score + 1
+					}
+					break
+				case 'win':
+					const matchWinner = messageObj.winner
+					if (matchWinner == getUserObj().id) {
+						document.getElementById("winnerBoardRemote").textContent = "You won"
+					} else {
+						document.getElementById("winnerBoardRemote").textContent = "You lost"
+					}
+					gameDictRemote.instance.running = false;
+					closeSocket(sockets.gameSocket)
+					break
+				case "ball_updates":
+				case "player_input":
+					// console.log(gameDictRemote.instance.running)
+					gameDictRemote.instance.update_game_data(messageObj['data']);
 
+			}
+		}
+	}
+	sockets.gameSocket.onerror = function(err) {
+		console.log("WebSocket encountered an error: " + err.message);
+		console.log("Closing the socket.");
+		game_socket.close();
+	}
 }

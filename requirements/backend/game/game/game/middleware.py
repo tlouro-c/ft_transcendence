@@ -26,8 +26,11 @@ class JwtAuthMiddleware(BaseMiddleware):
 		token = query_string.get('token', [None])[0] or None
 		mode_3d = query_string.get('mode_3d', [None])[0] or None
 		mode_hazard = query_string.get('mode_hazard', [None])[0] or None
-		scope['mode_3d'] = mode_3d or ""
-		scope['mode_hazard'] = mode_hazard or ""
+		tournament = query_string.get('tournament', [None])[0] or None
+		invited = query_string.get('invited', [None])[0] or None
+		scope['mode_hazard'] = mode_hazard == 'true'
+		scope['tournament'] = tournament == 'true'
+		scope['invited'] = invited or ""
 		
 		user_id = user_id_from_token(token)
 		logger.debug(f"User ID: {user_id}")
@@ -44,5 +47,5 @@ class JwtAuthMiddleware(BaseMiddleware):
 			scope['user'] = user_data.get('id', AnonymousUser())
 		except:
 			scope['user'] = AnonymousUser()
-	
+		
 		return await super().__call__(scope, receive, send)
