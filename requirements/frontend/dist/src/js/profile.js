@@ -17,7 +17,8 @@ export async function loadProfilePage(userId) {
 
 	const allUsers = await fetchAllUsers()
 	const userInfo = allUsers.find(user => user.id == userId)
-	const matchHistory = await fetchGameHistory(userId)
+	const matchHistory = (await fetchGameHistory(userId)).sort((a, b) => new Date(b.finish_time) - new Date(a.finish_time))
+	console.log(matchHistory)
 	await loadPage(elements.profilePage)
 
 	const url = API + userInfo.avatar

@@ -209,29 +209,29 @@ export class RemoteGame{
 		this.score2 = 0
 
 
-		let keyPressed = false
+		//let keyPressed = false
 
-		window.addEventListener('keyup', function(event) {
-			keyPressed = false
-			const toSend = {
-				'type': 'action',
-				'action': event.key + " released", 
-			}
+		// window.addEventListener('keyup', function(event) {
+		// 	keyPressed = false
+		// 	const toSend = {
+		// 		'type': 'action',
+		// 		'action': event.key + " released", 
+		// 	}
 
-			sockets.gameSocket.send(JSON.stringify(toSend))
-		 }, false);
+		// 	sockets.gameSocket.send(JSON.stringify(toSend))
+		//  }, false);
 
-		window.addEventListener('keydown', function(event) { 
-			if (!keyPressed) {
-				keyPressed = true
-				const toSend = {
-					'type': 'action',
-					'action': event.key + " pressed", 
-				}
-				sockets.gameSocket.send(JSON.stringify(toSend))
-			}
+		// window.addEventListener('keydown', function(event) { 
+		// 	if (!keyPressed) {
+		// 		keyPressed = true
+		// 		const toSend = {
+		// 			'type': 'action',
+		// 			'action': event.key + " pressed", 
+		// 		}
+		// 		sockets.gameSocket.send(JSON.stringify(toSend))
+		// 	}
 			
-		 }, false);
+		//  }, false);
 
 		
 		const gameCanvas = document.getElementById('gameCanvasRemote');
@@ -297,6 +297,9 @@ export class RemoteGame{
 	}
 	
 	GameUpdate(moveUp, moveDown) {
+		if (sockets.gameSocket == -1) {
+			return
+		}
 		const toSend = {
 			"type": "ball",
 			"moveUp": moveUp,
@@ -479,11 +482,9 @@ export class RemoteGame{
 				this.score1 = data["player2_score"];
 			}
 			this.ball.position.y = data["ball_y"];
-			console.log(this.paddle1.position.y, this.paddle2.position.y, data["player1_id"], data["player2_id"]);
-			document.getElementById("scoreLeftRemote").textContent = this.score1;
-			document.getElementById("scoreRightRemote").textContent = this.score2;
+			document.getElementById("scoreLeftRemote").textContent = this.score1
+			document.getElementById("scoreRightRemote").textContent = this.score2
 		}
-			// console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.1position.x, this.ball.position.y, this.score1, this.score2)
 	}
 
 	StartOnBG()
@@ -501,7 +502,6 @@ export function startRemoteGame(ballOwner){
 	game = new RemoteGame();
 	
 	game.StartGame();
-	console.log(game.update_game_data())
 	game.StartOnBG();
 	animate()
 	
