@@ -460,6 +460,12 @@ export class RemoteGame{
 				this.score2 = data["player1_score"];
 				this.score1 = data["player2_score"];
 			}
+			this.hazardBlock.position.y = data["hazard_y"]
+			if (!this.hazardMode && this.hazardBlock.position.y != -500)
+			{
+				this.scene.add(this.hazardBlock);
+				this.hazardMode = true;
+			}
 			this.ball.position.y = data["ball_y"];
 			console.log(this.paddle1.position.y, this.paddle2.position.y, data["player1_id"], data["player2_id"]);
 			document.getElementById("scoreLeftRemote").textContent = this.score1;
