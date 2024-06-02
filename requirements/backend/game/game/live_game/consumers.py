@@ -247,7 +247,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 			data = event['data']
 			temp_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
 
-			if ((data.get("moveUp") or data.get("moveDown")) and data.get("user_id") == self.scope.get('user')):
+			#(data.get("moveUp") or data.get("moveDown")) and  dentro do if v
+			if (data.get("user_id") == self.scope.get('user')):
 				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), data.get("user_id"))
 
 
@@ -255,7 +256,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			response_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
 
-			# logger.debug(response_data)
+			# logger.debug(response_data["ball_y"], response_data["player1_score"], response_data["player2_score"])
 
 			await self.send(text_data=json.dumps({
 				'type': 'ball_updates',
