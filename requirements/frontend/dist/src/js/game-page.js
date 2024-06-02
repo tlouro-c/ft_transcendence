@@ -120,14 +120,31 @@ async function loadRealTimeGame(opponentId, ballOwner) {
 	document.getElementById("scoreRightRemote").textContent = '0'
 	document.getElementById("scoreLeftRemote").textContent = '0'
 	document.getElementById("winnerBoardRemote").textContent = "First to 7 wins!"
+
+	if (gameDictRemote.instance) {
+        delete gameDictRemote.instance;
+        gameDictRemote.instance = null;
+    }
+
 	gameDictRemote.instance = startRemoteGame(ballOwner)
 }
 
 
 function monitorGame(roomId, modeHazard, invited) {
 
+	if (gameDictRemote.instance) {
+		delete gameDictRemote.instance
+		gameDictRemote.instance = null
+	}
+
 	const encodedToken = encodeURIComponent(getTokensObj().access)
 	sockets.gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}&mode_hazard=${modeHazard}&invited=${invited}`)
+
+	sockets.gameSocket.onclose = function() {
+		gameDictRemote.instance.running = false
+		delete gameDictRemote.instance
+		gameDictRemote.instance = null
+	}
 
 	sockets.gameSocket.onmessage = function(message) {
 		const messageObj = JSON.parse(message.data)
@@ -139,6 +156,7 @@ function monitorGame(roomId, modeHazard, invited) {
 			switch (messageObj.type) {
 				case 'info':
 					if (messageObj.info == "Wait") {
+						counterElements.forEach(element => element.classList.add('d-none'))
 						loadPage(elements.waitingPage)
 						waitingMessage.classList.remove('d-none')
 					} else {
@@ -160,10 +178,10 @@ function monitorGame(roomId, modeHazard, invited) {
 					}
 					break					
 				case 'win':
-					console.log("win")
-					gameDictRemote.instance.running = false;
-					sockets.gameSocket.close()
-					sockets.gameSocket = -1
+                    if (sockets.gameSocket) {
+                        sockets.gameSocket.close();
+                        sockets.gameSocket = null;
+                    }
 					const matchWinner = messageObj.winner
 					if (matchWinner.toString() == getUserObj().id) {
 						document.getElementById("winnerBoardRemote").textContent = "You won"
@@ -172,7 +190,9 @@ function monitorGame(roomId, modeHazard, invited) {
 					}
 					break
 				case "ball_updates":
-					gameDictRemote.instance.update_game_data(messageObj['data']);
+					if (gameDictRemote.instance != undefined) {
+						gameDictRemote.instance.update_game_data(messageObj['data']);
+					}
 					break
 			}
 		}

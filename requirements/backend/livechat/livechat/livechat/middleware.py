@@ -35,7 +35,6 @@ class JwtAuthMiddleware(BaseMiddleware):
 				raise "Unauthenticated"
 
 			user_data = response.json()
-			logger.debug(user_data)
 			scope['user'] = user_data.get('id', AnonymousUser())
 		except:
 			scope['user'] = AnonymousUser()

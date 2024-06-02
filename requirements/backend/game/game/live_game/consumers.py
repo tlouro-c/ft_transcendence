@@ -31,7 +31,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if user == AnonymousUser():
 			await self.close()
 			return
-		
 
 		await self.channel_layer.group_add(
 			self.group_room_name,
@@ -45,7 +44,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if self.room_id not in self.room_db_entry:
 			self.room_db_entry[self.room_id] = int()
 		if self.room_id not in self.game_map:
-			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), self.scope.get('hazard'))
+			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), self.scope['mode_hazard'])
 		self.users_in_room[self.room_id].add(user)
 
 		self.user_count = len(self.users_in_room[self.room_id])
@@ -68,45 +67,53 @@ class GameConsumer(AsyncWebsocketConsumer):
 				})
 
 	async def disconnect(self, code):
+		logger.debug("disconnect")
 		user = self.scope.get('user')
 
-		self.users_in_room[self.room_id].remove(user)
 		await self.channel_layer.group_discard(
 			self.group_room_name,
 			self.channel_name
 		)
 
-		users_counter = len(self.users_in_room[self.room_id])
 
-		if users_counter == 1:
-			remaining_user = list(self.users_in_room[self.room_id])[0]
+		self.users_in_room[self.room_id].remove(user)
+		self.user_count = len(self.users_in_room[self.room_id])
+
+		if self.user_count == 1:
+			for _ in list(self.users_in_room[self.room_id]):
+				if _ != self.scope.get('user'):
+					remaining_user = _
+			logger.debug(remaining_user)
 			await self.finish_game(remaining_user)
 			await self.channel_layer.group_send(self.group_room_name,
 			{
 				"type": "win",
 				"winner": remaining_user
-			});
-		elif users_counter < 1:
+			})
+		elif self.user_count < 1:
 			await self.clear_if_invalid_game()
 			del self.users_in_room[self.room_id]
 			del self.room_db_entry[self.room_id]
-			del self.game_map[self.room_id]
+		
 
 
 	async def receive(self, text_data):
+		if self.room_id not in self.game_map or not self.game_map[self.room_id]:
+			return
 		text_data_json = json.loads(text_data)
 		type_of_event = text_data_json["type"]
 
-		if type_of_event == "ball":
-			await self.channel_layer.group_send(
-				self.group_room_name,
+		if type_of_event == "StartGame":
+			self.game_map[self.room_id].start_game()
+		elif type_of_event == "ball":
+			await self.channel_layer.send(
+				self.channel_name,
 				{
 					"type": "ball_updates",
 					"data": text_data_json
 				}
 			)
-		if type_of_event == "StartGame":
-			self.game_map[self.room_id].start_game()
+		
 			
 
 	async def action(self, event):
@@ -168,6 +175,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	@database_sync_to_async
 	def start_game_on_db(self):
+		logger.debug("\n\n\n\n\n")
+		logger.debug("start_game_on_db")
+		logger.debug("\n\n\n\n\n")
 		user2 = self.scope.get('user')
 		game = Game.objects.get(id=self.room_db_entry[self.room_id])
 		game.user2 = user2
@@ -183,6 +193,13 @@ class GameConsumer(AsyncWebsocketConsumer):
 			game.winner = winner
 			game.finish_time = datetime.now(timezone.utc)
 			game.save()
+			game_instance = self.game_map[self.room_id]
+			del game_instance
+			del self.game_map[self.room_id]
+			if not self.room_id in self.game_map:
+				# logger.debug(type(self.room_id))
+				logger.debug("deleted game")
+
 
 	@database_sync_to_async
 	def clear_if_invalid_game(self):
@@ -220,13 +237,15 @@ class GameConsumer(AsyncWebsocketConsumer):
 	async def ball_updates(self, event):
 
 		game_id = self.room_id
-		if self.game_map[game_id]:
+		response_data = {}
+		if game_id in self.game_map and self.game_map[game_id] and len(self.users_in_room[self.room_id]) == 2:
 
 			data = event['data']
 			temp_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
 
 			if ((data.get("moveUp") or data.get("moveDown")) and data.get("user_id") == self.scope.get('user')):
 				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), data.get("user_id"))
+
 
 			self.game_map[game_id].update_ball()
 
@@ -248,6 +267,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 						"type": "win",
 						"winner": match_winner
 					})
+
+			
 ## No more Vera
 
 
