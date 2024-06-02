@@ -12,16 +12,18 @@ class GameLogic:
 		self._ball = Ball()
 		self._player2_pladdle = Paddle(X=(CANVAS_WIDTH / 2 - PADDLE_WIDTH))
 		self._player1_paddle = Paddle(X=(-CANVAS_WIDTH / 2 + PADDLE_WIDTH))
-		self.game_paused = -1
+		self.game_paused = 1
 		self.user1 = user1
 		self._hazard = Hazard(hazard)
 
 	def __del__(self):
+		self._score = [0,0]
 		del self._ball
 		del self._player1_paddle
 		del self._player2_pladdle
 		del self._score
 		del self._hazard
+		self.game_paused = 1
 
 	def update_paddles(self, moveUp, moveDown, user):
 

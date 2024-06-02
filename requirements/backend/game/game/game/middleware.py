@@ -32,11 +32,6 @@ class JwtAuthMiddleware(BaseMiddleware):
 		scope['invited'] = invited or ""
 		
 		user_id = user_id_from_token(token)
-		logger.debug("\n\n\n")
-		logger.debug(f"User ID: {user_id}")
-		logger.debug(scope['invited'])
-		logger.debug(scope['tournament'])
-		logger.debug("\n\n\n")
 
 		try:
 			request_headers = {'Authorization': f'Bearer {token}'}

@@ -129,10 +129,23 @@ async function loadRealTimeGame(opponentId, ballOwner) {
 	gameDictRemote.instance = startRemoteGame(ballOwner)
 }
 
+// Define the functions outside of the event listeners
+function keyDownHandler(e) {
+    // Your keydown handler code here
+}
+
+function keyUpHandler(e) {
+    // Your keyup handler code here
+}
+
+
 
 function monitorGame(roomId, modeHazard, invited) {
 
 	if (gameDictRemote.instance) {
+		delete gameDictRemote.instance.playerInput
+		window.removeEventListener('keydown', e => {this.keyDown(e)});
+		window.removeEventListener('keyup', e => {this.keyUp(e)});
 		delete gameDictRemote.instance
 		gameDictRemote.instance = null
 	}
@@ -142,6 +155,9 @@ function monitorGame(roomId, modeHazard, invited) {
 
 	sockets.gameSocket.onclose = function() {
 		gameDictRemote.instance.running = false
+		delete gameDictRemote.instance.playerInput
+		window.removeEventListener('keydown', keyDownHandler);
+		window.removeEventListener('keyup', keyUpHandler);
 		delete gameDictRemote.instance
 		gameDictRemote.instance = null
 	}
@@ -162,6 +178,7 @@ function monitorGame(roomId, modeHazard, invited) {
 					} else {
 						const ballOwner = messageObj.ball_owner
 						loadPage(elements.waitingPage)
+						counterElements.forEach(element => element.classList.add('d-none'))
 						waitingMessage.classList.add('d-none')
 						counterElements.forEach((element, index) => {
 							setTimeout(() => {

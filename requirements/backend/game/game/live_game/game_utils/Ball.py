@@ -13,7 +13,15 @@ class Ball:
 		self.speed = 4
 		self.last_call = int(round(time.time() * 1000))
 		self.last_col = int(round(time.time() * 1000))
-		
+
+	def __del__(self):
+		self.x = 1
+		self.y = 1
+		self.x_dir = 1
+		self.y_dir = self.random_start_pos()
+		self.speed = 4
+		self.last_call = int(round(time.time() * 1000))
+		self.last_col = int(round(time.time() * 1000))
 
 
 	def update(self, Left_paddle, Right_paddle, score: int, game_paused: int, hazard):

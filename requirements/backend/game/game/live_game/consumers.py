@@ -26,6 +26,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 		self.room_id = self.scope['url_route']['kwargs']['room_id']
 		self.group_room_name = "chat_" + self.room_id
+		self.request_counter = 0
 
 		user = self.scope.get('user')
 		if user == AnonymousUser():
@@ -70,11 +71,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		logger.debug("disconnect")
 		user = self.scope.get('user')
 
-		await self.channel_layer.group_discard(
-			self.group_room_name,
-			self.channel_name
-		)
-
+		
 
 		self.users_in_room[self.room_id].remove(user)
 		self.user_count = len(self.users_in_room[self.room_id])
@@ -83,7 +80,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			for _ in list(self.users_in_room[self.room_id]):
 				if _ != self.scope.get('user'):
 					remaining_user = _
-			logger.debug(remaining_user)
 			await self.finish_game(remaining_user)
 			await self.channel_layer.group_send(self.group_room_name,
 			{
@@ -94,6 +90,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.clear_if_invalid_game()
 			del self.users_in_room[self.room_id]
 			del self.room_db_entry[self.room_id]
+
+		await self.channel_layer.group_discard(
+			self.group_room_name,
+			self.channel_name
+		)
 		
 
 
@@ -102,6 +103,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 			return
 		text_data_json = json.loads(text_data)
 		type_of_event = text_data_json["type"]
+
+		self.request_counter += 1
+		logger.debug(f"Request counter: {self.request_counter}")
 
 		if type_of_event == "StartGame":
 			self.game_map[self.room_id].start_game()
@@ -164,6 +168,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			new_game = Game(user1=user1, mode_hazard=mode_hazard)
 		else:
 			new_game = Game(user1=user1, invited=invited, invited_by=user1, mode_hazard=mode_hazard)
+		logger.debug(new_game)
 		new_game.save()
 		return new_game.id
 
@@ -197,9 +202,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			del game_instance
 			del self.game_map[self.room_id]
 			if not self.room_id in self.game_map:
-				# logger.debug(type(self.room_id))
 				logger.debug("deleted game")
-
 
 	@database_sync_to_async
 	def clear_if_invalid_game(self):
@@ -210,6 +213,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
 	def update_result(self, game_state):
 		game = Game.objects.get(id=self.room_db_entry[self.room_id])
+		logger.debug(game_state)
 		if game_state["player1_score"] != game.user1_score:
 			game.user1_score = game_state["player1_score"]
 		if game_state["player2_score"] != game.user2_score:

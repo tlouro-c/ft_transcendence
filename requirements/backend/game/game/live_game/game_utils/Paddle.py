@@ -1,4 +1,5 @@
 from .constantes import	CANVAS_HEIGHT, PADDLE_MAX_SPEED, PADDLE_HEIGHT
+import logging
 
 class Paddle:
 
@@ -8,6 +9,10 @@ class Paddle:
 		self.y = 0
 		self.speed = 0
 
+	def __del__(self):
+		self.x = 0
+		self.y = 0
+		self.speed = 0
 
 	def update(self, moveUp, moveDown):
 
@@ -15,7 +20,7 @@ class Paddle:
 		self.y += self.speed
 		if self.y > 175 - PADDLE_HEIGHT /2:
 			self.y = 175 - PADDLE_HEIGHT /2
-		elif (self.y <= -175 + PADDLE_HEIGHT / 2):
+		elif self.y <= -175 + PADDLE_HEIGHT / 2:
 			self.y = -175 + PADDLE_HEIGHT / 2
 
 

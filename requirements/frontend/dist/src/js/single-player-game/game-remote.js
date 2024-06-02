@@ -285,7 +285,7 @@ export class RemoteGame{
 	}
 	
 	GameUpdate(moveUp, moveDown) {
-		if (sockets.gameSocket == null || sockets.gameSocket.readyState !== WebSocket.OPEN || !self.game_started) {
+		if (sockets.gameSocket == null || sockets.gameSocket.readyState !== WebSocket.OPEN || !self.game_started || !this.running) {
 			return
 		}
 		const toSend = {
@@ -500,6 +500,9 @@ export function startRemoteGame(ballOwner){
 	
 	function animate()
 	{
+		if (!game.running) {
+			return
+		}
 		requestAnimationFrame(animate)
 		game.Draw();
 		game.CheckKeyInputs();
