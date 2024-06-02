@@ -14,13 +14,14 @@ class Hazard:
 		
 
 	def update(self, score1, score2):
-		self.time_now = int(round(time.time() * 1000))
-		if (self.y == -500):
-			self.start_hazard(score1, score2)
-		else:
-			self.check_score(score1, score2)
-			self.hazard_move()
-		self.last_call = self.time_now
+		if( self._active):
+			self.time_now = int(round(time.time() * 1000))
+			if (self.y == -500):
+				self.start_hazard(score1, score2)
+			else:
+				self.check_score(score1, score2)
+				self.hazard_move()
+			self.last_call = self.time_now
 
 	def start_hazard(self, score1, score2):
 		if ((score1 >= 3 or score2 >= 3)):
