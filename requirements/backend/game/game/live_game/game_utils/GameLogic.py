@@ -2,10 +2,11 @@ from .Paddle import Paddle
 from .Ball	import	Ball
 from .constantes import CANVAS_WIDTH, PADDLE_WIDTH
 import asyncio
+from .Hazard import Hazard
 
 class GameLogic:
 
-	def __init__(self, user1):
+	def __init__(self, user1, hazard):
 
 		self._score = [0,0]
 		self._ball = Ball()
@@ -13,6 +14,7 @@ class GameLogic:
 		self._player1_paddle = Paddle(X=(-CANVAS_WIDTH / 2 + PADDLE_WIDTH))
 		self.game_paused = -1
 		self.user1 = user1
+		self._hazard = Hazard(hazard)
 
 	def update_paddles(self, moveUp, moveDown, user):
 
@@ -23,7 +25,10 @@ class GameLogic:
 			self._player2_pladdle.update(moveUp, moveDown)
 
 	def update_ball(self):
-		self._ball.update(self._player1_paddle, self._player2_pladdle, self._score, self.game_paused)
+		self._ball.update(self._player1_paddle, self._player2_pladdle, self._score, self.game_paused, self._hazard)
+
+	def update_hazard(self):
+		self._hazard.update(self._score[0], self._score[1])
 
 	def get_state(self, user1_id, user2_id):
 
@@ -42,6 +47,7 @@ class GameLogic:
 			"player1_score": self._score[0],
 			"player1_id": response_user1,
 			"player2_id": response_user2,
+			"hazard_y": self._hazard.y
 		}
 		return response
 		

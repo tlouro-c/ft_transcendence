@@ -45,7 +45,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		if self.room_id not in self.room_db_entry:
 			self.room_db_entry[self.room_id] = int()
 		if self.room_id not in self.game_map:
-			self.game_map[self.room_id] = GameLogic(self.scope.get('user'))
+			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), self.scope.get('hazard'))
 		self.users_in_room[self.room_id].add(user)
 
 		self.user_count = len(self.users_in_room[self.room_id])

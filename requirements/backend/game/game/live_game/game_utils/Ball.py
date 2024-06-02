@@ -1,6 +1,6 @@
 import random
 import time
-from .constantes import CANVAS_HEIGHT, CANVAS_WIDTH, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_MAX_SPEED, BALL_RADIUS, BALL_START_SPEED
+from .constantes import CANVAS_HEIGHT, CANVAS_WIDTH, PADDLE_WIDTH, PADDLE_HEIGHT, BALL_MAX_SPEED, BALL_RADIUS, BALL_START_SPEED, HAZARDDEPTH, HAZARDHEIGHT, HAZARDWIDTH
 
 class Ball:
 
@@ -16,22 +16,26 @@ class Ball:
 		
 
 
-	def update(self, Left_paddle, Right_paddle, score: int, game_paused: int):
+	def update(self, Left_paddle, Right_paddle, score: int, game_paused: int, hazard):
 
 		self.left_paddle = Left_paddle
 		self.right_paddle = Right_paddle
+		self.hazard = hazard
 		self.time_now = int(round(time.time() * 1000))
 
 		if game_paused == -1:
 			self._check_paddle_collision()
 			self._check_border_collision(score)
 			self._calculate_position(score)
+			if self.hazard._active:
+				self._check_hazard_collision()
 
 		self.last_call = self.time_now
 
 	def unpause(self):
 		self.time_now = int(round(time.time() * 1000))
 		self.last_call = self.time_now
+		self.last_col = self.time_now
 
 	def _check_paddle_collision(self):
 
@@ -65,12 +69,6 @@ class Ball:
 				if self.speed < BALL_MAX_SPEED:
 					self.speed += 1
 				flag = 0
-					# if (self.x < 0):
-				# 	target_paddle = self.left_paddle
-				# 	self.x = target_paddle.x + PADDLE_WIDTH + BALL_RADIUS
-				# else:
-				# 	target_paddle = self.right_paddle
-				# 	self.x = target_paddle.x - PADDLE_WIDTH - BALL_RADIUS
 
 
 	def _check_border_collision(self, score):
@@ -99,6 +97,8 @@ class Ball:
 			self._correct_position_y()
 		else:
 			self.y = future_y
+		if (self.x > 0 and future_x < 0) or (self.x < 0 and future_x > 0):
+			self._correct_position_for_hazard()
 		if future_x >= 290 or future_x <= -290:
 			self._correct_position_x(score)
 		else:
@@ -133,4 +133,25 @@ class Ball:
 	
 	def random_start_pos(self):
 		return random.uniform(-1,1)
+		
+	def _correct_position_for_hazard(self):
+		time_divided = ((self.time_now - self.last_call))
+
+		while (time_divided > 0):
+			previous_x = self.x
+			self.x += self.x_dir * (self.speed / 20)
+			time_divided -= 1
+			if (self.x > 0 and previous_x < 0) or (self.x < 0 and previous_x > 0):
+				self._check_hazard_collision()
+				break
+		self.x += self.x_dir * (self.speed/20) * time_divided
+
+	def _check_hazard_collision(self):
+
+			if (self.x <= self.hazard.x + HAZARDWIDTH / 2 and
+				self.x >= self.hazard.x - HAZARDWIDTH / 2):
+				if (self.y <= self.hazard.y + HAZARDHEIGHT / 2 and
+				self.y >= self.hazard.y - HAZARDHEIGHT / 2): 
+					self.x_dir = -self.x_dir
+			
 		
