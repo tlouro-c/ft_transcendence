@@ -43,6 +43,8 @@ export class RemoteGame{
 		// window.addEventListener('keydown', this.handleKeyDown, false);
 		// window.addEventListener('keyup', this.handleKeyUp, false);
 	}
+
+	
 	
 	init(){
 		// create a WebGL renderer, camera and a scene
@@ -212,6 +214,7 @@ export class RemoteGame{
 		this.running = true
 		this.score1 = 0
 		this.score2 = 0
+		self.game_started = false
 
 		const gameCanvas = document.getElementById('gameCanvasRemote');
 		gameCanvas.classList.remove('d-none');
@@ -264,7 +267,6 @@ export class RemoteGame{
 				if (this.ballDirX < 0) {
 					//strech paddle when hits
 					this.paddle1.scale.y = 3;
-					console.log("hello there funny man")
 				}
 			}
 		}
@@ -277,14 +279,13 @@ export class RemoteGame{
 				if (this.ballDirX > 0) {
 					//strech paddle when hits
 					this.paddle2.scale.y = 3;
-					console.log("hello there funny man")
 				}
 			}
 		}
 	}
 	
 	GameUpdate(moveUp, moveDown) {
-		if (sockets.gameSocket == -1) {
+		if (sockets.gameSocket == null || sockets.gameSocket.readyState !== WebSocket.OPEN || !self.game_started) {
 			return
 		}
 		const toSend = {
@@ -481,6 +482,7 @@ export class RemoteGame{
 		const toSend = {
 			"type": "StartGame",
 		}
+		self.game_started = true
 		sockets.gameSocket.send(JSON.stringify(toSend))
 	}
 }
@@ -489,6 +491,8 @@ var game;
 
 export function startRemoteGame(ballOwner){
 	game = new RemoteGame();
+
+	//console.log(game)
 	
 	game.StartGame();
 	game.StartOnBG();
@@ -501,8 +505,6 @@ export function startRemoteGame(ballOwner){
 		game.Draw();
 		game.CheckKeyInputs();
 		// game.GameUpdate();
-		if (gameDictRemote.instance.running == false)
-			return ;
 	}
 	return game
 };

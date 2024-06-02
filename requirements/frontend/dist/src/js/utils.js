@@ -17,16 +17,16 @@ export const elements = {
 }
 
 export const sockets = {
-	chatSocket: -1,
-	gameSocket: -1
+	chatSocket: null,
+	gameSocket: null
 }
 
 export const gameDict = {
-	instance: -1
+	instance: null,
 }
 
 export const gameDictRemote = {
-	instance: -1,
+	instance: null,
 }
 
 export function clearMain() {
@@ -78,23 +78,25 @@ export function getTokensObj() {
 }
 
 export function closeSocket(socket) {
-	if (socket != -1) {
+	if (socket != null) {
 		socket.close()
 	}
 }
 
 export function closeAllSockets() {
 	closeSocket(sockets.gameSocket)
+	sockets.gameSocket = null
 	closeSocket(sockets.chatSocket)
+	sockets.chatSocket = null
 }
 
 
 export function ClearBackgroundResources() {
 	closeAllSockets()
 
-	if (gameDict.instance != -1) {
+	if (gameDict.instance != null) {
 		gameDict.instance.Stop()
 		delete gameDict.instance
-		gameDict.instance = -1
+		gameDict.instance = null
 	}
 }
