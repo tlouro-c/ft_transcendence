@@ -51,7 +51,7 @@ class Ball:
 						self.last_col = self.time_now
 	
 			if (self.x <= self.right_paddle.x + PADDLE_WIDTH and
-				self.x >= self.right_paddle.x):
+				self.x >= self.right_paddle.x - 15):
 				if (self.y <= self.right_paddle.y + PADDLE_HEIGHT / 2 and
 				self.y >= self.right_paddle.y - PADDLE_HEIGHT / 2):
 					if self.x_dir > 0:
@@ -76,11 +76,14 @@ class Ball:
 		if ((self.x + self.x_dir <= (-CANVAS_WIDTH / 2)) or (self.x + self.x_dir  >= (CANVAS_WIDTH / 2))):
 			if self.x + self.x_dir - BALL_RADIUS <= (-CANVAS_WIDTH / 2):
 				score[1] +=1
+				self.x = -10
+				self.y = -10
 			if self.x + self.x_dir + BALL_RADIUS >= (CANVAS_WIDTH / 2):
 				score[0] +=1
+				self.x = 10
+				self.y = 10
 			self.x_dir *= -1
-			self.x = 1
-			self.y = 1
+
 			self.speed = BALL_START_SPEED
 		if ((self.y + self.y_dir + BALL_RADIUS) >= (CANVAS_HEIGHT / 2) or (self.y + self.y_dir - BALL_RADIUS) <= (-CANVAS_HEIGHT / 2)):
 			self.y_dir *= -1
@@ -148,10 +151,12 @@ class Ball:
 
 	def _check_hazard_collision(self):
 
+		if self.time_now - self.last_col > 100:
 			if (self.x <= self.hazard.x + HAZARDWIDTH / 2 and
 				self.x >= self.hazard.x - HAZARDWIDTH / 2):
 				if (self.y <= self.hazard.y + HAZARDHEIGHT / 2 and
 				self.y >= self.hazard.y - HAZARDHEIGHT / 2): 
 					self.x_dir = -self.x_dir
+					self.last_col = self.time_now
 			
 		

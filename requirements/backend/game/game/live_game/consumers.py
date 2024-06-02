@@ -46,7 +46,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.room_db_entry[self.room_id] = int()
 		if self.room_id not in self.game_map:
 			logger.debug("I was here")
-			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), self.scope.get('hazard'))
+			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), True)
 			logger.debug(self.room_id)
 		self.users_in_room[self.room_id].add(user)
 		logger.debug(self.game_map)
@@ -236,6 +236,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 			if ((data.get("moveUp") or data.get("moveDown")) and data.get("user_id") == self.scope.get('user')):
 				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), data.get("user_id"))
 
+			self.game_map[game_id].update_hazard()
 			self.game_map[game_id].update_ball()
 
 			response_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
