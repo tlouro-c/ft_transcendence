@@ -45,11 +45,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.room_db_entry[self.room_id] = int()
 		if self.room_id not in self.game_map:
 			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), self.scope['mode_hazard'])
-			logger.debug("")
-			logger.debug("-----")
-			logger.debug("CREATING GAME")
-			logger.debug("-----")
-			logger.debug("")
 		self.users_in_room[self.room_id].add(user)
 
 		self.user_count = len(self.users_in_room[self.room_id])
@@ -202,7 +197,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			del game_instance
 			del self.game_map[self.room_id]
 			if not self.room_id in self.game_map:
-				# logger.debug(type(self.room_id))
 				logger.debug("deleted game")
 
 
