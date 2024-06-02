@@ -284,6 +284,9 @@ export class RemoteGame{
 	}
 	
 	GameUpdate(moveUp, moveDown) {
+		if (sockets.gameSocket == -1) {
+			return
+		}
 		const toSend = {
 			"type": "ball",
 			"moveUp": moveUp,
@@ -467,11 +470,9 @@ export class RemoteGame{
 				this.hazardMode = true;
 			}
 			this.ball.position.y = data["ball_y"];
-			console.log(this.paddle1.position.y, this.paddle2.position.y, data["player1_id"], data["player2_id"]);
-			document.getElementById("scoreLeftRemote").textContent = this.score1;
-			document.getElementById("scoreRightRemote").textContent = this.score2;
+			document.getElementById("scoreLeftRemote").textContent = this.score1
+			document.getElementById("scoreRightRemote").textContent = this.score2
 		}
-			// console.log(this.paddle1.position.y, this.paddle2.position.y, this.ball.1position.x, this.ball.position.y, this.score1, this.score2)
 	}
 
 	StartOnBG()
@@ -489,7 +490,6 @@ export function startRemoteGame(ballOwner){
 	game = new RemoteGame();
 	
 	game.StartGame();
-	console.log(game.update_game_data())
 	game.StartOnBG();
 	animate()
 	
@@ -505,3 +505,4 @@ export function startRemoteGame(ballOwner){
 	}
 	return game
 };
+
