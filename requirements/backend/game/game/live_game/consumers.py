@@ -48,13 +48,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 			logger.debug("I was here")
 			self.game_map[self.room_id] = GameLogic(self.scope.get('user'), self.scope.get('mode_hazard'))
 			logger.debug(self.room_id)
+
 		self.users_in_room[self.room_id].add(user)
-		logger.debug(self.game_map)
-
-
 
 		self.user_count = len(self.users_in_room[self.room_id])
-		if self.user_count == 1:
+		if self.user_count <= 1:
 			self.room_db_entry[self.room_id] = await self.new_game_on_db()
 			await self.channel_layer.group_send(self.group_room_name,
 			{
@@ -67,20 +65,19 @@ class GameConsumer(AsyncWebsocketConsumer):
 				{
 					"type": "info",
 					"info": "Start",
-					"ball_owner": choice(list(self.users_in_room[self.room_id]))
+					"ball_owner": choice(list(self.users_in_room[self.room_id])),
+					"user_1": list(self.users_in_room[self.room_id])[0],
+					"user_2": list(self.users_in_room[self.room_id])[1]
 				})
 
 	async def disconnect(self, code):
 		user = self.scope.get('user')
-
-		logger.debug(self.users_in_room[self.room_id])
 
 		self.users_in_room[self.room_id].remove(user)
 		await self.channel_layer.group_discard(
 			self.group_room_name,
 			self.channel_name
 		)
-		logger.debug(len(self.users_in_room[self.room_id]))
 
 		users_counter = len(self.users_in_room[self.room_id])
 
@@ -96,11 +93,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 			await self.clear_if_invalid_game()
 			del self.users_in_room[self.room_id]
 			del self.room_db_entry[self.room_id]
+			del self.game_map[self.room_id]
 
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
-		# logger.debug(text_data_json)
 		type_of_event = text_data_json["type"]
 
 		if type_of_event == "ball":
@@ -126,7 +123,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 		info = event['info']
 		if 'ball_owner' in event:
 			ball_owner = event['ball_owner']
-			await self.send(text_data=json.dumps({'type':type_of_event, "info": info, "ball_owner": ball_owner}))
+			user_1 = event['user_1']
+			user_2 = event['user_2']
+			await self.send(text_data=json.dumps({'type':type_of_event, "info": info, "ball_owner": ball_owner, "user_1":user_1, "user_2":user_2}))
 		else:
 			await self.send(text_data=json.dumps({'type':type_of_event, "info": info}))
 
@@ -140,43 +139,43 @@ class GameConsumer(AsyncWebsocketConsumer):
 		match_winner = event['winner']
 		await self.send(text_data=json.dumps({'type':type_of_event, "winner":match_winner}))
 
-	@database_sync_to_async
-	def new_game_on_db(self):
-		user = self.scope.get('user')
-		invited = str(int(self.room_id) - int(user))
-		mode_hazard = self.scope.get('mode_hazard') == 'true'
-
-		new_game = Game(user1=user, user2=invited, invited=invited, invited_by=user, mode_hazard=mode_hazard)
-		new_game.save()
-		return new_game.id
-
 	# @database_sync_to_async
 	# def new_game_on_db(self):
-	# 	user1 = self.scope.get('user')
-	# 	invited = self.scope.get('invited')
-	# 	mode_hazard = self.scope.get('mode_hazard')
-	# 	tournament = self.scope.get('tournament')
+	# 	user = self.scope.get('user')
+	# 	invited = str(int(self.room_id) - int(user))
+	# 	mode_hazard = self.scope.get('mode_hazard') == 'true'
 
-	# 	if tournament:
-	# 		new_game = Game(user1=user1, mode_hazard=mode_hazard)
-	# 	else:
-	# 		new_game = Game(user1=user1, invited=invited, invited_by=user1, mode_hazard=mode_hazard)
+	# 	new_game = Game(user1=user, user2=invited, invited=invited, invited_by=user, mode_hazard=mode_hazard)
 	# 	new_game.save()
 	# 	return new_game.id
 
 	@database_sync_to_async
-	def start_game_on_db(self):
-		game = Game.objects.get(id=self.room_db_entry[self.room_id])
-		game.status = 'On Going'
-		game.save()
+	def new_game_on_db(self):
+		user1 = self.scope.get('user')
+		invited = self.scope.get('invited')
+		mode_hazard = self.scope.get('mode_hazard')
+		tournament = self.scope.get('tournament')
+
+		if tournament:
+			new_game = Game(user1=user1, mode_hazard=mode_hazard)
+		else:
+			new_game = Game(user1=user1, invited=invited, invited_by=user1, mode_hazard=mode_hazard)
+		new_game.save()
+		return new_game.id
 
 	# @database_sync_to_async
 	# def start_game_on_db(self):
-	# 	user2 = self.scope.get('user')
 	# 	game = Game.objects.get(id=self.room_db_entry[self.room_id])
-	# 	game.user2 = user2
 	# 	game.status = 'On Going'
 	# 	game.save()
+
+	@database_sync_to_async
+	def start_game_on_db(self):
+		user2 = self.scope.get('user')
+		game = Game.objects.get(id=self.room_db_entry[self.room_id])
+		game.user2 = user2
+		game.status = 'On Going'
+		game.save()
 
 	@database_sync_to_async
 	def finish_game(self, winner):
@@ -187,7 +186,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 			game.winner = winner
 			game.finish_time = datetime.now(timezone.utc)
 			game.save()
-			del self.game_map[self.room_id]
 
 	@database_sync_to_async
 	def clear_if_invalid_game(self):
@@ -229,10 +227,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 			data = event['data']
 			temp_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
-			logger.debug("======")
-			logger.debug(type(self.scope.get('mode_hazard')))
-			logger.debug(self.scope.get('mode_hazard'))
-			logger.debug("======")
+
 			if ((data.get("moveUp") or data.get("moveDown")) and data.get("user_id") == self.scope.get('user')):
 				self.game_map[game_id].update_paddles(data.get("moveUp"), data.get("moveDown"), data.get("user_id"))
 
@@ -240,9 +235,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 			self.game_map[game_id].update_ball()
 
 			response_data = self.game_map[game_id].get_state(list(self.users_in_room[self.room_id])[0], list(self.users_in_room[self.room_id])[1])
-			logger.debug(response_data)
 
 			# logger.debug(response_data)
+
+			await self.send(text_data=json.dumps({
+				'type': 'ball_updates',
+				'data': response_data,
+			}))
+
 			if temp_data["player1_score"] != response_data["player1_score"] or temp_data["player2_score"] != response_data["player2_score"]:
 				match_winner = await self.update_result(response_data)
 				if match_winner is not None:
@@ -252,10 +252,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 						"type": "win",
 						"winner": match_winner
 					})
-			await self.send(text_data=json.dumps({
-				'type': 'ball_updates',
-				'data': response_data,
-			}))
 ## No more Vera
 
 

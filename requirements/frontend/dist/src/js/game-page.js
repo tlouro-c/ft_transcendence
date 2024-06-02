@@ -35,7 +35,7 @@ export async function loadGamePage() {
 		inviteElement.querySelector(".friend-avatar").setAttribute('src', API + invited_by.avatar)
 		inviteElement.querySelector("button").addEventListener("click", event => {
 			event.preventDefault()
-			monitorGame(userInfo.id + invited_by.id)
+			monitorGame(invited_by.id)
 		});
 		invitesList.appendChild(inviteElement)
 	})
@@ -53,10 +53,9 @@ export async function loadGamePage() {
 
 				const formData = new FormData(this)
 				
-				const mode3D = formData.get('mode3D') == ''
 				const modeHazard = formData.get('modeHazard') == ''
 				
-				monitorGame(userInfo.id + friend.id, mode3D, modeHazard)
+				monitorGame(userInfo.id, modeHazard, friend.id)
 			})
 			oneVsOneList.appendChild(friendElement)
 		}
@@ -125,20 +124,10 @@ async function loadRealTimeGame(opponentId, ballOwner) {
 }
 
 
-function monitorGame(roomId, mode3D, modeHazard) {
+function monitorGame(roomId, modeHazard, invited) {
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	sockets.gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}&mode_3d=${mode3D}&mode_hazard=${modeHazard}`)
-
-	document.getElementById("testPoint").addEventListener("click", (event) => {
-		event.preventDefault();
-		
-		const toSend = {
-			"type": "point",
-			"point_winner": getUserObj().id
-		}
-		sockets.gameSocket.send(JSON.stringify(toSend));
-	});
+	sockets.gameSocket = new WebSocket(`ws://localhost:8001/ws/game/${roomId}/?token=${encodedToken}&mode_hazard=${modeHazard}&invited=${invited}`)
 
 	sockets.gameSocket.onmessage = function(message) {
 		const messageObj = JSON.parse(message.data)
@@ -165,35 +154,26 @@ function monitorGame(roomId, mode3D, modeHazard) {
 							}, index * 1000);
 						})
 						setTimeout(() => {
-							loadRealTimeGame(roomId - getUserObj().id, ballOwner)
+							const opponent = messageObj.user_1 == getUserObj().id ? messageObj.user_2 : messageObj.user_1
+							loadRealTimeGame(opponent, ballOwner)
 						}, 3000);
 					}
-					break
-				case 'point':
-					const pointWinner = messageObj.point_winner
-					if (pointWinner == getUserObj().id) {
-						const current_score = parseInt(document.getElementById("scoreLeftRemote").textContent, 10)
-						document.getElementById("scoreLeftRemote").textContent = current_score + 1
-					} else {
-						const current_score = parseInt(document.getElementById("scoreRightRemote").textContent, 10)
-						document.getElementById("scoreRightRemote").textContent = current_score + 1
-					}
-					break
+					break					
 				case 'win':
+					console.log("win")
+					gameDictRemote.instance.running = false;
+					sockets.gameSocket.close()
+					sockets.gameSocket = -1
 					const matchWinner = messageObj.winner
-					if (matchWinner == getUserObj().id) {
+					if (matchWinner.toString() == getUserObj().id) {
 						document.getElementById("winnerBoardRemote").textContent = "You won"
 					} else {
 						document.getElementById("winnerBoardRemote").textContent = "You lost"
 					}
-					gameDictRemote.instance.running = false;
-					closeSocket(sockets.gameSocket)
 					break
 				case "ball_updates":
-				case "player_input":
-					// console.log(gameDictRemote.instance.running)
 					gameDictRemote.instance.update_game_data(messageObj['data']);
-
+					break
 			}
 		}
 	}

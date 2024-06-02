@@ -27,7 +27,6 @@ export const gameDict = {
 
 export const gameDictRemote = {
 	instance: -1,
-
 }
 
 export function clearMain() {
@@ -81,7 +80,6 @@ export function getTokensObj() {
 export function closeSocket(socket) {
 	if (socket != -1) {
 		socket.close()
-		socket = -1
 	}
 }
 
