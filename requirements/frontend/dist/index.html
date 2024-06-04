@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Transcendence</title>
+	<link rel="icon" href="src/assets/favicon.svg">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet", href="src/styles/main.css">
+	<link rel="stylesheet", href="src/styles/game.css">
+</head>
+<body data-bs-theme="dark">
+	<header class="bg-dark-subtle shadow pb-3">
+		<nav class="navbar navbar-expand-lg bg-dark-subtle">
+			<div class="d-flex flex-column flex-sm-row container-fluid align-items-center justify-content-center px-5">
+				<div class="p-3">
+					<a class="navbar-brand me-0">
+						<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346 346" width="40" height="40">
+							<title>ping-pong-svg</title>
+							<style>
+								.s0 { fill: #FEFEFA } 
+							</style>
+							<path id="Path 0" fill-rule="evenodd" class="s0" d="m173 0.1c9.4-0.1 13.3 0.4 21 2.5 5.2 1.4 13.6 4.5 18.5 6.9 4.9 2.4 12.6 7 17 10.3 4.4 3.2 11.8 9.9 16.4 14.8 4.6 4.9 11.2 13.2 14.7 18.4 3.4 5.2 8.3 13.8 10.7 19 2.5 5.2 5.6 13.1 7 17.5 1.4 4.4 3.4 11.8 4.4 16.5 1.4 6.5 1.8 12.5 1.7 25-0.1 14.5-0.4 17.7-2.7 26.5-1.6 6-5.1 14.8-8.6 22-3.6 7.1-8.7 15.4-12.6 20.3-3.6 4.5-6.4 8.3-6.2 8.5 0.1 0.2 12.6 11.3 27.7 24.8 22.4 19.9 28 25.4 30 29.4 1.3 2.8 2.6 7.5 2.8 10.5 0.3 3.6-0.2 7.4-1.3 11-1.5 4.6-3.5 7.2-11.9 15.8-7.1 7.3-11.7 11.1-15.6 13-4.2 2-7 2.6-11.5 2.5-4.7 0-7.3-0.7-12-3.2-5.2-2.7-9.3-6.8-30.5-30.6-13.5-15-24.7-27.2-25-27-0.3 0.2 0.3 15.1 1.3 33.2 1.8 31.1 1.8 33.1 0.2 38.3-1.3 4-3.1 6.8-6.9 10.6-4 4.1-6.5 5.6-12.1 7.4-6.1 2-8.5 2.2-18.5 1.8-10.2-0.3-12.2-0.7-17.9-3.3-3.5-1.7-7.8-4.6-9.4-6.5-1.7-1.9-3.9-5.3-4.9-7.5-1.3-2.9-1.8-6.5-1.8-13 0-4.9 0.4-16.4 1-25.5 0.5-9.1 1.2-19.4 2-29.5l-8.3-1.3c-4.5-0.8-12.5-2.7-17.7-4.4-5.2-1.6-13.3-5-18-7.5-4.7-2.4-11-6.3-14-8.6-3-2.3-8.5-7.1-12.3-10.7-3.8-3.6-9.1-9.4-11.7-13-2.6-3.6-6.6-9.7-8.8-13.5-2.3-3.8-6-11.5-8.3-17-2.3-5.5-5.4-14.9-7-21-1.5-6.1-3.3-16.6-4-23.5-0.9-9.6-0.9-14.9-0.1-23 0.7-5.8 2.1-14.1 3.3-18.5 1.1-4.4 3.6-11.4 5.6-15.5 1.9-4.1 5.4-10.4 7.8-14 2.3-3.6 7.6-9.7 11.6-13.5 4.1-3.9 11.2-9.3 15.9-12 4.7-2.7 13-6.5 18.5-8.3 8.8-3 10.9-4.2 18-10.3 4.4-3.8 11.4-8.9 15.5-11.3 4.1-2.5 10.7-5.7 14.5-7.1 3.8-1.5 10.2-3.5 14-4.5 4.7-1.2 10.9-1.9 18.5-1.9zm-18 20.5c-3 0.9-8.6 3-12.3 4.7-3.7 1.8-6.8 3.5-6.7 3.9 0 0.5 1.1 0.8 2.5 0.8 1.4 0 7.6 0.9 13.8 1.9 6.1 1.1 15.5 3.4 20.7 5.1 5.2 1.8 14.6 5.8 20.9 8.9 6.2 3.1 15 8.4 19.5 11.7 4.4 3.4 11.6 9.8 15.9 14.3 4.2 4.4 9.7 11.1 12.1 14.8 2.4 3.8 5.7 9.5 7.3 12.8 1.7 3.3 4.2 9.6 5.6 14 1.4 4.4 3.1 10.5 3.9 13.5 0.8 3.5 1.3 11.7 1.3 22.3v16.9c2.9-6.7 4.7-13 5.7-18.2 1.6-7.6 1.9-11.9 1.5-22-0.4-8.5-1.3-15.5-3-22-1.3-5.2-4.1-13.5-6.1-18.5-2-5-5.8-12.5-8.4-16.8-2.6-4.4-7.5-11.3-10.8-15.5-3.4-4.3-9.5-10.5-13.5-14-4.1-3.5-10.8-8.3-14.9-10.6-4.1-2.4-11.1-5.6-15.5-7.1-6.2-2.1-10.3-2.8-18-3-5.5-0.2-11.3-0.1-13 0.1-1.6 0.3-5.5 1.2-8.5 2zm-57.5 32c-2.7 0.9-7.2 2.8-10 4.1-2.7 1.4-8.3 5-12.4 8.2-4 3.1-9.4 8.3-11.9 11.6-2.5 3.3-6 9.2-7.8 13-1.8 3.8-4.2 10.8-5.3 15.5-1.1 4.7-2.3 13-2.7 18.5-0.4 6.7-0.1 13.4 1 20.5 0.8 5.8 2.7 14.6 4.1 19.5 1.4 4.9 4.3 12.8 6.3 17.5 2.1 4.7 6.3 12.3 9.4 17 3.1 4.7 7.8 10.9 10.5 13.9 2.6 3 8.4 8.2 12.8 11.4 4.4 3.3 11.6 7.7 16 9.9 4.4 2.1 11 4.6 14.7 5.6l6.8 1.7 111.1-111c-2.6-10.1-4.6-15.7-6.1-19-1.4-3.3-4.8-9.4-7.4-13.5-2.7-4.1-8.3-10.9-12.5-15.1-4.2-4.2-11.2-10-15.6-12.8-4.4-2.9-11.1-6.8-15-8.6-3.8-1.9-11-4.7-16-6.4-4.9-1.6-13-3.7-18-4.6-5.1-0.9-14.1-1.5-21-1.4-6.6 0-15.1 0.7-19 1.5-3.8 0.8-9.2 2.1-12 3zm56 189.4c6.2 0 11.6-0.9 16-1.9 4.4-1.1 11.5-3.3 15.8-5 5.8-2.3 9.3-3.1 14.2-3.1 3.6 0 8 0.6 9.8 1.3 1.7 0.8 5 2.9 7.1 4.8 2.2 1.9 14.8 15.5 28.1 30.4 13.3 14.9 24.9 27.3 25.8 27.7 0.9 0.5 3.2 0.8 5 0.8 1.9 0 4.3-0.9 5.8-2.3 1.5-1.2 5.6-5.5 9.3-9.5 4.7-5.1 6.6-8 6.6-10 0.1-1.5-1-4-2.2-5.6-1.3-1.7-14.8-14.1-30-27.8-23-20.5-28.3-25.7-30.5-30.1-2-4-2.7-6.7-2.7-11.7 0-5.1 0.7-8.5 3.6-16 2-5.2 4.4-13.6 5.3-18.5 0.9-5 1.5-9.6 1.2-10.3-0.2-0.7-20.1 18.5-44.3 42.8zm14.5 16.5c-5.2 1-9.6 1.9-9.8 1.9-0.1 0-0.9 10.4-1.7 23.1-0.8 12.6-1.5 26.3-1.5 30.5-0.1 6.9 0.2 7.7 2.7 10.3 2.8 2.7 2.9 2.7 15.6 2.7h12.9l6.2-6.5c-1-13.2-1.8-27.2-2.4-39.5-0.6-12.4-1.3-23.5-1.6-24.8-0.2-1.2-1-2.2-1.6-2.1-0.7 0-3.1 0.7-5.3 1.4-2.2 0.7-8.3 2.1-13.5 3zm-103.5-6.9c3.4 0.3 8.6 1.7 11.9 3.2 3.7 1.7 7.7 4.6 10.7 7.9 2.7 2.9 5.9 7.4 7.2 10 1.8 3.9 2.2 6.5 2.2 14.3 0 8.2-0.3 10.2-2.6 15-1.7 3.4-5 7.5-8.5 10.8-3.7 3.3-8 6.1-11.4 7.3-4.3 1.6-7.3 2-14 1.7-7.1-0.3-9.5-0.8-14.4-3.3-3.2-1.7-7.6-4.9-9.7-7.3-2.1-2.3-5.1-6.6-6.5-9.5-1.6-3.3-2.8-7.6-3.1-11.7-0.5-5-0.1-8.3 1.6-13.8 1.7-5.9 3.1-8.3 7.4-12.9 2.8-3.1 7.5-6.7 10.2-8.1 2.8-1.3 6.8-2.8 9-3.3 2.2-0.4 6.7-0.6 10-0.3zm-16.7 24c-1 1.6-2.4 4.4-3 6.4-0.6 1.9-0.8 5.3-0.4 7.5 0.3 2.2 1.7 5.7 3.1 7.7 1.4 2.1 4.1 4.4 6 5.3 1.9 0.8 5.6 1.5 8.3 1.5 2.6 0 6.3-0.8 8.2-1.8 1.9-0.9 4.5-3.3 5.8-5.2 1.2-2 2.5-5.1 2.9-7 0.3-2 0.3-4.9 0-6.5-0.4-1.7-1.7-4.6-2.9-6.5-1.3-2-4.3-4.6-6.8-5.8-2.5-1.2-5.8-2.2-7.5-2.2-1.6 0-5 0.8-7.4 1.9-2.4 1-5.3 3.1-6.3 4.7zm61.7-201.6h12.3c6.7 0 12.2 0.3 12.2 0.7 0 0.4-11.3 12.2-49.9 51.8l51.9 0.5v49l-26.5-0.5-0.5-26.5h-53l-0.5-21.5zm64.5 0h26v27.5l-26 26v26.5h-27v-26.5l27-27zm-27 0h13c7.2 0 13 0.3 13 0.7 0 0.4-5.5 6.3-12.2 13-6.8 6.7-12.6 12-13 11.7-0.4-0.2-0.8-6-0.8-12.9zm52.8 54c0.1 0 0.2 5.8 0.2 26h-11.7c-6.5 0-12.1-0.3-12.5-0.7-0.5-0.5 4.7-6.3 11.4-13.1 6.8-6.7 12.4-12.2 12.6-12.2z"/>
+						</svg>
+					</a>
+				</div>
+				<ul class="navbar-nav user-navbar d-none m-auto">
+					<li class="nav-item p-3 d-flex align-items-center justify-content-center"> 
+						<a id="navbar-home-link"> 
+							<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 495.398 495.398" xml:space="preserve">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+								<g id="SVGRepo_iconCarrier"> <g> <g> <g> <path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391 v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158 c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747 c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"/> <path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401 c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79 c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"/> </g> </g> </g> </g>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item p-3 d-flex align-items-center justify-content-center">
+						<a id="navbar-play-link"> 
+							<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 604.051 604.051" xml:space="preserve">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+								<g id="SVGRepo_iconCarrier"> <g> <g> <path d="M545.412,198.294H323.445v-97.301c0-11.83-9.59-21.42-21.419-21.42c-11.83,0-21.42,9.59-21.42,21.42v97.301H58.64 c-32.058,0-58.14,26.082-58.14,58.14v209.904c0,32.059,26.082,58.139,58.14,58.139h486.772c32.059,0,58.139-26.08,58.139-58.139 V256.435C603.551,224.376,577.471,198.294,545.412,198.294z M560.711,466.339c0,8.449-6.85,15.299-15.299,15.299H58.64 c-8.45,0-15.3-6.85-15.3-15.299V256.435c0-8.45,6.85-15.3,15.3-15.3h486.772c8.449,0,15.299,6.851,15.299,15.3V466.339 L560.711,466.339z"/> <path d="M545.412,524.978H58.64C26.306,524.978,0,498.672,0,466.339V256.435c0-32.334,26.306-58.64,58.64-58.64h221.466v-96.801 c0-12.087,9.833-21.92,21.92-21.92c12.086,0,21.919,9.833,21.919,21.92v96.801h221.467c32.333,0,58.639,26.306,58.639,58.64 v209.904C604.051,498.672,577.745,524.978,545.412,524.978z M58.64,198.794c-31.783,0-57.64,25.857-57.64,57.64v209.904 c0,31.782,25.857,57.639,57.64,57.639h486.772c31.782,0,57.639-25.856,57.639-57.639V256.435c0-31.783-25.856-57.64-57.639-57.64 H322.945v-97.801c0-11.535-9.385-20.92-20.919-20.92c-11.535,0-20.92,9.385-20.92,20.92v97.801H58.64z M545.412,482.138H58.64 c-8.712,0-15.8-7.087-15.8-15.799V256.435c0-8.712,7.088-15.8,15.8-15.8h486.772c8.712,0,15.799,7.088,15.799,15.8v209.904 C561.211,475.051,554.124,482.138,545.412,482.138z M58.64,241.634c-8.161,0-14.8,6.64-14.8,14.8v209.904 c0,8.16,6.639,14.799,14.8,14.799h486.772c8.16,0,14.799-6.639,14.799-14.799V256.435c0-8.161-6.639-14.8-14.799-14.8H58.64z"/> </g> <g> <path d="M230.178,339.966h-41.612v-41.612c0-8.45-6.85-15.3-15.3-15.3h-12.24c-8.45,0-15.3,6.85-15.3,15.3v41.612h-41.613 c-8.45,0-15.3,6.852-15.3,15.301v12.24c0,8.449,6.85,15.299,15.3,15.299h41.613v41.613c0,8.449,6.85,15.299,15.3,15.299h12.24 c8.45,0,15.3-6.85,15.3-15.299v-41.613h41.612c8.45,0,15.3-6.85,15.3-15.299v-12.24 C245.478,346.817,238.627,339.966,230.178,339.966z"/> <path d="M173.265,440.218h-12.24c-8.712,0-15.8-7.087-15.8-15.799v-41.113h-41.113c-8.712,0-15.8-7.087-15.8-15.799v-12.24 c0-8.713,7.088-15.801,15.8-15.801h41.113v-41.112c0-8.712,7.088-15.8,15.8-15.8h12.24c8.712,0,15.8,7.088,15.8,15.8v41.112 h41.112c8.712,0,15.8,7.088,15.8,15.801v12.24c0,8.712-7.088,15.799-15.8,15.799h-41.112v41.113 C189.065,433.131,181.978,440.218,173.265,440.218z M104.113,340.466c-8.161,0-14.8,6.64-14.8,14.801v12.24 c0,8.16,6.639,14.799,14.8,14.799h42.113v42.113c0,8.16,6.639,14.799,14.8,14.799h12.24c8.161,0,14.8-6.639,14.8-14.799v-42.113 h42.112c8.161,0,14.8-6.639,14.8-14.799v-12.24c0-8.161-6.639-14.801-14.8-14.801h-42.112v-42.112c0-8.161-6.639-14.8-14.8-14.8 h-12.24c-8.161,0-14.8,6.639-14.8,14.8v42.112H104.113z"/> </g> <g> <circle cx="429.895" cy="409.694" r="21.42"/> <path d="M429.895,431.614c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S441.981,431.614,429.895,431.614z M429.895,388.774c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S441.43,388.774,429.895,388.774z"/> </g> <g> <circle cx="429.895" cy="313.765" r="21.42"/> <path d="M429.895,335.685c-12.087,0-21.92-9.833-21.92-21.919c0-12.087,9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 C451.814,325.852,441.981,335.685,429.895,335.685z M429.895,292.845c-11.535,0-20.92,9.385-20.92,20.92 s9.385,20.919,20.92,20.919s20.92-9.384,20.92-20.919S441.43,292.845,429.895,292.845z"/> </g> <g> <circle cx="381.93" cy="361.729" r="21.42"/> <path d="M381.93,383.649c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S394.017,383.649,381.93,383.649z M381.93,340.81c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S393.465,340.81,381.93,340.81z"/> </g> <g> <circle cx="477.859" cy="361.729" r="21.42"/> <path d="M477.859,383.649c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S489.946,383.649,477.859,383.649z M477.859,340.81c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S489.395,340.81,477.859,340.81z"/> </g> </g> </g>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item p-3 d-flex align-items-center justify-content-center">
+						<a id="navbar-chat-link"> 
+							<svg fill="#FEFEFA" height="25px" width="25px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60" xml:space="preserve">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+								<g id="SVGRepo_iconCarrier"> <g> <path d="M26,9.586C11.664,9.586,0,20.09,0,33c0,4.499,1.418,8.856,4.106,12.627c-0.51,5.578-1.86,9.712-3.813,11.666 c-0.304,0.304-0.38,0.768-0.188,1.153C0.276,58.789,0.625,59,1,59c0.046,0,0.093-0.003,0.14-0.01 c0.349-0.049,8.432-1.213,14.317-4.585c3.33,1.333,6.874,2.009,10.544,2.009c14.336,0,26-10.503,26-23.414S40.337,9.586,26,9.586z"/> <path d="M55.894,37.042C58.582,33.27,60,28.912,60,24.414C60,11.503,48.337,1,34,1c-8.246,0-15.968,3.592-20.824,9.42 C17.021,8.614,21.38,7.586,26,7.586c15.439,0,28,11.4,28,25.414c0,5.506-1.945,10.604-5.236,14.77 c4.946,1.887,9.853,2.6,10.096,2.634c0.047,0.006,0.094,0.01,0.14,0.01c0.375,0,0.724-0.211,0.895-0.554 c0.192-0.385,0.116-0.849-0.188-1.153C57.753,46.753,56.403,42.619,55.894,37.042z"/> </g> </g>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item p-3 d-flex align-items-center justify-content-center d-none user-navbar" id="search-item">
+						<form class="d-flex h-100" role="search" id="search-form">
+							<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-input" name="inputText" autocomplete="off">
+							<button class="btn btn-sm btn-outline-success" type="submit">Search</button>
+						</form>
+					</li>
+				</ul>
+				<div class="dropdown d-flex align-items-center justify-content-center user-navbar d-none p-3">
+					<a class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
+						<svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FEFEFA">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+							<g id="SVGRepo_iconCarrier"> <circle cx="12" cy="6" r="4" stroke="#FEFEFA" stroke-width="1.5"/> <path d="M19.9975 18C20 17.8358 20 17.669 20 17.5C20 15.0147 16.4183 13 12 13C7.58172 13 4 15.0147 4 17.5C4 19.9853 4 22 12 22C14.231 22 15.8398 21.8433 17 21.5634" stroke="#FEFEFA" stroke-width="1.5" stroke-linecap="round"/> </g>
+						</svg>
+					</a>
+					<ul class="dropdown-menu text-small" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 40px, 0px);" data-popper-placement="bottom-end">
+					<li><a class="dropdown-item" id="profile-link">Profile</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item sign-out" id="sign-out-link">Sign out</a></li>
+					</ul>
+				</div>
+				
+			</div>
+		</nav>
+	</header>
+	<main class="d-flex justify-content-center" id="main-content">
+
+		<div class="dynamic-page container" id="login-page">
+			<div class="row pt-5 mt-5" >
+				<div class="col-lg-5 col-md-8 col-sm-10 mx-auto py-5 px-5 bg-body-tertiary rounded-2 shadow">
+					<form id="login-form">
+						<h1 class="h3 mb-3">Please sign in</h1>
+						<div class="form-floating mb-3">
+							<input type="text" class="form-control" id="loginInput" placeholder="Username" name="username" required autocomplete="off">
+							<label for="loginInput">Username</label>
+						</div>
+						<div class="form-floating mb-3" id="login-password-box">
+							<input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" required autocomplete="off">
+							<label for="loginPassword">Password</label>
+						</div>
+						<button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+					</form>
+					<div class="text-center mt-4">
+						<a class="link-opacity-75" id="create-account-link">Create account</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="dynamic-page container" id="register-page">
+			<div class="row pt-5 mt-5">
+				<div class="col-lg-5 col-md-8 col-sm-10 mx-auto py-5 px-5 bg-body-tertiary rounded-2 shadow">
+					<form id="register-form">
+						<h1 class="h3 mb-3">Create an account</h1>
+						<div class="form-floating mb-3">
+							<input type="text" class="form-control" id="registerInput" placeholder="Username" name="username" required autocomplete="off">
+							<label for="registerInput">Username</label>
+						</div>
+						<div class="form-floating mb-3">
+							<input type="password" class="form-control" id="registerPassword" placeholder="Password" name="password" required autocomplete="off">
+							<label for="registerPassword">Password</label>
+						</div>
+						<div class="form-floating mb-3" id="register-password-box">
+							<input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirm Password" name="confirm-password" required autocomplete="off">
+							<label for="registerConfirmPassword">Confirm Password</label>
+						</div>
+						<button class="btn btn-light w-100 py-2" type="submit">Sign up</button>
+					</form>
+					<div class="text-center mt-4">
+						<a class="link-opacity-75" id="i-have-an-account-link">I have an account</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dynamic-page container d-flex flex-column" id="profile-page">
+			<div class="row justify-content-center">
+				<div class="col-md-4 p-4 d-flex flex-column justify-content-start align-items-center">
+					<div class="text-center ratio ratio-1x1 mb-3 profile-avatar">
+						<img src="" class="rounded-circle  object-fit-cover" id="user-avatar" alt="User avatar">
+						<svg class="online-icon" id="profileOnlineStatus" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+							<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#32d25a"/> </g>
+						</svg>
+						<svg class="offline-icon" id="profileOfflineStatus" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+							<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#b0b0b0"/> </g>
+						</svg>
+					</div>
+					<button type="button" class="btn btn-outline-light btn-sm mb-4 private-profile" data-bs-toggle="modal" data-bs-target="#change-avatar">Upload</button>
+					<!--  Modal for uploading image -->
+					<div class="modal fade" id="change-avatar">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content p-2">
+								<div class="modal-header">
+									<h5>Change avatar</h5>
+								</div>
+								<form id="change-avatar-form" enctype="multipart/form-data">
+									<div class="modal-body">
+										<div class="mb-3">
+											<input class="form-control" type="file" name="avatar" accept="images/*">
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button id="avatar-submit-btn" type="submit" class="btn btn-primary">Submit</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<ul class="w-100 d-flex justify-content-start align-items-center flex-column p-0 m-0">
+						<li class="w-100 list-group-item text-center d-flex flex-lg-row flex-column justify-content-between align-items-center m-2">
+							<div>
+								<p class="m-2 fw-semibold" id="profile-username">Username</p>
+							</div>
+							<button class="btn btn-outline-light btn-sm m-2 private-profile" data-bs-toggle="modal" data-bs-target="#change-username">Edit</button>
+							<!--  Modal for editing username -->
+
+							<div class="modal fade" id="change-username">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content p-2">
+										<div class="modal-header">
+											<h4>Change Username</h4>
+										</div>
+										<form id="change-username-form" class="form-floating">
+											<div class="modal-body">
+												<div class="form-floating mb-3" id="new-username-box">
+													<input type="text" class="form-control" id="newUsername" placeholder="New username" name="new_username" required autocomplete="off">
+													<label for="newUsername">New username</label>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<button id="change-username-btn" type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+
+						</li>
+						<li class="w-100 list-group-item text-center d-flex flex-lg-row flex-column justify-content-between align-items-center private-profile m-2">
+							<div>
+								<p class="m-2">**********</p>
+							</div>
+							<button class="btn btn-outline-light btn-sm m-2" data-bs-toggle="modal" data-bs-target="#change-password">Edit</button>
+							<!--  Modal for changing password -->
+
+							<div class="modal fade" id="change-password">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content p-2">
+										<div class="modal-header">
+											<h4>Change Password</h4>
+										</div>
+										<form id="change-password-form" class="form-floating">
+											<div class="modal-body">
+												<div class="mb-3">
+													<input type="text" class="form-control mb-3" placeholder="New password" name="new_password" required autocomplete="off">
+													<input type="text" class="form-control" placeholder="Confirm password" name="new_password_confirm" required autocomplete="off">
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<button id="change-password-btn" type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-8 p-4 text-center">
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-12 pb-3">
+								<h3 class="m-0 pb-3">Friends (<span id="friends-counter">10</span>)</h3>
+								<ul class="list-group list-group-flush w-100 p-3" id="friends-list">
+									<li class="list-group-item d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover d-none" id="friend-template">
+										<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center">
+											<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
+
+											<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
+										</div>
+										<button class="btn btn-outline-danger btn-sm m-2 private-profile btn-remove">Remove</button>
+									</li>
+								</ul>
+							</div>
+							<div class="col private-profile pb-3">
+								<h3 class="m-0 mb-3">Pending (<span id="pending-friends-counter">3</span>)</h3>
+								<ul class="list-group list-group-flush w-100 p-3" id="pending-friends-list">
+									<li class="w-100 list-group-item d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover d-none" id="pending-friend-template">
+										<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center">
+											<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
+											<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
+										</div>
+										<div class="d-flex align-items-center justify-content-center">
+											<button class="btn btn-outline-success btn-sm m-2 private btn-accept">
+												Accept
+											</button>
+											<button class="btn btn-outline-danger btn-sm m-1 private btn-reject">
+												Reject
+											</button>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="d-flex align-items-center justify-content-center">
+									<h3 class="m-0">Match History</h3>
+									<h3 class="m-0" >&nbsp;(</h3>
+									<h3 class="m-0" id="win-count">Wins</h3>
+									<h3 class="m-0">/</h3>
+									<h3 class="m-0" id="loss-count">Losses</h3>
+									<h3 class="m-0" >)</h3>
+								</div>
+								<ul class="list-group list-group-flush w-100 p-3" id="match-history">
+									<li class="w-100 list-group-item d-flex justify-content-between align-items-center smooth-hover d-none" id="game-template">
+										<div class="match-background bg-gradient">
+										</div>
+										<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center z-1">
+											<img src="" class="rounded-circle img-thumbnail object-fit-cover user-1-avatar m-2 friend-avatar" alt="...">
+											<a class="friend-link"><p class="m-0 user-1-username friend-username">User 1</p></a>
+										</div>
+										<div class="d-flex justify-content-center align-items-center z-1">
+											<h3 class="m-0 user-1-score">0</h3>
+											<h3 class="m-0"> - </h3>
+											<h3 class="m-0 user-2-score">0</h3>
+										</div>
+										<div class="d-flex flex-column-reverse flex-sm-row justify-content-end align-items-center z-1">
+											<a class="friend-link"><p class="m-0 user-2-username friend-username">User 2</p></a>
+											<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar user-2-avatar m-2" alt="...">
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dynamic-page container text-center mt-4" id="search-page">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 col-md-8 col-sm-10 col-12 d-flex flex-column p-1">
+					<h3>Search Results</h3>
+					<ul class="list-group list-group-flush w-100 p-3" id="search-results-list">
+						<li class="list-group-item d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover d-none" id="user-search-template">
+							<div class="d-flex justify-content-start align-items-center flex-column flex-sm-row">
+								<img src="" class="rounded-circle img-thumbnail object-fit-cover user-search-avatar m-2" alt="...">
+								<a class="user-link m-0"><p class="m-0 username">Username</p></a>
+							</div>
+							<div class="d-flex align-items-center justify-content-center m-2">
+								<button class="btn btn-outline-success btn-sm m-1 d-none add-friend-button">Add</button>
+								<span class="btn btn-outline-success btn-sm m-1 d-none friends-text">Friends</span>
+								<span class="btn btn-outline-success btn-sm m-1 d-none sent-text">Sent</span>
+								<button class="btn btn-outline-danger btn-sm m-1 d-none block-button">Block</button>
+								<button class="btn btn-outline-danger btn-sm m-1 d-none unblock-button">Unblock</button>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content-center" id="home-page">
+			<h1>Home Page</h1>
+			<p class="fs-4 fw-lighter text-center pe-5 ps-5"> This project as developed by tlouro-c, lleiria- and pcoimbra</p>
+			<ul class="navbar-nav user-navbar d-none d-flex flex-row">
+				<li class="nav-item d-flex align-items-center justify-content-center p-3">
+					<a id="home-page-play-link"> 
+						<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="45px" height="45px" viewBox="0 0 604.051 604.051" xml:space="preserve">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+							<g id="SVGRepo_iconCarrier"> <g> <g> <path d="M545.412,198.294H323.445v-97.301c0-11.83-9.59-21.42-21.419-21.42c-11.83,0-21.42,9.59-21.42,21.42v97.301H58.64 c-32.058,0-58.14,26.082-58.14,58.14v209.904c0,32.059,26.082,58.139,58.14,58.139h486.772c32.059,0,58.139-26.08,58.139-58.139 V256.435C603.551,224.376,577.471,198.294,545.412,198.294z M560.711,466.339c0,8.449-6.85,15.299-15.299,15.299H58.64 c-8.45,0-15.3-6.85-15.3-15.299V256.435c0-8.45,6.85-15.3,15.3-15.3h486.772c8.449,0,15.299,6.851,15.299,15.3V466.339 L560.711,466.339z"/> <path d="M545.412,524.978H58.64C26.306,524.978,0,498.672,0,466.339V256.435c0-32.334,26.306-58.64,58.64-58.64h221.466v-96.801 c0-12.087,9.833-21.92,21.92-21.92c12.086,0,21.919,9.833,21.919,21.92v96.801h221.467c32.333,0,58.639,26.306,58.639,58.64 v209.904C604.051,498.672,577.745,524.978,545.412,524.978z M58.64,198.794c-31.783,0-57.64,25.857-57.64,57.64v209.904 c0,31.782,25.857,57.639,57.64,57.639h486.772c31.782,0,57.639-25.856,57.639-57.639V256.435c0-31.783-25.856-57.64-57.639-57.64 H322.945v-97.801c0-11.535-9.385-20.92-20.919-20.92c-11.535,0-20.92,9.385-20.92,20.92v97.801H58.64z M545.412,482.138H58.64 c-8.712,0-15.8-7.087-15.8-15.799V256.435c0-8.712,7.088-15.8,15.8-15.8h486.772c8.712,0,15.799,7.088,15.799,15.8v209.904 C561.211,475.051,554.124,482.138,545.412,482.138z M58.64,241.634c-8.161,0-14.8,6.64-14.8,14.8v209.904 c0,8.16,6.639,14.799,14.8,14.799h486.772c8.16,0,14.799-6.639,14.799-14.799V256.435c0-8.161-6.639-14.8-14.799-14.8H58.64z"/> </g> <g> <path d="M230.178,339.966h-41.612v-41.612c0-8.45-6.85-15.3-15.3-15.3h-12.24c-8.45,0-15.3,6.85-15.3,15.3v41.612h-41.613 c-8.45,0-15.3,6.852-15.3,15.301v12.24c0,8.449,6.85,15.299,15.3,15.299h41.613v41.613c0,8.449,6.85,15.299,15.3,15.299h12.24 c8.45,0,15.3-6.85,15.3-15.299v-41.613h41.612c8.45,0,15.3-6.85,15.3-15.299v-12.24 C245.478,346.817,238.627,339.966,230.178,339.966z"/> <path d="M173.265,440.218h-12.24c-8.712,0-15.8-7.087-15.8-15.799v-41.113h-41.113c-8.712,0-15.8-7.087-15.8-15.799v-12.24 c0-8.713,7.088-15.801,15.8-15.801h41.113v-41.112c0-8.712,7.088-15.8,15.8-15.8h12.24c8.712,0,15.8,7.088,15.8,15.8v41.112 h41.112c8.712,0,15.8,7.088,15.8,15.801v12.24c0,8.712-7.088,15.799-15.8,15.799h-41.112v41.113 C189.065,433.131,181.978,440.218,173.265,440.218z M104.113,340.466c-8.161,0-14.8,6.64-14.8,14.801v12.24 c0,8.16,6.639,14.799,14.8,14.799h42.113v42.113c0,8.16,6.639,14.799,14.8,14.799h12.24c8.161,0,14.8-6.639,14.8-14.799v-42.113 h42.112c8.161,0,14.8-6.639,14.8-14.799v-12.24c0-8.161-6.639-14.801-14.8-14.801h-42.112v-42.112c0-8.161-6.639-14.8-14.8-14.8 h-12.24c-8.161,0-14.8,6.639-14.8,14.8v42.112H104.113z"/> </g> <g> <circle cx="429.895" cy="409.694" r="21.42"/> <path d="M429.895,431.614c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S441.981,431.614,429.895,431.614z M429.895,388.774c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S441.43,388.774,429.895,388.774z"/> </g> <g> <circle cx="429.895" cy="313.765" r="21.42"/> <path d="M429.895,335.685c-12.087,0-21.92-9.833-21.92-21.919c0-12.087,9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 C451.814,325.852,441.981,335.685,429.895,335.685z M429.895,292.845c-11.535,0-20.92,9.385-20.92,20.92 s9.385,20.919,20.92,20.919s20.92-9.384,20.92-20.919S441.43,292.845,429.895,292.845z"/> </g> <g> <circle cx="381.93" cy="361.729" r="21.42"/> <path d="M381.93,383.649c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S394.017,383.649,381.93,383.649z M381.93,340.81c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S393.465,340.81,381.93,340.81z"/> </g> <g> <circle cx="477.859" cy="361.729" r="21.42"/> <path d="M477.859,383.649c-12.087,0-21.92-9.833-21.92-21.92s9.833-21.92,21.92-21.92s21.92,9.833,21.92,21.92 S489.946,383.649,477.859,383.649z M477.859,340.81c-11.535,0-20.92,9.385-20.92,20.92s9.385,20.92,20.92,20.92 s20.92-9.385,20.92-20.92S489.395,340.81,477.859,340.81z"/> </g> </g> </g>
+						</svg>
+					</a>
+				</li>
+				<li class="nav-item p-3 d-flex align-items-center justify-content-center">
+					<a id="home-page-chat-link"> 
+						<svg fill="#FEFEFA" height="45px" width="45px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60 60" xml:space="preserve">
+							<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+							<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+							<g id="SVGRepo_iconCarrier"> <g> <path d="M26,9.586C11.664,9.586,0,20.09,0,33c0,4.499,1.418,8.856,4.106,12.627c-0.51,5.578-1.86,9.712-3.813,11.666 c-0.304,0.304-0.38,0.768-0.188,1.153C0.276,58.789,0.625,59,1,59c0.046,0,0.093-0.003,0.14-0.01 c0.349-0.049,8.432-1.213,14.317-4.585c3.33,1.333,6.874,2.009,10.544,2.009c14.336,0,26-10.503,26-23.414S40.337,9.586,26,9.586z"/> <path d="M55.894,37.042C58.582,33.27,60,28.912,60,24.414C60,11.503,48.337,1,34,1c-8.246,0-15.968,3.592-20.824,9.42 C17.021,8.614,21.38,7.586,26,7.586c15.439,0,28,11.4,28,25.414c0,5.506-1.945,10.604-5.236,14.77 c4.946,1.887,9.853,2.6,10.096,2.634c0.047,0.006,0.094,0.01,0.14,0.01c0.375,0,0.724-0.211,0.895-0.554 c0.192-0.385,0.116-0.849-0.188-1.153C57.753,46.753,56.403,42.619,55.894,37.042z"/> </g> </g>
+						</svg>
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="dynamic-page container-fluid text-center" id="chat-page">
+			<h3 class="mt-4">Chat</h3>
+			<div class="container text-center mt-4 chat-container rounded">
+				<div class="row h-100">
+					<div class="col-12 p-0 col-md-4 container d-flex flex-column chat-column z-2 right-shadow rounded">
+							<div class="row z-2 d-flex flex-column justify-content-start">
+								<div class="col d-flex p-3 z-1 d-flex justify-content-center">
+									<h5 class="m-0">Friends</h5>
+								</div>
+							</div>
+							<div class="row position-relative overflow-hidden h-100">
+								<div class="col mh-100" data-bs-spy="scroll" data-bs-offset="50" id="chat-friends-box">
+									
+									<div class="smooth-hover p-2 d-none" id="chat-friend-template">
+										<div class="d-flex justify-content-start align-items-center h-100">
+											<img src="" class="rounded-circle img-thumbnail object-fit-cover m-2 chat-user-avatar z-1" alt="...">
+											<a class="user-link m-0"><p class="m-0 username">Username</p></a>
+										</div>
+									</div>
+
+								</div>
+							</div>
+					</div>
+					<div class="col-12 col-md-8 container d-flex flex-column chat-column z-1">
+						<div class="row rounded d-flex justify-content-center down-shadow rounded">
+							 <div class="col d-flex p-3 justify-content-center align-items-center header" style="height: 56px;" id="chat-tmp-header">
+								<svg class="me-2 d-none online" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+								<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#32d25a"/> </g>
+								</svg>
+								<svg class="me-2 d-none offline" style="height: 24px;" viewBox="-1.8 -1.8 15.60 15.60" xmlns="http://www.w3.org/2000/svg" fill="#212529" stroke="#212529" stroke-width="1.2">
+									<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+									<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#212529" stroke-width="0.312"/>
+									<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#b0b0b0"/> </g>
+								</svg>
+								<h5 class="m-0" ></h5>
+							</div>
+						</div>
+						<div class="row d-flex flex-grow-1 p-4 position-relative overflow-hidden h-100">
+							<div class="col container flex-column mh-100" data-bs-spy="scroll" data-bs-offset="50" id="chat-box">
+
+								<p style="font-size: small; opacity: 35%;">Start of the conversation</p>
+
+								<div class="row d-none" id="current-user-message-template">
+									<div class="col d-flex justify-content-end m-2">
+										<div class="bg-primary rounded d-flex shadow chat-message-box rounded">
+											<p class="m-0 p-2 pe-3 ps-3 message-content">Hello World</p>
+											<p class="m-1 me-2 message-date align-self-end message-time">22:30</p>
+										</div>
+									</div>
+								</div>
+
+								<div class="row d-none" id="other-user-message-template">
+									<div class="col d-flex justify-content-start m-2">
+										<div class="bg-dark-subtle rounded d-flex shadow chat-message-box">
+											<p class="m-0 p-2 pe-3 ps-3 message-content">Hello World</p>
+											<p class="m-1 me-2 message-date align-self-end message-time">22:30</p>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="row p-3 top-shadow rounded">
+							<div class="col">
+								<form class="d-flex" id="send-msg-form">
+									<div class="form-floating flex-grow-1">
+										<input class="form-control chat-container" placeholder="Send a message" id="chatMessageInput" autocomplete="off" name="message">
+										<label for="chatMessageInput">Send a message</label>
+									</div>
+									<div class="ms-4 flex-grow-2 d-flex align-items-center justify-content-center">
+										<button class="btn btn-dark chat-container" style="height: 58px;" type="submit" id="send-msg-btn">
+											<svg width="35px" height="35px" viewBox="-2.8 -2.8 33.60 33.60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FEFEFA" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)">
+												<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+												<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="2.016"/>
+												<g id="SVGRepo_iconCarrier"><title>ic_fluent_send_28_filled</title> <desc>Created with Sketch.</desc> <g id="🔍-Product-Icons" stroke-width="0.00028" fill="none" fill-rule="evenodd"> <g id="ic_fluent_send_28_filled" fill="#FEFEFA" fill-rule="nonzero"> <path d="M3.78963301,2.77233335 L24.8609339,12.8499121 C25.4837277,13.1477699 25.7471402,13.8941055 25.4492823,14.5168992 C25.326107,14.7744476 25.1184823,14.9820723 24.8609339,15.1052476 L3.78963301,25.1828263 C3.16683929,25.4806842 2.42050372,25.2172716 2.12264586,24.5944779 C1.99321184,24.3238431 1.96542524,24.015685 2.04435886,23.7262618 L4.15190935,15.9983421 C4.204709,15.8047375 4.36814355,15.6614577 4.56699265,15.634447 L14.7775879,14.2474874 C14.8655834,14.2349166 14.938494,14.177091 14.9721837,14.0981464 L14.9897199,14.0353553 C15.0064567,13.9181981 14.9390703,13.8084248 14.8334007,13.7671556 L14.7775879,13.7525126 L4.57894108,12.3655968 C4.38011873,12.3385589 4.21671819,12.1952832 4.16392965,12.0016992 L2.04435886,4.22889788 C1.8627142,3.56286745 2.25538645,2.87569101 2.92141688,2.69404635 C3.21084015,2.61511273 3.51899823,2.64289932 3.78963301,2.77233335 Z" id="🎨-Color"> </path> </g> </g> </g>
+											</svg>
+										</button>
+									</div>
+								</form>
+							</div>							  
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content w-100" id="game-page">
+			<div class="container-fluid h-100 mt-4">
+				<div class="row justify-content-center shadow">
+					<div class="col-3 justify-content-start p-4 ">
+							<h5 class="m-0 ps-0 p-4 border-end">Pending Invites</h5>
+					</div>
+					<div class="col-7 d-flex align-items-center justify-content-start p-4 overflow-auto">
+						<ul class="list-group list-group-horizontal m-0 p-0" id="invitesList">
+							
+							<li class="ms-2 me-2 p-0 ps-3 pe-3 d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover shadow rounded d-none" id="invite-template" style="width: 250px;">
+								<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center">
+									<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
+									<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
+								</div>
+								<div class="d-flex align-items-center justify-content-center">
+									<button class="btn btn-outline-success btn-sm m-2 private btn-accept">
+										<svg width="20px" height="20px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#00ff6e" stroke="#00ff6e">
+											<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+											<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.064"/>
+											<g id="SVGRepo_iconCarrier"> <defs> <style>.cls-3{fill:none;stroke:#198754;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style> </defs> <title/> <g id="checkmark"> <line class="cls-3" x1="3" x2="12" y1="16" y2="25"/> <line class="cls-3" x1="12" x2="29" y1="25" y2="7"/> </g> </g>
+										</svg>
+									</button>
+								</div>
+							</li>
+												
+						</ul>
+					</div>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col-md-10 col-lg-3 d-flex flex-column justify-content-start border rounded p-0 m-4 shadow-lg">
+						<div class="bg-body-tertiary w-100 text-center p-4 border-bottom">
+							<h5 class="m-0">Tournament</h5>
+						</div>
+						<div class="d-flex flex-column justify-content-center align-items-center game-page-column position-relative">
+							<div class="d-flex flex-column justify-content-center align-items-center mb-5">
+								<svg width="150px" height="150px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+									<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+									<g id="SVGRepo_iconCarrier"> <path d="M9 2H2v2h5v4H2v2h7V7h5v10H9v-3H2v2h5v4H2v2h7v-3h7v-6h6v-2h-6V5H9V2z" fill="#FEFEFA"/> </g>
+									</svg>
+								<p class="m-3 text-center width-85">Play a tournament against random players. </p>	
+							</div>
+							<button type="button" class="btn btn-outline-primary position-absolute bottom-0 m-4 fs-5 width-85" id="play-tournament-btn">Join</button>
+						</div>
+						
+					</div>
+					<div class="col-md-10 col-lg-3 d-flex flex-column justify-content-start border rounded p-0 m-4 shadow-lg">
+						<div class="bg-body-tertiary w-100 text-center p-4 border-bottom">
+							<h5 class="m-0">Local Play</h5>
+						</div>
+						<div class="d-flex flex-column justify-content-center align-items-center game-page-column position-relative">
+							<div class="d-flex flex-column justify-content-center align-items-center mb-5">
+								<svg width="150px" height="150px" viewBox="0 0 1867 1755" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path d="M1540.89 1133.79C1618.25 1133.79 1680.95 1071.09 1680.95 993.737C1680.95 916.388 1618.25 853.684 1540.89 853.684M1680.95 1367.21C1762.84 1385.17 1821 1430.65 1821 1483.92C1821 1531.97 1773.68 1573.69 1704.29 1594.58M1447.53 993.737C1447.53 1096.87 1363.92 1180.47 1260.79 1180.47C1157.66 1180.47 1074.05 1096.87 1074.05 993.737C1074.05 890.605 1157.66 807 1260.79 807C1363.92 807 1447.53 890.605 1447.53 993.737ZM1587.58 1507.26C1587.58 1610.4 1441.27 1694 1260.79 1694C1080.31 1694 934 1610.4 934 1507.26C934 1404.13 1080.31 1320.53 1260.79 1320.53C1441.27 1320.53 1587.58 1404.13 1587.58 1507.26Z" stroke="#FEFEFA" stroke-width="70" stroke-linecap="round"/>
+									<path d="M379.25 733.499C379.25 725.887 382.272 718.587 387.652 713.205C393.032 707.822 400.329 704.799 407.937 704.799H580.062C587.671 704.799 594.968 707.822 600.348 713.205C605.728 718.587 608.75 725.887 608.75 733.499C608.75 741.11 605.728 748.41 600.348 753.793C594.968 759.175 587.671 762.199 580.062 762.199H407.937C400.329 762.199 393.032 759.175 387.652 753.793C382.272 748.41 379.25 741.11 379.25 733.499ZM207.125 478.758C207.125 404.023 277.983 346.91 352.284 353.856C446.557 362.652 541.443 362.652 635.716 353.856C710.017 346.91 780.875 404.023 780.875 478.758V545.17C781.144 557.879 776.872 570.266 768.826 580.105C760.78 589.943 749.488 596.586 736.983 598.839C688.501 607.276 602.726 618.699 494 618.699C385.274 618.699 299.499 607.219 251.017 598.839C238.512 596.586 227.22 589.943 219.174 580.105C211.128 570.266 206.856 557.879 207.125 545.17V478.758ZM467.722 431.288C465.486 430.908 463.192 431.063 461.028 431.742C458.864 432.42 456.891 433.602 455.272 435.191L402.487 486.851C366.585 484.698 330.777 481.194 295.138 476.347C291.445 475.98 287.754 477.059 284.839 479.358C281.925 481.657 280.015 484.996 279.51 488.674C279.005 492.352 279.944 496.083 282.131 499.083C284.318 502.082 287.582 504.117 291.237 504.76C322.793 509.123 361.923 513.313 407.134 515.838C409.126 515.951 411.119 515.646 412.986 514.944C414.853 514.243 416.553 513.159 417.978 511.763L461.239 469.517L509.835 567.67C510.859 569.73 512.363 571.512 514.219 572.869C516.075 574.225 518.231 575.115 520.503 575.464C522.775 575.813 525.098 575.61 527.275 574.873C529.453 574.136 531.421 572.887 533.015 571.229L586.489 515.551C623.372 513.377 660.158 509.777 696.763 504.76C700.418 504.117 703.682 502.082 705.869 499.083C708.056 496.083 708.995 492.352 708.49 488.674C707.985 484.996 706.075 481.657 703.16 479.358C700.246 477.059 696.555 475.98 692.862 476.347C661.994 480.595 623.61 484.67 579.259 487.196C575.648 487.397 572.247 488.955 569.735 491.558L526.474 536.617L478.165 439.037C477.157 437.014 475.686 435.258 473.871 433.911C472.057 432.565 469.95 431.666 467.722 431.288Z" fill="#FEFEFA"/>
+									<path d="M522.687 123.11C533.626 116.792 542.174 107.04 547.008 95.3659C551.841 83.692 552.689 70.7488 549.42 58.5437C546.151 46.3386 538.948 35.5536 528.928 27.8615C518.907 20.1694 506.63 16 494 16C481.37 16 469.093 20.1694 459.072 27.8615C449.052 35.5536 441.849 46.3386 438.58 58.5437C435.311 70.7488 436.159 83.692 440.992 95.3659C445.826 107.04 454.374 116.792 465.312 123.11V188.201H350.562C282.087 188.201 216.416 215.415 167.996 263.855C119.577 312.296 92.375 377.995 92.375 446.501V475.201C77.1582 475.201 62.5646 481.248 51.8047 492.013C41.0448 502.777 35 517.377 35 532.601V647.4C35 662.624 41.0448 677.224 51.8047 687.988C62.5646 698.753 77.1582 704.8 92.375 704.8V762.2C92.375 792.647 104.465 821.847 125.984 843.376C147.504 864.905 176.691 877 207.125 877H780.875C811.309 877 840.496 864.905 862.015 843.376C883.535 821.847 895.625 792.647 895.625 762.2V704.8C910.842 704.8 925.435 698.753 936.195 687.988C946.955 677.224 953 662.624 953 647.4V532.601C953 517.377 946.955 502.777 936.195 492.013C925.435 481.248 910.842 475.201 895.625 475.201V446.501C895.625 377.995 868.423 312.296 820.004 263.855C771.584 215.415 705.913 188.201 637.437 188.201H522.687V123.11ZM838.25 446.501V762.2C838.25 777.424 832.205 792.023 821.445 802.788C810.685 813.553 796.092 819.6 780.875 819.6H207.125C191.908 819.6 177.315 813.553 166.555 802.788C155.795 792.023 149.75 777.424 149.75 762.2V446.501C149.75 393.219 170.907 342.119 208.567 304.443C246.226 266.767 297.304 245.601 350.562 245.601H637.437C690.696 245.601 741.774 266.767 779.433 304.443C817.093 342.119 838.25 393.219 838.25 446.501Z" fill="#FEFEFA"/>
+									<line x1="326.322" y1="1504.32" x2="1574.32" y2="256.322" stroke="#FEFEFA" stroke-width="50"/>
+									</svg>
+								<p class="m-3 text-center width-85">Challenge our advanced AI or play against a friend in the same device. </p>	
+							</div>
+							<button type="button" class="btn btn-outline-primary position-absolute bottom-0 m-4 fs-5 width-85" id="play-against-ai-btn">Play locally</button>
+						</div>
+						
+					</div>
+					<div class="col-md-10 col-lg-3 d-flex flex-column justify-content-start border rounded p-0 m-4 shadow-lg">
+						<div class="bg-body-tertiary w-100 text-center p-4 border-bottom">
+							<h5 class="m-0">1 Vs 1 With a Friend</h5>
+						</div>
+						<div class="d-flex flex-column game-page-column position-relative">
+							<ul class="list-group list-group-flush m-0 p-0 w-100" id="oneVsOneList">
+								<li class="list-group-item d-flex justify-content-center align-items-center justify-content-between align-items-center smooth-hover d-none" id="game-friend-template">
+									<div class="d-flex justify-content-start align-items-center">
+										<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
+										<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
+									</div>
+									<div class="d-flex align-items-center justify-content-center">
+										<div class="dropdown">
+											<button type="button" class="btn btn-outline-success btn-sm m-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+											  Invite
+											</button>
+											<form class="dropdown-menu dropdown-menu-end p-2">
+												<ul class="p-0 m-0 fs-5">
+													<li class="p-2 d-flex align-items-center justify-content-between fs-6 fw-semibold">
+														<input class="form-check-input m-2" type="checkbox" value="" id="hazardModeInvite" name="modeHazard">
+														<label class="form-check-label m-2 text-nowrap" for="hazardModeInvite">Hazard Mode</label>
+														<svg fill="#FEFEFA" width="25px" height="25px" viewBox="0 0 32 32" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" stroke="#FEFEFA" stroke-width="0.00032">
+															<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+															<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+															<g id="SVGRepo_iconCarrier"> <defs> <style> .cls-8 { fill: none; } </style> </defs> <circle cx="16" cy="20.5" r="1.5"/> <rect x="15" y="7" width="2" height="9"/> <path d="M16,30,7.5645,20.0513c-.0479-.0571-.3482-.4515-.3482-.4515A10.8888,10.8888,0,0,1,5,13a11,11,0,0,1,22,0,10.8844,10.8844,0,0,1-2.2148,6.5973l-.0015.0025s-.3.3944-.3447.4474ZM8.8125,18.395c.001.0007.2334.3082.2866.3744L16,26.9079l6.91-8.15c.0439-.0552.2783-.3649.2788-.3657A8.901,8.901,0,0,0,25,13,9,9,0,0,0,7,13a8.9054,8.9054,0,0,0,1.8125,5.395Z" transform="translate(0 0)"/> <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-8" width="32" height="32"/> </g>
+														</svg>
+													</li>
+												</ul>
+												<div class="d-flex justify-content-center w-100">
+													<button type="submit" class="btn btn-primary btn-sm mt-2">Send</button>
+												</div>
+											</form>
+										  </div>
+										
+									</div>
+								</li>
+								
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content w-100" id="local-play-page">
+			<div class="container-fluid h-100 mt-4">
+
+				<div class="row justify-content-center align-items-center">
+					<div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 text-center d-flex flex-column justify-content-center align-items-center d-none" id="game-menu-column">
+						<div id="menu" class="text-center">
+							<h1>3D Pong</h1>
+							<h6>Game Settings</h6>
+							<ul class="p-0 m-5 fs-5 width-85 shadow rounded">
+								<li class="list-group-item p-3 d-flex align-items-center fs-4 fw-semibold justify-content-between">
+								  	<input class="form-check-input m-3" type="checkbox" value="" id="3DMode">
+								  	<label class="form-check-label m-3" for="3DMode">3D Mode</label>
+									<svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+										<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+										<g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5144 1.12584C11.8164 0.958052 12.1836 0.958052 12.4856 1.12584L21.4845 6.12522C21.4921 6.12942 21.4996 6.13372 21.5071 6.13813C21.8125 6.31781 22 6.64568 22 7V17C22 17.3632 21.8031 17.6978 21.4856 17.8742L12.4856 22.8742C12.1791 23.0445 11.8059 23.0416 11.5022 22.8673L2.51436 17.874C2.19689 17.6977 2 17.3631 2 16.9999V7C2 6.64568 2.18749 6.3177 2.49287 6.13802L2.5073 6.13784L2.51436 6.12584L11.5144 1.12584ZM12.0001 10.856L5.05923 6.99995L12 3.14396L18.9409 7L12.0001 10.856ZM4 8.69951V16.4115L11 20.3004V12.5884L4 8.69951ZM13 12.5884V20.3005L20 16.4116V8.69951L13 12.5884Z" fill="#FEFEFA"/> </g>
+									</svg>
+								</li>
+								<li class="list-group-item p-3 d-flex align-items-center fs-4 fw-semibold justify-content-between">
+									<input class="form-check-input m-3" type="checkbox" value="" id="multiPlayMode">
+									<label class="form-check-label m-3" for="multiPlayMode">Multiplayer Mode</label>
+									<svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+										<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+										<g id="SVGRepo_iconCarrier"> <circle cx="9" cy="6" r="4" stroke="#FEFEFA" stroke-width="1.5"/> <path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3" stroke="#FEFEFA" stroke-width="1.5" stroke-linecap="round"/> <ellipse cx="9" cy="17" rx="7" ry="4" stroke="#FEFEFA" stroke-width="1.5"/> <path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704" stroke="#FEFEFA" stroke-width="1.5" stroke-linecap="round"/> </g>
+									</svg>
+								</li>
+								<li class="list-group-item p-3 d-flex align-items-center justify-content-between fs-4 fw-semibold">
+									<input class="form-check-input m-3" type="checkbox" value="" id="hazardMode">
+									<label class="form-check-label m-3" for="hazardMode">Hazard Mode</label>
+									<svg fill="#FEFEFA" width="50px" height="50px" viewBox="0 0 32 32" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" stroke="#FEFEFA" stroke-width="0.00032">
+										<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+										<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+										<g id="SVGRepo_iconCarrier"> <defs> <style> .cls-8 { fill: none; } </style> </defs> <circle cx="16" cy="20.5" r="1.5"/> <rect x="15" y="7" width="2" height="9"/> <path d="M16,30,7.5645,20.0513c-.0479-.0571-.3482-.4515-.3482-.4515A10.8888,10.8888,0,0,1,5,13a11,11,0,0,1,22,0,10.8844,10.8844,0,0,1-2.2148,6.5973l-.0015.0025s-.3.3944-.3447.4474ZM8.8125,18.395c.001.0007.2334.3082.2866.3744L16,26.9079l6.91-8.15c.0439-.0552.2783-.3649.2788-.3657A8.901,8.901,0,0,0,25,13,9,9,0,0,0,7,13a8.9054,8.9054,0,0,0,1.8125,5.395Z" transform="translate(0 0)"/> <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-8" width="32" height="32"/> </g>
+									</svg>
+								</li>
+							</ul>
+							<button class="btn btn-primary" id="start-game-btn">Start Game</button>
+						</div>
+						
+					</div>
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center local-play-avatar">
+						<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2 user-avatar" alt="...">
+						<p class="m-0 username"></p>
+					</div>
+					<div class="col-8 d-none" id="game-column">
+						<div id="gameCanvas" class="p-0 rounded shadow-lg d-flex"></div>
+						<div id="scoreboard">
+							<h1 id="scores">0-0</h1>
+							<h1 id="title">3D PONG</h1>
+							<h2 id="winnerBoard">First to 7 wins!</h2>
+						</div>
+					</div>
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center local-play-avatar">
+						<img src="./src/assets/AI-Avatar.png" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
+						<p class="m-0">Marvin</p>
+					</div>	
+				</div>
+			</div>
+		</div>
+
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content w-100 vh-100" id="remote-play-page">
+			<div class="container-fluid h-100 mt-4"> 
+				<div class="row d-flex justify-content-center align-items-center h-100"> 
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center">
+						<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2 user-avatar" alt="...">
+						<p class="m-0 user-name"></p>
+					</div>
+					<div class="col-8 d-flex flex-column align-items-center justify-content-center" id="game-column">
+						<div id="gameCanvasRemote" class="p-0 rounded shadow-lg d-flex d-none"></div>
+						<div class="d-flex flex-column align-items-center justify-content-center" id="scoreboardRemote">
+							<div class="d-flex justify-content-center align-items-center">
+								<h1 id="scoreLeftRemote">0</h1>
+								<h1>-</h1>
+								<h1 id="scoreRightRemote">0</h1>
+							</div>
+							<h1 id="titleRemote">3D PONG</h1>
+							<h2 id="winnerBoardRemote">First to 7 wins!</h2>
+						</div>
+					</div>
+					<div class="col-2 d-flex flex-column align-items-center justify-content-center">
+						<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2 opponent-avatar" alt="...">
+						<p class="m-0 opponent-name"></p>
+					</div>	
+				</div>
+			</div>
+		</div>
+
+
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content w-100" id="waiting-page">
+			<div class="container vh-100">
+				<div class="row justify-content-center h-100">
+					<div class="col d-flex justify-content-center align-items-center">
+						<h1 class="m-0 d-none">Waiting for the opponent...</h1>
+						<h1 class="counter d-none">3</h1>
+						<h1 class="counter d-none">2</h1>
+						<h1 class="counter d-none">1</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content w-100" id="waiting-page-tournament">
+			<div class="container vh-100">
+				<div class="row justify-content-center h-100">
+					<div class="col d-flex justify-content-center align-items-center">
+						<h1 class="m-0 dynamic-text"></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</main>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script type="module" src="src/js/index.js" ></script>
+	
+</body>
+</html>

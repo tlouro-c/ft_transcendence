@@ -1,0 +1,28 @@
+#gameCanvas {
+	display: none; /* Inicialmente oculto */
+}
+#scoreboard {
+	text-align: center;
+	color: white;
+	display: none; /* Inicialmente oculto */
+}
+#scores {
+	font-size: 600%;
+	padding: 0;
+	margin: 0;
+	color: white;
+}
+#title {
+	color: black;
+	background-color: #FEFEFA;
+}
+#menu {
+	width: 100%;
+	height: 100%;
+	color: #FEFEFA;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
