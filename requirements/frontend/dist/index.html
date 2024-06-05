@@ -12,7 +12,7 @@
 <body data-bs-theme="dark">
 	<header class="bg-dark-subtle shadow pb-3">
 		<nav class="navbar navbar-expand-lg bg-dark-subtle">
-			<div class="d-flex flex-column flex-sm-row container-fluid align-items-center justify-content-center px-5">
+			<div class="d-flex flex-column flex-md-row container-fluid align-items-center justify-content-center px-5">
 				<div class="p-3">
 					<a class="navbar-brand me-0">
 						<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346 346" width="40" height="40">
@@ -24,7 +24,7 @@
 						</svg>
 					</a>
 				</div>
-				<ul class="navbar-nav user-navbar d-none m-auto">
+				<ul class="navbar-nav user-navbar d-none m-auto d-flex flex-column flex-md-row">
 					<li class="nav-item p-3 d-flex align-items-center justify-content-center"> 
 						<a id="navbar-home-link"> 
 							<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 495.398 495.398" xml:space="preserve">
@@ -346,6 +346,23 @@
 					</a>
 				</li>
 			</ul>
+			<div class="container mt-5">
+				<div class="d-flex justify-content-between align-items-center p-3">
+					<h3 class="m-0 ms-2">User</h3>
+					<h3 class="m-0 me-2">Wins</h3>
+				</div>
+				<ul class="list-group list-group-flush w-100 p-3" id="dashboard">
+					<li class="list-group-item d-flex justify-content-between align-items-center w-100 d-none" id="dashboard-entry-template">
+							<div class="d-flex justify-content-start align-items-center">
+								<img src="" class="rounded-circle img-thumbnail object-fit-cover user-1-avatar m-2 friend-avatar" alt="...">
+								<a class="friend-link"><p class="m-0 user-1-username username">User 1</p></a>
+							</div>
+							<div class="d-flex justify-content-center align-items-center">
+								<h3 class="m-0 me-2 user-wins">0</h3>
+							</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 
 		<div class="dynamic-page container-fluid text-center" id="chat-page">
@@ -500,13 +517,13 @@
 						</div>
 						
 					</div>
-					<div class="col-md-10 col-lg-3 d-flex flex-column justify-content-start border rounded p-0 m-4 shadow-lg">
+					<div class="col-md-10 col-lg-3 d-flex flex-column justify-content-start border rounded p-0 m-4 shadow-lg position-relative">
 						<div class="bg-body-tertiary w-100 text-center p-4 border-bottom">
 							<h5 class="m-0">1 Vs 1 With a Friend</h5>
 						</div>
 						<div class="d-flex flex-column game-page-column position-relative">
 							<ul class="list-group list-group-flush m-0 p-0 w-100" id="oneVsOneList">
-								<li class="list-group-item d-flex justify-content-center align-items-center justify-content-between align-items-center smooth-hover d-none" id="game-friend-template">
+								<li class="list-group-item d-flex justify-content-center align-items-center justify-content-between align-items-center d-none" id="game-friend-template">
 									<div class="d-flex justify-content-start align-items-center">
 										<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
 										<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
@@ -519,8 +536,9 @@
 											<form class="dropdown-menu dropdown-menu-end p-2">
 												<ul class="p-0 m-0 fs-5">
 													<li class="p-2 d-flex align-items-center justify-content-between fs-6 fw-semibold">
-														<input class="form-check-input m-2" type="checkbox" value="" id="hazardModeInvite" name="modeHazard">
-														<label class="form-check-label m-2 text-nowrap" for="hazardModeInvite">Hazard Mode</label>
+														<label class="form-check-label m-2 text-nowrap d-flex align-items-center justify-content-center">
+															<input class="form-check-input m-2" type="checkbox" value="" name="modeHazard"> Hazard Mode
+														</label>
 														<svg fill="#FEFEFA" width="25px" height="25px" viewBox="0 0 32 32" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" stroke="#FEFEFA" stroke-width="0.00032">
 															<g id="SVGRepo_bgCarrier" stroke-width="0"/>
 															<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>

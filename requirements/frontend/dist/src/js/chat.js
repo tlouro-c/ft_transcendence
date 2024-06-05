@@ -3,8 +3,7 @@ import { TokenVerification } from "./jwt.js";
 import { fetchUser } from "./profile.js";
 import { API, elements, getTokensObj, loadPage } from "./utils.js";
 import { getUserObj } from "./utils.js";
-
-let chatSocket = null;
+import { sockets } from "./utils.js";
 
 export async function loadChatPage() {
 
@@ -33,7 +32,7 @@ export async function loadChatPage() {
 			if (active != friend) {
 				if (active) {
 					active.classList.remove('active');
-					chatSocket.close();
+					sockets.chatSocket.close();
 				}
 				chatBox.querySelectorAll(".tmp").forEach(element => element.remove());
 		
@@ -81,7 +80,6 @@ async function fetchChatHistory(roomId) {
 
 async function enterChatRoom(roomId) {
 
-	const currentUser = getUserObj().id;
 	const chatBox = document.getElementById("chat-box");
 
 	document.getElementById("send-msg-form").classList.remove('d-none');
@@ -96,15 +94,17 @@ async function enterChatRoom(roomId) {
 	chatBox.scrollTo(0, chatBox.scrollHeight);
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	chatSocket = new WebSocket(`ws://localhost:9000/ws/chat/${roomId}/?token=${encodedToken}`);
+	sockets.chatSocket = new WebSocket(`ws://localhost:9000/ws/chat/${roomId}/?token=${encodedToken}`);
 
-	chatSocket.onmessage = function(message) {
+	sockets.chatSocket.onmessage = function(message) {
 		const messageObj = JSON.parse(message.data);
 		let messageItem = generateMessage(messageObj.user, messageObj.message, messageObj.time);
 		chatBox.appendChild(messageItem);
+		chatBox.scrollTo(0, chatBox.scrollHeight);
 	}
 
-	chatSocket.onclose = function(message) {
+	sockets.chatSocket.onclose = function(message) {
+		//console.log("Chat socket closed");
 	}
 
 	document.getElementById("chatMessageInput").addEventListener("keyup", (e) => {
@@ -128,7 +128,7 @@ async function enterChatRoom(roomId) {
 			'message': message
 		};
 
-		chatSocket.send(JSON.stringify(toSend));
+		sockets.chatSocket.send(JSON.stringify(toSend));
 		document.getElementById("chatMessageInput").value = '';
 	});
 }

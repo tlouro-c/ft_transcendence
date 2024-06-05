@@ -7,6 +7,7 @@ import { loadGamePage } from './game-page.js';
 import { startGame } from './single-player-game/gameDouble.js';
 import { Game } from './single-player-game/gameDouble.js'
 import { monitorTournament } from './tournament.js';
+import { loadHomePage } from './home.js';
 
 export function setupEventListeners() {
 
@@ -29,7 +30,7 @@ export function setupEventListeners() {
 	document.getElementById("profile-link").addEventListener("click",
 		() => {ClearBackgroundResources(); loadProfilePage(getUserObj().id)});
 	document.getElementById("navbar-home-link").addEventListener("click",
-		() => {ClearBackgroundResources(); loadPage(elements.homePage)});
+		() => loadHomePage());
 	document.getElementById("navbar-play-link").addEventListener("click",
 		() => {ClearBackgroundResources(); loadGamePage()});
 	document.getElementById("navbar-chat-link").addEventListener("click",
