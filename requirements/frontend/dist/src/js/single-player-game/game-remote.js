@@ -465,7 +465,7 @@ export class RemoteGame{
 				this.score1 = data["player2_score"];
 			}
 			this.hazardBlock.position.y = data["hazard_y"]
-			console.log(this.hazardMode, this.hazardBlock.position.y)
+			//console.log(this.hazardMode, this.hazardBlock.position.y)
 			if (!this.hazardMode && this.hazardBlock.position.y != -500)
 			{
 				this.scene.add(this.hazardBlock);
