@@ -311,49 +311,7 @@ export class RemoteGame{
 		this.GameUpdate(moveUp,moveDown)
 	}
 
-
-	// Rest of the class implementation
-
-// HazardStart()
-// {
-// 	// if ((this.score1 >= 4 || this.score2 >= 4) && this.hazardMode)
-// 		// 	{
-// 		// 		this.scene.add(this.hazardBlock);
-// 		// 	this.HazardColision();
-// 		// }
-// 		// this.CheckScoreForHazard();
-// 		this.HazardMove();
-// 	}
 	
-// 	// HazardColision() {
-// 		// 	// Verify colision
-// 		// 	if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
-// 		// 		this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
-// 			// 			if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
-// 	// 			this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
-// 		// 				// bounce the ball;
-// 	// 			this.ballDirX = -this.ballDirX;
-// 	// 		}
-// 	// 	}
-// 	// }
-	
-// 	HazardMove()
-// 	{
-// 		// if (this.hazardBlock.position.y >= PLANEWIDTH / 2 - HAZARDWIDTH / 2) {
-// 			// 	this.hazardDir = -1;
-// 			// } else if (this.hazardBlock.position.y <= -PLANEWIDTH / 2 + HAZARDWIDTH / 2) {
-// 				// 	this.hazardDir = 1;
-// 		// }
-// 		// this.hazardBlock.position.y += this.hazardSpeed * this.hazardDir;
-// 		this.hazardBlock.position.y = hazard_y;
-// 	}
-	
-	// CheckScoreForHazard() {
-		// 	if (this.score1 >= 5 || this.score2 >= 5) {
-			// 		this.hazardSpeed = 5;
-	// 	}
-	// }
-
 	DoubleCameraWork3D() { 
 		this.camera2.position.x = this.paddle2.position.x + 100;
 		this.camera2.position.z = this.paddle2.position.z + 100;

@@ -200,27 +200,6 @@ export class Game{
 			this.hazardOnScene = false;
 		}
 	}
-
-	SwitchMode() {
-		if (Key.isDown(Key.SPACE) && !this.keyPressed) {
-			this.is3D = !this.is3D;
-			this.keyPressed = true;
-		} else if (!Key.isDown(Key.SPACE))
-			this.keyPressed = false;
-	
-		if (Key.isDown(Key.M) && !this.multiPressed) {
-			this.multiPlay = !this.multiPlay;
-			this.multiPressed = true;
-		} else if (!Key.isDown(Key.M))
-			this.multiPressed = false;
-	
-		if (Key.isDown(Key.H) && !this.hazardPressed) {
-			this.hazardMode = !this.hazardMode;
-			this.hazardPressed = true;
-		} else if (!Key.isDown(Key.H))
-			this.hazardPressed = false;
-	}
-
 	
 	AttachCanvas(){
 		document.querySelectorAll(".old-canvas").forEach(element => element.remove())
@@ -283,7 +262,7 @@ export class Game{
 		if (this.running == false) {
 			return
 		}
-		this.SwitchMode();
+
 		this.ChangeField();
 	
 		// double view
@@ -402,7 +381,7 @@ export class Game{
 					//bounce the ball
 					this.ballDirX = -this.ballDirX;
 					//adding angle to the bouncing
-					this.ballDirY -= this.paddle2DirY * 0.7;
+					this.ballDirY -= RandomDir()
 				}
 			}
 		}
@@ -579,16 +558,33 @@ export class Game{
 
 	ResetBall(loser) {
 		//ball in center
-		this.ball.position.x = 0;
-		this.ball.position.y = 0;
+		if (!this.hazardMode){
+			this.ball.position.x = 0;
+			this.ball.position.y = 0;
+			if (loser == 1)
+				this.ballDirX = -1;
+			else //player 2 lost point, ball goes to 1
+			this.ballDirX = 1;
+			
+			this.ballDirY = 1;
+		}
+		else{
+			if (loser == 1)
+			{
+				this.ball.position.x = 15
+				this.ball.position.y = 15
+				this.ballDirX = -1
+			}
+			else
+			{
+				this.ball.position.x = -15
+				this.ball.position.y = -15
+				this.ballDirX = 1
+			}
+				this.ballDirY = 1
+		}
 		
 		//player 1 lost point, ball goes to 2
-		if (loser == 1)
-			this.ballDirX = -1;
-		else //player 2 lost point, ball goes to 1
-		this.ballDirX = 1;
-		
-		this.ballDirY = 1;
 	}
 
 	MatchScoreCheck()
@@ -662,6 +658,7 @@ export class Game{
 }
 
 function RandomDir(){
+	console.log("random direction was called!")
 	let random1 = Math.random();
 	if (random1 > 0.5)
 			return Math.random();

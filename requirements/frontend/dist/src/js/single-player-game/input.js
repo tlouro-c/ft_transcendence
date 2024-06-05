@@ -20,7 +20,7 @@ export class InputHandler {
 			{
 				this.shift = true;
 				this.field++;
-				if (this.field > 3)
+				if (this.field > 5)
 					this.field = 0;
 			}
 		}
