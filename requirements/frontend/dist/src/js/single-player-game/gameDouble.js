@@ -7,6 +7,7 @@ const WIDTH = 640 + 300;
 const HEIGHT = 360 + 0;
 const PADDLEWIDTH = 20, PADDLEHEIGHT = 60, PADDLEDEPTH = 10, PADDLEQUALITY = 1;
 const HAZARDWIDTH = 20, HAZARDHEIGHT = 150, HAZARDDEPTH = 100, HAZARDQUALITY = 1;
+const BALLSPEED = 4, BALLMAXSPEED = 9;
 
 export class Game{
 	constructor(){
@@ -366,6 +367,8 @@ export class Game{
 					this.ballDirX = -this.ballDirX;
 					//adding angle to the bouncing
 					this.ballDirY = RandomDir()
+					if (this.ballSpeed < BALLMAXSPEED)
+						this.ballSpeed += 1; 
 				}
 			}
 		}
@@ -571,19 +574,19 @@ export class Game{
 		else{
 			if (loser == 1)
 			{
-				this.ball.position.x = 15
-				this.ball.position.y = 15
+				this.ball.position.x = 30
+				this.ball.position.y = 30
 				this.ballDirX = -1
 			}
 			else
 			{
-				this.ball.position.x = -15
-				this.ball.position.y = -15
+				this.ball.position.x = -30
+				this.ball.position.y = -30
 				this.ballDirX = 1
 			}
 				this.ballDirY = 1
 		}
-		
+		this.ballSpeed = BALLSPEED
 		//player 1 lost point, ball goes to 2
 	}
 
@@ -658,7 +661,6 @@ export class Game{
 }
 
 function RandomDir(){
-	console.log("random direction was called!")
 	let random1 = Math.random();
 	if (random1 > 0.5)
 			return Math.random();
