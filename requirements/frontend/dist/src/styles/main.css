@@ -134,6 +134,11 @@ div.active {
 	overflow-y: auto;
 }
 
+#dashboard, #match-history {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
 #chat-box, #chat-friends-box  {
 	overflow-y: auto;
 }
