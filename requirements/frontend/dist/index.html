@@ -12,7 +12,7 @@
 <body data-bs-theme="dark">
 	<header class="bg-dark-subtle shadow pb-3">
 		<nav class="navbar navbar-expand-lg bg-dark-subtle">
-			<div class="d-flex flex-column flex-sm-row container-fluid align-items-center justify-content-center px-5">
+			<div class="d-flex flex-column flex-md-row container-fluid align-items-center justify-content-center px-5">
 				<div class="p-3">
 					<a class="navbar-brand me-0">
 						<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346 346" width="40" height="40">
@@ -24,7 +24,7 @@
 						</svg>
 					</a>
 				</div>
-				<ul class="navbar-nav user-navbar d-none m-auto">
+				<ul class="navbar-nav user-navbar d-none m-auto d-flex flex-column flex-md-row">
 					<li class="nav-item p-3 d-flex align-items-center justify-content-center"> 
 						<a id="navbar-home-link"> 
 							<svg fill="#FEFEFA" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 495.398 495.398" xml:space="preserve">
@@ -346,6 +346,23 @@
 					</a>
 				</li>
 			</ul>
+			<div class="container mt-5">
+				<div class="d-flex justify-content-between align-items-center p-3">
+					<h3 class="m-0 ms-2">User</h3>
+					<h3 class="m-0 me-2">Wins</h3>
+				</div>
+				<ul class="list-group list-group-flush w-100 p-3" id="dashboard">
+					<li class="list-group-item d-flex justify-content-between align-items-center w-100 d-none" id="dashboard-entry-template">
+							<div class="d-flex justify-content-start align-items-center">
+								<img src="" class="rounded-circle img-thumbnail object-fit-cover user-1-avatar m-2 friend-avatar" alt="...">
+								<a class="friend-link"><p class="m-0 user-1-username username">User 1</p></a>
+							</div>
+							<div class="d-flex justify-content-center align-items-center">
+								<h3 class="m-0 me-2 user-wins">0</h3>
+							</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 
 		<div class="dynamic-page container-fluid text-center" id="chat-page">
