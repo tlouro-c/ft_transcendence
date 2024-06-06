@@ -1,7 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from datetime import datetime, timezone
-from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
 from .models import Message
 import logging
@@ -12,6 +11,7 @@ logger = logging.getLogger(__name__)
 class ChatConsumer(AsyncWebsocketConsumer):
 	group_room_name = ""
 	async def connect(self):
+		from django.contrib.auth.models import AnonymousUser
 		user = self.scope.get('user')
 		if user == AnonymousUser():
 			await self.close()

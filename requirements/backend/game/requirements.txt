@@ -12,3 +12,5 @@ typing_extensions
 httpx
 channels==4
 daphne==4
+uvicorn
+websockets

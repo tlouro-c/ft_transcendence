@@ -11,4 +11,6 @@ then
 		--noinput
 fi
 
+cd usermanagement
+
 $@

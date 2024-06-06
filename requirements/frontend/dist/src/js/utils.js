@@ -1,6 +1,6 @@
 import { isTokenAccessExpired, refreshAccessToken } from "./jwt.js"
 
-export const API = 'http://localhost:8000';
+export const API = 'https://localhost:8000';
 
 export const elements = {
 	loginPage : document.getElementById("login-page"),

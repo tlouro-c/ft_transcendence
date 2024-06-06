@@ -1,7 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from datetime import datetime, timezone
-from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
 from .models import Game, Tournament
 import logging
@@ -23,6 +22,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 	game_map = {}
 
 	async def connect(self):
+		from django.contrib.auth.models import AnonymousUser
 
 		self.room_id = self.scope['url_route']['kwargs']['room_id']
 		self.group_room_name = "chat_" + self.room_id
@@ -69,7 +69,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 				})
 
 	async def disconnect(self, code):
+		from django.contrib.auth.models import AnonymousUser
 		user = self.scope.get('user')
+		if user == AnonymousUser():
+			return
 
 		await self.channel_layer.group_discard(
 			self.group_room_name,
@@ -249,6 +252,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 	available = True
 
 	async def connect(self):
+		from django.contrib.auth.models import AnonymousUser
 
 		self.room_id = '1'
 		self.group_room_name = "chat_" + self.room_id

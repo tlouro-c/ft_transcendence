@@ -12,4 +12,6 @@ then
 		--email $DJANGO_SUPERUSER_EMAIL
 fi
 
+cd livechat
+
 $@

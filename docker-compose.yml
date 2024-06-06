@@ -1,4 +1,19 @@
 services:
+  frontend:
+    container_name: frontend-dist
+    image: frontend-dist-img
+    build: requirements/frontend
+    depends_on:
+      - user-management
+      - live-chat
+      - game
+    networks:
+      - docker-network
+    ports:
+      - 443:443
+    volumes:
+      - ssl:/etc/ssl/my_certs
+  
   user-management:
     container_name: user-management-service
     image: user-management-service-img
@@ -20,6 +35,8 @@ services:
       - '8000'
     ports: 
       - 8000:8000
+    volumes:
+      - ssl:/etc/ssl/my_certs
    
   live-chat:
     container_name: live-chat-service
@@ -41,6 +58,8 @@ services:
       - docker-network
     ports: 
       - 9000:9000
+    volumes:
+      - ssl:/etc/ssl/my_certs
 
   game:
     container_name: game-service
@@ -62,19 +81,8 @@ services:
       - docker-network
     ports: 
       - 8001:8001
-    
-  frontend:
-    container_name: frontend-dist
-    image: frontend-dist-img
-    build: requirements/frontend
-    depends_on:
-      - user-management
-      - live-chat
-      - game
-    networks:
-      - docker-network
-    ports:
-      - 443:443
+    volumes:
+      - ssl:/etc/ssl/my_certs
 
   user-management-db:
     container_name: user-management-db-container
@@ -134,6 +142,7 @@ volumes:
   live-chat-db-data:
   game-db-data: 
   media:
+  ssl:
 
 
 networks:

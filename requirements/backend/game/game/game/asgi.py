@@ -8,12 +8,14 @@ https://docs.djangoproject.com/en/5.0/howto/deployment/asgi/
 """
 
 import os
-
+import django
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'game.settings')
+
+django.setup()
 
 from live_game.routing import websocket_urlpatterns
 from .middleware import JwtAuthMiddleware
