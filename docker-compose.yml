@@ -12,7 +12,7 @@ services:
     ports:
       - 443:443
     volumes:
-      - ssl:/etc/ssl/my_certs
+      - media:/usr/share/nginx/html/images
   
   user-management:
     container_name: user-management-service
@@ -26,6 +26,7 @@ services:
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPER_USER}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_PASSWORD}
+      - API_KEY=${USER_MANAGEMENT_SECRET_KEY}
     depends_on:
       user-management-db:
         condition: service_healthy
@@ -36,7 +37,7 @@ services:
     ports: 
       - 8000:8000
     volumes:
-      - ssl:/etc/ssl/my_certs
+      - media:/app/usermanagement/media
    
   live-chat:
     container_name: live-chat-service
@@ -51,6 +52,7 @@ services:
       - DJANGO_SUPERUSER_USERNAME=${LIVE_CHAT_USER}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_EMAIL}
+      - API_KEY=${LIVE_CHAT_SECRET_KEY}
     depends_on:
       live-chat-db:
         condition: service_healthy
@@ -58,8 +60,6 @@ services:
       - docker-network
     ports: 
       - 9000:9000
-    volumes:
-      - ssl:/etc/ssl/my_certs
 
   game:
     container_name: game-service
@@ -74,6 +74,7 @@ services:
       - DJANGO_SUPERUSER_USERNAME=${GAME_USER}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_EMAIL}
+      - API_KEY=${GAME_SECRET_KEY}
     depends_on:
       live-chat-db:
         condition: service_healthy
@@ -81,8 +82,6 @@ services:
       - docker-network
     ports: 
       - 8001:8001
-    volumes:
-      - ssl:/etc/ssl/my_certs
 
   user-management-db:
     container_name: user-management-db-container
@@ -93,7 +92,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - user-management-db-data:/var/lib/postgresql/data
-      - media:/app/usermanagement/media
     networks:
       - docker-network
     healthcheck:
@@ -142,7 +140,6 @@ volumes:
   live-chat-db-data:
   game-db-data: 
   media:
-  ssl:
 
 
 networks:

@@ -5,6 +5,7 @@ import httpx
 from rest_framework_simplejwt.tokens import AccessToken
 from urllib.parse import parse_qs
 import logging
+import ssl
 
 logger = logging.getLogger(__name__)
 
@@ -29,24 +30,23 @@ class JwtAuthMiddleware(BaseMiddleware):
 		scope['mode_hazard'] = mode_hazard == 'true'
 		scope['tournament'] = tournament == 'true'
 		scope['invited'] = invited or ""
-		scope['user'] = user_id_from_token(token)
+		# scope['user'] = user_id_from_token(token)
 		
-		# user_id = user_id_from_token(token)
+		user_id = user_id_from_token(token)
 
-		# logger.debug(f"User id: {user_id}")
+		logger.debug(f"User id: {user_id}")
 
-		# try:
-		# 	request_headers = {'Authorization': f'Bearer {token}'}
-		# 	async with httpx.AsyncClient() as client:
-		# 		client.verify = False
-		# 		response = await client.get(f'https://user-management-service:8000/user_management/user/{user_id}/', headers=request_headers)
-		# 	if response.status_code != 200:
-		# 		logger.debug(f"Unauthenticated: {response.status_code}")
-		# 		raise "Unauthenticated"
+		try:
+			request_headers = {'Authorization': f'Bearer {token}'}
+			async with httpx.AsyncClient() as client:
+				response = await client.get(f'http://user-management-service:8000/user/{user_id}/', headers=request_headers)
+			if response.status_code != 200:
+				logger.debug(f"Unauthenticated: {response.status_code}")
+				raise "Unauthenticated"
 
-		# 	user_data = response.json()
-		# 	scope['user'] = user_data.get('id', AnonymousUser())
-		# except:
-		# 	scope['user'] = AnonymousUser()
+			user_data = response.json()
+			scope['user'] = user_data.get('id', AnonymousUser())
+		except:
+			scope['user'] = AnonymousUser()
 		
 		return await super().__call__(scope, receive, send)

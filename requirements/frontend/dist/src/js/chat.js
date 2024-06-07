@@ -57,7 +57,7 @@ async function fetchChatHistory(roomId) {
 
 	try {
 		TokenVerification();
-		const response = await fetch(`https://localhost:9000/chat/history/${roomId}/`, {
+		const response = await fetch(`https://localhost:443/chat/history/${roomId}/`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
@@ -94,7 +94,7 @@ async function enterChatRoom(roomId) {
 	chatBox.scrollTo(0, chatBox.scrollHeight);
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	sockets.chatSocket = new WebSocket(`wss://localhost:9000/ws/chat/${roomId}/?token=${encodedToken}`);
+	sockets.chatSocket = new WebSocket(`wss://localhost:443/ws/chat/${roomId}/?token=${encodedToken}`);
 
 	sockets.chatSocket.onmessage = function(message) {
 		const messageObj = JSON.parse(message.data);

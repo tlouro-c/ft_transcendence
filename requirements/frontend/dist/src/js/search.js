@@ -11,7 +11,7 @@ export async function fetchAllUsers() {
 
 	try {
 		TokenVerification();
-		const response = await fetch(`${API}/user_management/users/`, {
+		const response = await fetch(`https://localhost:443/user_management/users/`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
