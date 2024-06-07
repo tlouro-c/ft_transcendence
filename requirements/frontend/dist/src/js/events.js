@@ -8,6 +8,7 @@ import { startGame } from './single-player-game/gameDouble.js';
 import { Game } from './single-player-game/gameDouble.js'
 import { monitorTournament } from './tournament.js';
 import { loadHomePage } from './home.js';
+import { startLocalTournament } from './single-player-game/localTournament.js';
 
 export function setupEventListeners() {
 
@@ -80,5 +81,16 @@ export function setupEventListeners() {
 		
 		gameDict.instance = startGame()
 	});
+
+	document.getElementById("play-local-tournament").addEventListener("click", (event) => {
+		event.preventDefault();
+
+		document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.add('d-none'))
+		document.getElementById('game-column').classList.add('d-none');
+		loadPage(elements.localPlayPage);
+		startLocalTournament()
+	});
+
+
 
 }
