@@ -49,6 +49,7 @@ export async function refreshAccessToken() {
 		});
 		if (response.status >= 400) {
 			logoutUser();
+			return false;
 		} else {
 			const json = await response.json();
 
@@ -59,11 +60,14 @@ export async function refreshAccessToken() {
 	}
 	catch (error) {
 		logoutUser();
+		return false;
 	}
 }
 
 export async function TokenVerification() {
 	if (isTokenAccessExpired()) {
-		await refreshAccessToken();
+		return await refreshAccessToken();
+	} else {
+		return true;
 	}
 }

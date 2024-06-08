@@ -1,5 +1,5 @@
 import { fetchUser } from "../profile.js";
-import { gameDict, getUserObj, API } from "../utils.js";
+import { gameDictTournament, getUserObj, API } from "../utils.js";
 import { Key } from "./keyboard.js"
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -9,7 +9,7 @@ const PADDLEWIDTH = 20, PADDLEHEIGHT = 60, PADDLEDEPTH = 10, PADDLEQUALITY = 1;
 const HAZARDWIDTH = 20, HAZARDHEIGHT = 150, HAZARDDEPTH = 100, HAZARDQUALITY = 1;
 const BALLSPEED = 4, BALLMAXSPEED = 9;
 
-export class Game{
+export class TournamentGame{
 	constructor(player1, player2){
 		this.initialCameraX = 0;
 		this.initialCameraY = 0;
@@ -234,9 +234,8 @@ export class Game{
 			document.querySelector(".local-play-avatar .username").textContent = user.username
 		} else {
 			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
-			document.querySelector(".local-play-avatar img").classList.add('d-none')
+			document.querySelectorAll(".local-play-avatar img").forEach(element => element.classList.add('d-none'))
 			document.querySelector(".local-play-avatar .username").textContent = this.player1
-			document.querySelector(".local-play-user2-avatar img").classList.add('d-none')
 			document.querySelector(".local-play-user2-avatar .username").textContent = this.player2
 		}
 
@@ -617,7 +616,7 @@ export class Game{
 			this.finish_game()
 			//write to banner
 			document.getElementById("scores").innerHTML = this.player1 + " wins!";
-			document.getElementById("winnerBoard").innerHTML = "Refresh to play again";
+			document.getElementById("winnerBoard").classList.add('d-none')
 		}
 		else if (this.score2 >= this.maxScore)
 		{
@@ -626,16 +625,7 @@ export class Game{
 			this.finish_game()
 			//write to banner
 			document.getElementById("scores").innerHTML = this.player2 + " wins!";
-			document.getElementById("winnerBoard").classList.add('d-none')
-			const playAgainBtn = document.createElement('button')
-			playAgainBtn.classList.add('btn', 'btn-light', 'tmp')
-			playAgainBtn.textContent = "Play Again"
-			playAgainBtn.addEventListener("click", event => {
-				event.preventDefault()
-				this.StartGame()
-			})
-			document.getElementById("scoreboard").appendChild(playAgainBtn)
-			 
+			document.getElementById("winnerBoard").classList.add('d-none')			 
 		}
 	}
 	
@@ -678,6 +668,10 @@ export class Game{
 			this.hazardSpeed = 5;
 		}
 	}
+
+	Stop() {
+		this.running = false;
+	}
 }
 
 function RandomDir(){
@@ -712,16 +706,18 @@ export function startLocalTournament(){
 	var player2 = randomNames[1]
 	var player3 = randomNames[2]
 	var player4 = randomNames[3] 
-	const game1 = new Game(player1, player2);
+	const game1 = new TournamentGame(player1, player2);
 	
+	gameDictTournament.instance = game1
 	game1.StartGame();
 	game1.onFinish((winner1) => {
 		const game2 = new Game(player3, player4);
+		gameDictTournament.instance = game2
 		game2.StartGame();
 
 		// Wait for game2 to finish
 		game2.onFinish((winner2) => {
-			const game3 = new Game(winner1, winner2);
+			const game3 = new TournamentGame(winner1, winner2);
 			game3.StartGame();
 
 			// Wait for game3 to finish

@@ -230,8 +230,12 @@ export class Game{
 		if (this.multiPlay == false) {
 			const user = await fetchUser(getUserObj().id);
 			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
+			document.querySelectorAll(".local-play-avatar img").forEach(element => element.classList.remove('d-none'))
 			document.querySelector(".local-play-avatar .user-avatar").setAttribute('src', API + user.avatar)
+			document.querySelector(".local-play-user2-avatar img").setAttribute('src', "./src/assets/AI-Avatar.png")
 			document.querySelector(".local-play-avatar .username").textContent = user.username
+			document.querySelector(".local-play-user2-avatar .username").textContent = "Marvin"
+
 		}
 
 
@@ -598,7 +602,16 @@ export class Game{
 			this.running = false
 			//write to banner
 			document.getElementById("scores").innerHTML = "Player 1 wins!";
-			document.getElementById("winnerBoard").innerHTML = "Refresh to play again";
+
+			document.getElementById("winnerBoard").classList.add('d-none')
+			const playAgainBtn = document.createElement('button')
+			playAgainBtn.classList.add('btn', 'btn-light', 'tmp')
+			playAgainBtn.textContent = "Play Again"
+			playAgainBtn.addEventListener("click", event => {
+				event.preventDefault()
+				this.StartGame()
+			})
+			document.getElementById("scoreboard").appendChild(playAgainBtn)
 		}
 		else if (this.score2 >= this.maxScore)
 		{

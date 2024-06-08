@@ -27,6 +27,10 @@ export const gameDict = {
 	instance: null,
 }
 
+export const gameDictTournament = {
+	instance: null,
+}
+
 export const gameDictRemote = {
 	instance: null,
 }
@@ -100,5 +104,10 @@ export function ClearBackgroundResources() {
 		gameDict.instance.Stop()
 		delete gameDict.instance
 		gameDict.instance = null
+	}
+	if (gameDictTournament.instance != null) {
+		gameDictTournament.instance.Stop()
+		delete gameDictTournament.instance
+		gameDictTournament.instance = null
 	}
 }
