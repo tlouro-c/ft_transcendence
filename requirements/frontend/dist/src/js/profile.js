@@ -95,6 +95,7 @@ export async function loadProfilePage(userId) {
 
 		matchElement.classList.remove('d-none')
 		matchElement.classList.add('tmp-game')
+		matchElement.querySelector('.game-date').textContent = new Date(match.finish_time).toLocaleString().split(',')[0]
 		matchElement.querySelector('.user-1-username').textContent = user1.username
 		matchElement.querySelector('.user-2-username').textContent = user2.username
 		matchElement.querySelector('.user-1-score').textContent = match.user1_score
