@@ -217,3 +217,7 @@ div.active {
 	flex: 1;
 }
 
+.game-date {
+	font-size: 0.6em;
+}
+

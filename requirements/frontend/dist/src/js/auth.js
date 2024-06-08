@@ -1,5 +1,6 @@
 import { elements, capitalizeFirstLetter, loadPage, getTokensObj, API } from "./utils.js";
 import { loadHomePage } from "./home.js";
+import { initialize } from "./index.js";
 
 async function proccessAuthForm(url, form, type) {
 
@@ -70,7 +71,7 @@ export async function loginUser(optionalForm) {
 	window.localStorage.setItem('tokens', JSON.stringify(tokens));
 	const user = {'id': responseJson.user_id, 'username': responseJson.username };
 	window.localStorage.setItem('user', JSON.stringify(user));
-	loadHomePage();
+	initialize()
 }
 
 

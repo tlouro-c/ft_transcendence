@@ -1,4 +1,4 @@
-import { elements, getUserObj, loadPage, closeAllSockets, gameDict, ClearBackgroundResources } from './utils.js'
+import { elements, getUserObj, loadPage, closeAllSockets, gameDict, ClearBackgroundResources} from './utils.js'
 import { loginUser, logoutUser, registerUser } from './auth.js'
 import { loadProfilePage, updateUser, updateUserAvatar } from './profile.js';
 import { loadSearchResults } from './search.js';
@@ -23,23 +23,23 @@ export function setupEventListeners() {
 	});
 
 	document.getElementById("i-have-an-account-link").addEventListener("click",
-		() => loadPage(elements.loginPage));
+		() => {loadPage(elements.loginPage)});
 	document.getElementById("create-account-link").addEventListener("click", 
-		() => loadPage(elements.registerPage));
+		() => {loadPage(elements.registerPage)});
 	document.getElementById("sign-out-link").addEventListener("click", 
 		() => {ClearBackgroundResources(); logoutUser()});
 	document.getElementById("profile-link").addEventListener("click",
 		() => {ClearBackgroundResources(); loadProfilePage(getUserObj().id)});
-	document.getElementById("navbar-home-link").addEventListener("click",
-		() => loadHomePage());
-	document.getElementById("navbar-play-link").addEventListener("click",
-		() => {ClearBackgroundResources(); loadGamePage()});
-	document.getElementById("navbar-chat-link").addEventListener("click",
-		() => {ClearBackgroundResources(); loadChatPage()});
-	document.getElementById("home-page-chat-link").addEventListener("click",
-		() => loadChatPage());
-	document.getElementById("home-page-play-link").addEventListener("click",
-		() => loadGamePage());
+	// document.getElementById("navbar-home-link").addEventListener("click",
+	// 	() => loadHomePage());
+	// document.getElementById("navbar-play-link").addEventListener("click",
+	// 	() => {ClearBackgroundResources(); loadGamePage()});
+	// document.getElementById("navbar-chat-link").addEventListener("click",
+	// 	() => {ClearBackgroundResources(); loadChatPage()});
+	// document.getElementById("home-page-chat-link").addEventListener("click",
+	// 	() => loadChatPage());
+	// document.getElementById("home-page-play-link").addEventListener("click",
+	// 	() => loadGamePage());
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();

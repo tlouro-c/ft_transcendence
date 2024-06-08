@@ -1,4 +1,9 @@
+import { loadChatPage } from "./chat.js";
+import { loadGamePage } from "./game-page.js";
+import { loadHomePage } from "./home.js";
 import { isTokenAccessExpired, refreshAccessToken } from "./jwt.js"
+import { loadProfilePage } from "./profile.js";
+import { loadSearchResults } from "./search.js";
 
 export const API = 'https://localhost:443/';
 
@@ -99,6 +104,7 @@ export function closeAllSockets() {
 
 export function ClearBackgroundResources() {
 	closeAllSockets()
+	document.querySelectorAll(".tmp-dashboard-entry").forEach((element) => element.remove())
 
 	if (gameDict.instance != null) {
 		gameDict.instance.Stop()
@@ -110,4 +116,41 @@ export function ClearBackgroundResources() {
 		delete gameDictTournament.instance
 		gameDictTournament.instance = null
 	}
+}
+
+export function initializeRouter() {
+    window.addEventListener('popstate', (event) => {
+		event.preventDefault();
+		const href = window.location.href.substring(window.location.href.indexOf('#')) || '';
+
+        handleNavigation(href, false);
+    });
+}
+
+export function handleNavigation(path, pushState = true) {
+
+	if (pushState) {
+		window.history.pushState({}, '', path);
+	}
+
+	ClearBackgroundResources();
+
+    switch (path) {
+        case '#game':
+            loadGamePage();
+            break;
+		case '#chat':
+			loadChatPage();
+			break;
+		case '#search':
+			const emptyForm = document.getElementById("search-form");
+			loadSearchResults(emptyForm);
+			break;
+		case '#profile':
+			loadProfilePage(getUserObj().id)
+			break;
+        default:
+			loadHomePage();
+			break;
+    }
 }

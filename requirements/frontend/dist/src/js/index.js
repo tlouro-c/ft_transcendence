@@ -1,12 +1,27 @@
 import { setupEventListeners } from './events.js';
 import { TokenVerification } from './jwt.js';
 import { loadHomePage } from './home.js';
+import { handleNavigation, initializeRouter } from './utils.js';
 
 
-async function initialize() {
+export async function initialize() {
+
+	initializeRouter();
+    
+	
+
 	setupEventListeners();
 	if (await TokenVerification()) {
-		loadHomePage();
+   		handleNavigation("#home", true);
+
+		   document.querySelectorAll('a .my-link').forEach(anchor => {
+			anchor.addEventListener('click', event => {
+				event.preventDefault();
+				const path = anchor.getAttribute('href');
+				console.log(path);
+				handleNavigation(path);
+			});
+		});
 	}
 }
 
