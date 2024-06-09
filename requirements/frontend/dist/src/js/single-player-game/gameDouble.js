@@ -33,6 +33,7 @@ export class Game{
 		this.running = false
 		this.hazardOnScene = false;
 		this.Stop = function() { this.running = false }
+		this.collision_flag = false;
 		
 		this.init();
 
@@ -268,6 +269,7 @@ export class Game{
 			return
 		}
 
+		this.collision_flag_reset();
 		this.ChangeField();
 	
 		// double view
@@ -312,6 +314,17 @@ export class Game{
 			this.HazardStart();
 		else
 			this.scene.remove(this.hazardBlock);
+	}
+
+	collision_flag_reset()
+	{
+		console.log("been here done that start", this.collision_flag)
+		if (this.ball.position.x > -280 && this.ball.position.x < -30 && this.collision_flag == true)
+			this.collision_flag = false;
+		else if (this.ball.position.x > 30 && this.ball.position.x < 280 && this.collision_flag == true)
+			this.collision_flag = false;
+		console.log("been here done that finish", this.collision_flag)
+		
 	}
 	
 	BallPhysics() {
@@ -359,36 +372,41 @@ export class Game{
 
 	PaddlesColision() {
 		//verification if the ball colides with de dimesions of the paddle1
-		if (this.ball.position.x <= this.paddle1.position.x + PADDLEWIDTH &&
-			this.ball.position.x >= this.paddle1.position.x) {
-				
-				if (this.ball.position.y <= this.paddle1.position.y + PADDLEHEIGHT / 2 &&
-				this.ball.position.y >= this.paddle1.position.y - PADDLEHEIGHT / 2) {
-				if (this.ballDirX < 0) {
-					//strech paddle when hits
-					this.paddle1.scale.y = 3;
-					//bounce the ball
-					this.ballDirX = -this.ballDirX;
-					//adding angle to the bouncing
-					this.ballDirY = RandomDir()
-					if (this.ballSpeed < BALLMAXSPEED)
-						this.ballSpeed += 1; 
+		if (this.collision_flag == false)
+		{
+			if (this.ball.position.x <= this.paddle1.position.x + PADDLEWIDTH &&
+				this.ball.position.x >= this.paddle1.position.x - PADDLEWIDTH) {
+
+					if (this.ball.position.y <= this.paddle1.position.y + PADDLEHEIGHT / 2 &&
+					this.ball.position.y >= this.paddle1.position.y - PADDLEHEIGHT / 2) {
+					if (this.ballDirX < 0) {
+						//strech paddle when hits
+						this.collision_flag = true
+						this.paddle1.scale.y = 3;
+						//bounce the ball
+						this.ballDirX = -this.ballDirX;
+						//adding angle to the bouncing
+						this.ballDirY = RandomDir()
+						if (this.ballSpeed < BALLMAXSPEED)
+							this.ballSpeed += 1; 
+					}
 				}
 			}
-		}
-		//verification if the ball colides with de dimesions of the paddle2
-		if (this.ball.position.x <= this.paddle2.position.x + PADDLEWIDTH &&
-			this.ball.position.x >= this.paddle2.position.x) {
+			//verification if the ball colides with de dimesions of the paddle2
+			if (this.ball.position.x <= this.paddle2.position.x + PADDLEWIDTH &&
+				this.ball.position.x >= this.paddle2.position.x - PADDLEWIDTH) {
 
-				if (this.ball.position.y <= this.paddle2.position.y + PADDLEHEIGHT / 2 &&
-				this.ball.position.y >= this.paddle2.position.y - PADDLEHEIGHT / 2) {
-				if (this.ballDirX > 0) {
-					//strech paddle when hits
-					this.paddle2.scale.y = 3;
-					//bounce the ball
-					this.ballDirX = -this.ballDirX;
-					//adding angle to the bouncing
-					this.ballDirY -= RandomDir()
+					if (this.ball.position.y <= this.paddle2.position.y + PADDLEHEIGHT / 2 &&
+					this.ball.position.y >= this.paddle2.position.y - PADDLEHEIGHT / 2) {
+					if (this.ballDirX > 0) {
+						//strech paddle when hits
+						this.paddle2.scale.y = 3;
+						this.collision_flag = true
+						//bounce the ball
+						this.ballDirX = -this.ballDirX;
+						//adding angle to the bouncing
+						this.ballDirY -= RandomDir()
+					}
 				}
 			}
 		}
@@ -578,14 +596,14 @@ export class Game{
 		else{
 			if (loser == 1)
 			{
-				this.ball.position.x = 30
-				this.ball.position.y = 30
+				this.ball.position.x = -30
+				this.ball.position.y = -30
 				this.ballDirX = -1
 			}
 			else
 			{
-				this.ball.position.x = -30
-				this.ball.position.y = -30
+				this.ball.position.x = 30
+				this.ball.position.y = 30
 				this.ballDirX = 1
 			}
 				this.ballDirY = 1
@@ -634,7 +652,7 @@ export class Game{
 	
 	HazardStart()
 	{
-		if ((this.score1 >= 4 || this.score2 >= 4) && this.hazardMode)
+		if ((this.score1 >= 3 || this.score2 >= 3) && this.hazardMode)
 		{
 			this.scene.add(this.hazardBlock);
 			this.hazardOnScene = true;
@@ -646,12 +664,16 @@ export class Game{
 
 	HazardColision() {
 		// Verify colision
-		if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
-			this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
-			if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
-			this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
-				// bounce the ball;
-				this.ballDirX = -this.ballDirX;
+		if (this.collision_flag == false)
+		{
+			if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
+				this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
+				if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
+				this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
+					// bounce the ball;
+					this.collision_flag = true
+					this.ballDirX = -this.ballDirX;
+				}
 			}
 		}
 	}
