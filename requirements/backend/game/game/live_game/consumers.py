@@ -25,7 +25,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		from django.contrib.auth.models import AnonymousUser
 
 		self.room_id = self.scope['url_route']['kwargs']['room_id']
-		self.group_room_name = "chat_" + self.room_id
+		self.group_room_name = "game_" + self.room_id
 
 		user = self.scope.get('user')
 		if user == AnonymousUser():
@@ -260,7 +260,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 		from django.contrib.auth.models import AnonymousUser
 
 		self.room_id = '1'
-		self.group_room_name = "chat_" + self.room_id
+		self.group_room_name = "tournament_" + self.room_id
 
 		user = self.scope.get('user')
 		if user == AnonymousUser():
@@ -275,7 +275,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 		await self.accept()
 
 		self.users_in_room.append(user)
-
 
 		user_count = len(self.users_in_room)
 		if self.available == False:
