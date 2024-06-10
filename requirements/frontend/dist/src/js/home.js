@@ -6,6 +6,7 @@ import { API } from "./utils.js";
 
 export function loadHomePage() {
 	ClearBackgroundResources()
+	document.querySelectorAll(".tmp-dashboard-entry").forEach((element) => element.remove())
 	loadPage(elements.homePage)
 	loadDashboard()
 }
@@ -16,8 +17,6 @@ export async function loadDashboard() {
 
 	const allUsers = await fetchAllUsers()
 	const dashboard = document.getElementById("dashboard");
-
-	document.querySelectorAll(".tmp-dashboard-entry").forEach((element) => element.remove())
 
 	let dashboardEntries = []
 

@@ -105,10 +105,16 @@ class SendFriendRequestView(APIView):
 		except:
 			return Response({'Error': 'User not found'}, 404)
 		
-		if Friendship.objects.filter((Q(sender=sender) & Q(receiver=receiver)) |
-							   Q(sender=receiver) & Q(receiver=sender)).exists():
-			return Response({'Error': 'Friend request already sent'}, 400)
-		
+		try:
+			pending_friendship = Friendship.objects.get(Q(sender=receiver) & Q(receiver=sender) & Q(status='Pending'))
+		except:
+			pending_friendship = None
+		if pending_friendship:
+			pending_friendship.status = 'Friends'
+			pending_friendship.friends_since = datetime.datetime.now(datetime.timezone.utc)
+			pending_friendship.save()
+			return Response({'Error': 'You had a pending friend request from this user, now you are friends'}, 201)
+
 		new_friendship = Friendship(sender=sender, receiver=receiver, status='Pending')
 		new_friendship.save()
 		return Response({'Success': 'Friend request sent'}, 201)

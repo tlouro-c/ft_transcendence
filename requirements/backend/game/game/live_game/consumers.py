@@ -83,6 +83,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 		user_count = len(self.users_in_room[self.room_id])
 
 		if user_count == 1:
+			remaining_user = None
 			for _ in list(self.users_in_room[self.room_id]):
 				if _ != self.scope.get('user'):
 					remaining_user = _
@@ -164,8 +165,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
 	@database_sync_to_async
 	def finish_game(self, winner):
-		game = Game.objects.get(id=self.room_db_entry[self.room_id])
-
+		if self.room_id not in self.room_db_entry or winner is None:
+				return
+		try:
+			game = Game.objects.get(id=self.room_db_entry[self.room_id])
+		except:
+			return
 		if game.status == 'On Going':
 			game.status = 'Finished'
 			game.winner = winner
