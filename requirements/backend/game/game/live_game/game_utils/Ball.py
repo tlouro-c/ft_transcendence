@@ -59,7 +59,7 @@ class Ball:
 						self.last_col = self.time_now
 	
 			if (self.x <= self.right_paddle.x + PADDLE_WIDTH and
-				self.x >= self.right_paddle.x - - PADDLE_WIDTH):
+				self.x >= self.right_paddle.x - PADDLE_WIDTH):
 				if (self.y <= self.right_paddle.y + PADDLE_HEIGHT / 2 and
 				self.y >= self.right_paddle.y - PADDLE_HEIGHT / 2):
 					if self.x_dir > 0:
