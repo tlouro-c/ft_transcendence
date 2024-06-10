@@ -267,7 +267,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 			await self.close()
 			return
 		
-
 		await self.channel_layer.group_add(
 			self.group_room_name,
 			self.channel_name
@@ -316,6 +315,11 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 		if user in self.users_in_room:
 			self.users_in_room.remove(user)
 		user_count = len(self.users_in_room)
+		await self.channel_layer.group_send(self.group_room_name,
+		{
+			"type": "info",
+			"info": f'Wait, you need {4 - user_count} more {"player" if user_count == 3 else "players"}',
+		})
 		if user_count == 0:
 			self.__class__.available = True
 

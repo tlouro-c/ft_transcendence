@@ -99,6 +99,8 @@ export function closeAllSockets() {
 	sockets.gameSocket = null
 	closeSocket(sockets.chatSocket)
 	sockets.chatSocket = null
+	closeSocket(sockets.tournamentSocket)
+	sockets.tournamentSocket = null
 }
 
 
