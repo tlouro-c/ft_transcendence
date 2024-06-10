@@ -104,7 +104,6 @@ async function enterChatRoom(roomId) {
 	}
 
 	sockets.chatSocket.onclose = function(message) {
-		//console.log("Chat socket closed");
 	}
 
 	document.getElementById("chatMessageInput").addEventListener("keyup", (e) => {

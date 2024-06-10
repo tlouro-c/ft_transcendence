@@ -9,12 +9,10 @@ export async function monitorTournament() {
 
 	const allUsers = await fetchAllUsers()
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	console.log("Connecting to tournament socket")
 	sockets.tournamentSocket = new WebSocket(`wss://localhost:443/ws/tournament/1/?token=${encodedToken}`)
 
 	sockets.tournamentSocket.onmessage = function(message) {
 		const messageObj = JSON.parse(message.data)
-		console.log(messageObj)
 
 		if (messageObj) {
 			switch (messageObj.type) {

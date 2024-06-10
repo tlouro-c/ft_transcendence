@@ -107,6 +107,11 @@ export async function fetchGameHistory(userId) {
 
 async function loadRealTimeGame(opponentId, ballOwner) {
 
+
+	if (!sockets.gameSocket) {
+		return	
+	}
+	
 	const allUsers = await fetchAllUsers()
 	const userInfo = allUsers.find(user => user.id == getUserObj().id)
 	const opponentInfo = allUsers.find(user => user.id == opponentId)
@@ -201,11 +206,11 @@ export function monitorGame(roomId, modeHazard, invited, tournamentStage='') {
 							sockets.gameSocket = null;
                     }
 					const matchWinner = messageObj.winner
-					if (matchWinner.toString() == getUserObj().id) {
-						document.getElementById("winnerBoardRemote").textContent = "You won"
-					} else {
-						document.getElementById("winnerBoardRemote").textContent = "You lost"
-					}
+
+					loadPage(elements.waitingPageTournament)
+					const dynamicText = elements.waitingPageTournament.querySelector(".dynamic-text")
+
+					dynamicText.textContent = matchWinner == getUserObj().id ? "You won!" : "You lost!"
 					if (tournamentStage == '') {
 						break
 					}

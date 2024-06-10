@@ -406,7 +406,6 @@ export class RemoteGame{
 
 	update_game_data(data)
 	{
-		// console.log("I was here!", data["ball_y"])
 		if (data)
 		{
 			if (data["player1_id"] == getUserObj().id){
@@ -424,7 +423,6 @@ export class RemoteGame{
 				this.score1 = data["player2_score"];
 			}
 			this.hazardBlock.position.y = data["hazard_y"]
-			//console.log(this.hazardMode, this.hazardBlock.position.y)
 			if (!this.hazardMode && this.hazardBlock.position.y != -500)
 			{
 				this.scene.add(this.hazardBlock);
@@ -450,8 +448,6 @@ var game;
 
 export function startRemoteGame(ballOwner){
 	game = new RemoteGame();
-
-	//console.log(game)
 	
 	game.StartGame();
 	game.StartOnBG();
