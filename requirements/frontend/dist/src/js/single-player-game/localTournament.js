@@ -232,13 +232,14 @@ export class TournamentGame{
 			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
 			document.querySelector(".local-play-avatar .user-avatar").setAttribute('src', API + user.avatar)
 			document.querySelector(".local-play-avatar .username").textContent = user.username
+			document.querySelectorAll(".multiplayer-control").forEach(element => element.style.opacity = 0.25)
 		} else {
 			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
 			document.querySelectorAll(".local-play-avatar img").forEach(element => element.classList.add('d-none'))
 			document.querySelector(".local-play-avatar .username").textContent = this.player1
 			document.querySelector(".local-play-user2-avatar .username").textContent = this.player2
+			document.querySelectorAll(".multiplayer-control").forEach(element => element.style.opacity = 1)
 		}
-
 
 		//resets counter and header
 		const playAgainBtn = document.getElementById("scoreboard").querySelector('button')

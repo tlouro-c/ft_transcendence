@@ -236,7 +236,9 @@ export class Game{
 			document.querySelector(".local-play-user2-avatar img").setAttribute('src', "./src/assets/AI-Avatar.png")
 			document.querySelector(".local-play-avatar .username").textContent = user.username
 			document.querySelector(".local-play-user2-avatar .username").textContent = "Marvin"
-
+			document.querySelectorAll(".multiplayer-control").forEach(element => element.style.opacity = 0.25)
+		} else {
+			document.querySelectorAll(".multiplayer-control").forEach(element => element.style.opacity = 1)
 		}
 
 
