@@ -406,6 +406,7 @@ export class RemoteGame{
 
 	update_game_data(data)
 	{
+		// console.log("I was here!", data["ball_y"])
 		if (data)
 		{
 			if (data["player1_id"] == getUserObj().id){

@@ -575,7 +575,7 @@ export class Game{
 			else if (this.paddle2DirY < -this.paddleSpeed)
 				this.paddle2.position.y -= this.paddleSpeed;
 		}
-		//strech paddle when hits the end of the SHIFTle
+		//strech paddle when hits the end of the plane
 		this.paddle2.scale.y += (1 - this.paddle2.scale.y) * 0.2;
 	}
 
