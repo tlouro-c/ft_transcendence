@@ -318,12 +318,10 @@ export class Game{
 
 	collision_flag_reset()
 	{
-		console.log("been here done that start", this.collision_flag)
 		if (this.ball.position.x > -280 && this.ball.position.x < -30 && this.collision_flag == true)
 			this.collision_flag = false;
 		else if (this.ball.position.x > 30 && this.ball.position.x < 280 && this.collision_flag == true)
 			this.collision_flag = false;
-		console.log("been here done that finish", this.collision_flag)
 		
 	}
 	
