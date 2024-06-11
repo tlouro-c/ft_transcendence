@@ -3,7 +3,7 @@ import { acceptFriendRequest, rejctFriendRequest, removeFriend } from "./friends
 import { fetchGameHistory } from "./game-page.js"
 import { TokenVerification } from "./jwt.js"
 import { fetchAllUsers } from "./search.js"
-import { capitalizeFirstLetter, elements, getTokensObj, getUserObj, loadPage, API } from "./utils.js"
+import { capitalizeFirstLetter, elements, getTokensObj, getUserObj, loadPage, API, handleNavigation, ClearBackgroundResources } from "./utils.js"
 
 
 export async function loadProfilePage(userId) {
@@ -50,6 +50,7 @@ export async function loadProfilePage(userId) {
 		friend.querySelector(".friend-avatar").setAttribute('src', API + element.avatar)
 		friend.querySelector(".friend-username").textContent = element.username
 		friend.querySelector(".friend-link").addEventListener("click", () => {
+			ClearBackgroundResources()
 			loadProfilePage(element.id)
 		})
 		friend.querySelector(".btn-remove").addEventListener("click", () => {
@@ -142,23 +143,35 @@ export async function fetchUser(userId) {
 export async function updateUser(form) {
 
 	const formData = new FormData(form)
+	let formJson = {}
 
 	const username = formData.get('new_username')
 	const password = formData.get('new_password')
 	const confirmPassword = formData.get('new_password_confirm')
-	if (!password && username.trim().length == 0) {
-		alert("Invalid username")
-		return
-	} else if (password != confirmPassword) {
-		alert("The passwords don't match")
-		return
-	}
 
-	let formJson
+	form.querySelectorAll(".clear").forEach(element => {
+		element.value = ""
+	})
+
+	const modalElement = document.getElementById(password ? 'change-password': 'change-username')
+    const modal = bootstrap.Modal.getInstance(modalElement)
+
+	if (username) {
+		if (username.trim().length == 0) {
+			alert("Invalid username")
+			modal.hide()
+			handleNavigation("#profile")
+		}
+		formJson.username = username
+	}
 	if (password) {
-		formJson = {'password': password}
-	} else {
-		formJson = {'username': username}
+		if (password != confirmPassword) {
+			alert("The passwords don't match")
+			modal.hide()
+			handleNavigation("#profile")
+			return
+		}
+		formJson.password = password
 	}
 
 	try {
@@ -173,18 +186,18 @@ export async function updateUser(form) {
 			body: JSON.stringify(formJson)
 		})
 		const json = await response.json()
-		if (response.status >= 400 && (json.username || json.password)) {
-			alert(capitalizeFirstLetter(json.username ? json.username[0] : json.password[0]))
-			return
-		} else {
-			const modalElement = document.getElementById(password ? 'change-password': 'change-username')
-            const modal = bootstrap.Modal.getInstance(modalElement)
-            modal.hide()
-			loadProfilePage(getUserObj().id)
+		if (response.status >= 400) {
+			const firstErrorKey = Object.keys(json)[0]
+			const firstError = json[firstErrorKey][0]
+			throw firstError
 		}
+        modal.hide()
+		handleNavigation("#profile")
 	}
 	catch (error) {
 		alert("Error: " + error)
+		modal.hide()
+		handleNavigation("#profile")
 	}
 }
 

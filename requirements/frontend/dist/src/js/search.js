@@ -77,6 +77,9 @@ export async function loadSearchResults(form) {
 			userEntry.classList.add("tmp-entry");
 			userEntry.querySelector(".user-search-avatar").setAttribute('src', API + user.avatar);
 			userEntry.querySelector(".username").textContent = user.username;
+			if (user == currentUser) {
+				userEntry.querySelector(".user-link").classList.add("my-link");
+			}
 			userEntry.querySelector(".user-link").addEventListener("click", () => {
 				loadProfilePage(user.id);
 			});

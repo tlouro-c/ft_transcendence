@@ -30,16 +30,6 @@ export function setupEventListeners() {
 		() => {ClearBackgroundResources(); logoutUser()});
 	document.getElementById("profile-link").addEventListener("click",
 		() => {ClearBackgroundResources(); loadProfilePage(getUserObj().id)});
-	// document.getElementById("navbar-home-link").addEventListener("click",
-	// 	() => loadHomePage());
-	// document.getElementById("navbar-play-link").addEventListener("click",
-	// 	() => {ClearBackgroundResources(); loadGamePage()});
-	// document.getElementById("navbar-chat-link").addEventListener("click",
-	// 	() => {ClearBackgroundResources(); loadChatPage()});
-	// document.getElementById("home-page-chat-link").addEventListener("click",
-	// 	() => loadChatPage());
-	// document.getElementById("home-page-play-link").addEventListener("click",
-	// 	() => loadGamePage());
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();
@@ -52,6 +42,7 @@ export function setupEventListeners() {
 	});
 
 	document.getElementById("change-password-form").addEventListener("submit", function(event) {
+		event.preventDefault();
 		updateUser(this);
 	});
 

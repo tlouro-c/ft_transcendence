@@ -4,25 +4,22 @@ import { ClearBackgroundResources, elements, loadPage } from "./utils.js";
 import { API } from "./utils.js";
 
 
-export function loadHomePage() {
+export async function loadHomePage() {
 	ClearBackgroundResources()
-	document.querySelectorAll(".tmp-dashboard-entry").forEach((element) => element.remove())
 	loadPage(elements.homePage)
-	loadDashboard()
+	await loadDashboard()
 }
 
 
 export async function loadDashboard() {
-
-
+	
 	const allUsers = await fetchAllUsers()
 	const dashboard = document.getElementById("dashboard");
 
-	let dashboardEntries = []
+	dashboard.querySelectorAll("li:not(.template)").forEach((element) => element.remove())
 
-	for (const user of allUsers) {
-		dashboardEntries.push(await loadDashboardEntry(user))
-    }
+	const loadPromises = allUsers.map(user => loadDashboardEntry(user))
+    const dashboardEntries = await Promise.all(loadPromises)
 
 	dashboardEntries.sort((a, b) => {
 		return b.querySelector(".user-wins").textContent - a.querySelector(".user-wins").textContent

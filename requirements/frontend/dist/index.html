@@ -89,7 +89,7 @@
 							<label for="loginInput">Username</label>
 						</div>
 						<div class="form-floating mb-3" id="login-password-box">
-							<input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" required autocomplete="off">
+							<input type="password" class="form-control clear" id="loginPassword" placeholder="Password" name="password" required autocomplete="off">
 							<label for="loginPassword">Password</label>
 						</div>
 						<button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
@@ -111,11 +111,11 @@
 							<label for="registerInput">Username</label>
 						</div>
 						<div class="form-floating mb-3">
-							<input type="password" class="form-control" id="registerPassword" placeholder="Password" name="password" required autocomplete="off">
+							<input type="password" class="form-control clear" id="registerPassword" placeholder="Password" name="password" required autocomplete="off">
 							<label for="registerPassword">Password</label>
 						</div>
 						<div class="form-floating mb-3" id="register-password-box">
-							<input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirm Password" name="confirm-password" required autocomplete="off">
+							<input type="password" class="form-control clear" id="registerConfirmPassword" placeholder="Confirm Password" name="confirm-password" required autocomplete="off">
 							<label for="registerConfirmPassword">Confirm Password</label>
 						</div>
 						<button class="btn btn-light w-100 py-2" type="submit">Sign up</button>
@@ -182,7 +182,7 @@
 										<form id="change-username-form" class="form-floating">
 											<div class="modal-body">
 												<div class="form-floating mb-3" id="new-username-box">
-													<input type="text" class="form-control" id="newUsername" placeholder="New username" name="new_username" required autocomplete="off">
+													<input type="text" class="form-control clear" id="newUsername" placeholder="New username" name="new_username" required autocomplete="off">
 													<label for="newUsername">New username</label>
 												</div>
 												<div class="modal-footer">
@@ -212,8 +212,8 @@
 										<form id="change-password-form" class="form-floating">
 											<div class="modal-body">
 												<div class="mb-3">
-													<input type="text" class="form-control mb-3" placeholder="New password" name="new_password" required autocomplete="off">
-													<input type="text" class="form-control" placeholder="Confirm password" name="new_password_confirm" required autocomplete="off">
+													<input type="password" class="form-control mb-3 clear" placeholder="New password" name="new_password" required autocomplete="off">
+													<input type="password" class="form-control clear" placeholder="Confirm password" name="new_password_confirm" required autocomplete="off">
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -326,8 +326,8 @@
 		</div>
 
 
-		<div class="dynamic-page d-flex flex-column align-items-center justify-content-center" id="home-page">
-			<h1>Home Page</h1>
+		<div class="dynamic-page d-flex flex-column align-items-center justify-content-center mh-100" id="home-page">
+			<h1 class="m-4">Home Page</h1>
 			<p class="fs-4 fw-lighter text-center pe-5 ps-5"> This project as developed by tlouro-c, lleiria- and pcoimbra</p>
 			<ul class="navbar-nav user-navbar d-none d-flex flex-row">
 				<li class="nav-item d-flex align-items-center justify-content-center p-3">
@@ -355,7 +355,7 @@
 					<h3 class="m-0 me-2">Wins</h3>
 				</div>
 				<ul class="list-group list-group-flush w-100 p-3" id="dashboard">
-					<li class="list-group-item d-flex justify-content-between align-items-center w-100 d-none" id="dashboard-entry-template">
+					<li class="list-group-item d-flex justify-content-between align-items-center w-100 d-none template" id="dashboard-entry-template">
 							<div class="d-flex justify-content-start align-items-center">
 								<img src="" class="rounded-circle img-thumbnail object-fit-cover user-1-avatar m-2 friend-avatar" alt="...">
 								<a class="friend-link"><p class="m-0 user-1-username username">User 1</p></a>

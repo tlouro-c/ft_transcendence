@@ -1,6 +1,4 @@
-import { elements, capitalizeFirstLetter, loadPage, getTokensObj, API } from "./utils.js";
-import { loadHomePage } from "./home.js";
-import { initialize } from "./index.js";
+import { elements, capitalizeFirstLetter, loadPage, getTokensObj, API, handleNavigation } from "./utils.js";
 
 async function proccessAuthForm(url, form, type) {
 
@@ -8,6 +6,11 @@ async function proccessAuthForm(url, form, type) {
 	const username = formData.get('username').trim();
 	const password = formData.get('password');
 	const confirmPassword = formData.get('confirm-password');
+
+	form.querySelectorAll(".clear").forEach(element => {
+		element.value = ""
+	});
+
 	if (username.length == 0 || password.length == 0 ||
 		(confirmPassword && confirmPassword.length == 0)) {
 			alert("Empty field(s).")
@@ -71,7 +74,7 @@ export async function loginUser(optionalForm) {
 	window.localStorage.setItem('tokens', JSON.stringify(tokens));
 	const user = {'id': responseJson.user_id, 'username': responseJson.username };
 	window.localStorage.setItem('user', JSON.stringify(user));
-	initialize()
+	handleNavigation('#home');
 }
 
 
