@@ -36,6 +36,7 @@ export class TournamentGame{
 		this.player1 = player1;
 		this.player2 = player2;
 		this.Stop = function() { this.running = false }
+		this.collision_flag = false;
 		
 		this.init();
 
@@ -270,6 +271,7 @@ export class TournamentGame{
 			return
 		}
 
+		this.collision_flag_reset();
 		this.ChangeField();
 	
 		// double view
@@ -316,6 +318,15 @@ export class TournamentGame{
 			this.scene.remove(this.hazardBlock);
 	}
 	
+	collision_flag_reset()
+	{
+		if (this.ball.position.x > -280 && this.ball.position.x < -30 && this.collision_flag == true)
+			this.collision_flag = false;
+		else if (this.ball.position.x > 30 && this.ball.position.x < 280 && this.collision_flag == true)
+			this.collision_flag = false;
+		
+	}
+
 	BallPhysics() {
 		//BALL BOUNCING
 		if (this.ball.position.y <= -PLANEHEIGHT / 2){ //bottom side of tablele
@@ -361,40 +372,46 @@ export class TournamentGame{
 
 	PaddlesColision() {
 		//verification if the ball colides with de dimesions of the paddle1
-		if (this.ball.position.x <= this.paddle1.position.x + PADDLEWIDTH &&
-			this.ball.position.x >= this.paddle1.position.x) {
-				
-				if (this.ball.position.y <= this.paddle1.position.y + PADDLEHEIGHT / 2 &&
-				this.ball.position.y >= this.paddle1.position.y - PADDLEHEIGHT / 2) {
-				if (this.ballDirX < 0) {
-					//strech paddle when hits
-					this.paddle1.scale.y = 3;
-					//bounce the ball
-					this.ballDirX = -this.ballDirX;
-					//adding angle to the bouncing
-					this.ballDirY = RandomDir()
-					if (this.ballSpeed < BALLMAXSPEED)
-						this.ballSpeed += 1; 
+		if (this.collision_flag == false)
+		{
+			if (this.ball.position.x <= this.paddle1.position.x + PADDLEWIDTH &&
+				this.ball.position.x >= this.paddle1.position.x - PADDLEWIDTH) {
+
+					if (this.ball.position.y <= this.paddle1.position.y + PADDLEHEIGHT / 2 &&
+					this.ball.position.y >= this.paddle1.position.y - PADDLEHEIGHT / 2) {
+					if (this.ballDirX < 0) {
+						//strech paddle when hits
+						this.collision_flag = true
+						this.paddle1.scale.y = 3;
+						//bounce the ball
+						this.ballDirX = -this.ballDirX;
+						//adding angle to the bouncing
+						this.ballDirY = RandomDir()
+						if (this.ballSpeed < BALLMAXSPEED)
+							this.ballSpeed += 1; 
+					}
 				}
 			}
-		}
-		//verification if the ball colides with de dimesions of the paddle2
-		if (this.ball.position.x <= this.paddle2.position.x + PADDLEWIDTH &&
-			this.ball.position.x >= this.paddle2.position.x) {
+			//verification if the ball colides with de dimesions of the paddle2
+			if (this.ball.position.x <= this.paddle2.position.x + PADDLEWIDTH &&
+				this.ball.position.x >= this.paddle2.position.x - PADDLEWIDTH) {
 
-				if (this.ball.position.y <= this.paddle2.position.y + PADDLEHEIGHT / 2 &&
-				this.ball.position.y >= this.paddle2.position.y - PADDLEHEIGHT / 2) {
-				if (this.ballDirX > 0) {
-					//strech paddle when hits
-					this.paddle2.scale.y = 3;
-					//bounce the ball
-					this.ballDirX = -this.ballDirX;
-					//adding angle to the bouncing
-					this.ballDirY -= RandomDir()
+					if (this.ball.position.y <= this.paddle2.position.y + PADDLEHEIGHT / 2 &&
+					this.ball.position.y >= this.paddle2.position.y - PADDLEHEIGHT / 2) {
+					if (this.ballDirX > 0) {
+						//strech paddle when hits
+						this.paddle2.scale.y = 3;
+						this.collision_flag = true
+						//bounce the ball
+						this.ballDirX = -this.ballDirX;
+						//adding angle to the bouncing
+						this.ballDirY -= RandomDir()
+					}
 				}
 			}
 		}
 	}
+	
 	
 	ChangeField() {
 		if (Key.isDown(Key.SHIFT) && !this.SHIFTPressed) {
@@ -580,14 +597,14 @@ export class TournamentGame{
 		else{
 			if (loser == 1)
 			{
-				this.ball.position.x = 30
-				this.ball.position.y = 30
+				this.ball.position.x = -30
+				this.ball.position.y = -30
 				this.ballDirX = -1
 			}
 			else
 			{
-				this.ball.position.x = -30
-				this.ball.position.y = -30
+				this.ball.position.x = 30
+				this.ball.position.y = 30
 				this.ballDirX = 1
 			}
 				this.ballDirY = 1
@@ -644,12 +661,16 @@ export class TournamentGame{
 
 	HazardColision() {
 		// Verify colision
-		if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
-			this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
-			if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
-			this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
-				// bounce the ball;
-				this.ballDirX = -this.ballDirX;
+		if (this.collision_flag == false)
+		{
+			if (this.ball.position.x <= this.hazardBlock.position.x + HAZARDWIDTH / 2 &&
+				this.ball.position.x >= this.hazardBlock.position.x - HAZARDWIDTH / 2) {
+				if (this.ball.position.y <= this.hazardBlock.position.y + HAZARDHEIGHT / 2 &&
+				this.ball.position.y >= this.hazardBlock.position.y - HAZARDHEIGHT / 2) {
+					// bounce the ball;
+					this.collision_flag = true
+					this.ballDirX = -this.ballDirX;
+				}
 			}
 		}
 	}
@@ -712,7 +733,7 @@ export function startLocalTournament(){
 	gameDictTournament.instance = game1
 	game1.StartGame();
 	game1.onFinish((winner1) => {
-		const game2 = new Game(player3, player4);
+		const game2 = new TournamentGame(player3, player4);
 		gameDictTournament.instance = game2
 		game2.StartGame();
 
