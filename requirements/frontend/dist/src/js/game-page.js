@@ -69,7 +69,7 @@ async function fetchPendingInvites() {
 
 	try {
 		TokenVerification()
-		const response = await fetch(`https://localhost:443/game/pending/${getUserObj().id}/`, {
+		const response = await fetch(`https://localhost:5544/game/pending/${getUserObj().id}/`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
@@ -89,7 +89,7 @@ export async function fetchGameHistory(userId) {
 
 	try {
 		TokenVerification()
-		const response = await fetch(`https://localhost:443/game/history/${userId}/`, {
+		const response = await fetch(`https://localhost:5544/game/history/${userId}/`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
@@ -155,7 +155,7 @@ export function monitorGame(roomId, modeHazard, invited, tournamentStage='') {
 	}
 
 	const encodedToken = encodeURIComponent(getTokensObj().access)
-	sockets.gameSocket = new WebSocket(`wss://localhost:443/ws/game/${roomId}/?token=${encodedToken}&mode_hazard=${modeHazard}&invited=${invited}`)
+	sockets.gameSocket = new WebSocket(`wss://localhost:5544/ws/game/${roomId}/?token=${encodedToken}&mode_hazard=${modeHazard}&invited=${invited}`)
 
 	sockets.gameSocket.onclose = function() {
 		if (gameDictRemote.instance) {

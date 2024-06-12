@@ -17,4 +17,4 @@ To run the project, follow these steps:
    docker-compose up --build
    ```
 
-3. Open your browser and go to localhost:443/
+3. Open your browser and go to localhost:5544/

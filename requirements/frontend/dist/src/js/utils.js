@@ -5,7 +5,7 @@ import { isTokenAccessExpired, refreshAccessToken } from "./jwt.js"
 import { loadProfilePage } from "./profile.js";
 import { loadSearchResults } from "./search.js";
 
-export const API = 'https://localhost:443/';
+export const API = 'https://localhost:5544/';
 
 export const elements = {
 	loginPage : document.getElementById("login-page"),
