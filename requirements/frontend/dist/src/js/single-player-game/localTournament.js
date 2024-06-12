@@ -591,7 +591,7 @@ export class TournamentGame{
 				this.ballDirX = -1;
 			else //player 2 lost point, ball goes to 1
 			this.ballDirX = 1;
-			
+
 			this.ballDirY = 1;
 		}
 		else{
@@ -646,7 +646,7 @@ export class TournamentGame{
 			document.getElementById("winnerBoard").classList.add('d-none')			 
 		}
 	}
-	
+
 	HazardStart()
 	{
 		if ((this.score1 >= 4 || this.score2 >= 4) && this.hazardMode)
