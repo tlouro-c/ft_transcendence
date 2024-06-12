@@ -7,10 +7,6 @@ async function proccessAuthForm(url, form, type) {
 	const password = formData.get('password');
 	const confirmPassword = formData.get('confirm-password');
 
-	form.querySelectorAll(".clear").forEach(element => {
-		element.value = ""
-	});
-
 	if (username.length == 0 || password.length == 0 ||
 		(confirmPassword && confirmPassword.length == 0)) {
 			alert("Empty field(s).")
@@ -75,6 +71,9 @@ export async function loginUser(optionalForm) {
 	const user = {'id': responseJson.user_id, 'username': responseJson.username };
 	window.localStorage.setItem('user', JSON.stringify(user));
 	handleNavigation('#home');
+	loginForm.querySelectorAll(".clear").forEach(element => {
+		element.value = ""
+	});
 }
 
 
@@ -84,6 +83,9 @@ export async function registerUser() {
 	if (responseJson) {
 		loginUser(registerForm);
 	}
+	registerForm.querySelectorAll(".clear").forEach(element => {
+		element.value = ""
+	});
 }
 
 export async function logoutUser() {
