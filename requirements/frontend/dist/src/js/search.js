@@ -10,7 +10,7 @@ import { getTokensObj, getUserObj } from "./utils.js";
 export async function fetchAllUsers() {
 
 	try {
-		TokenVerification();
+		await TokenVerification();
 		const response = await fetch(`https://localhost:5544/user_management/users/`, {
 			method: 'GET',
 			credentials: 'include',

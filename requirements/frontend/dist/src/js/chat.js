@@ -56,7 +56,7 @@ export async function loadChatPage() {
 async function fetchChatHistory(roomId) {
 
 	try {
-		TokenVerification();
+		await TokenVerification();
 		const response = await fetch(`https://localhost:5544/chat/history/${roomId}/`, {
 			method: 'GET',
 			credentials: 'include',

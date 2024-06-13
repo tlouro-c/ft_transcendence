@@ -68,7 +68,7 @@ export async function loadGamePage() {
 async function fetchPendingInvites() {
 
 	try {
-		TokenVerification()
+		await TokenVerification();
 		const response = await fetch(`https://localhost:5544/game/pending/${getUserObj().id}/`, {
 			method: 'GET',
 			credentials: 'include',
@@ -88,7 +88,7 @@ async function fetchPendingInvites() {
 export async function fetchGameHistory(userId) {
 
 	try {
-		TokenVerification()
+		await TokenVerification();
 		const response = await fetch(`https://localhost:5544/game/history/${userId}/`, {
 			method: 'GET',
 			credentials: 'include',
