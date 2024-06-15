@@ -207,7 +207,7 @@ export async function updateUserAvatar() {
 
 	try {
 		await TokenVerification()
-		const response = fetch(`${API}/user_management/user/${getUserIdFromToken()}/`, {
+		const response = await fetch(`${API}/user_management/user/${getUserIdFromToken()}/`, {
 			method: 'PATCH',
 			credentials: 'include',
 			headers: {
