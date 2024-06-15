@@ -204,6 +204,8 @@ export async function updateUser(form) {
 export async function updateUserAvatar() {
 	
 	const formData = new FormData(document.getElementById('change-avatar-form'))
+	const modalElement = document.getElementById('change-avatar')
+    const modal = bootstrap.Modal.getInstance(modalElement)
 
 	try {
 		await TokenVerification()
@@ -216,16 +218,17 @@ export async function updateUserAvatar() {
 			body: formData
 		})
 		if (response.status >= 400) {
-			alert(response.status)
-		} else {
-			const modalElement = document.getElementById('change-avatar')
-            const modal = bootstrap.Modal.getInstance(modalElement)
-            modal.hide()
-			loadProfilePage(getUserIdFromToken())
+			if (response.status == 413) {
+				alert ("The image must be less than 1 Mb")
+			} else {
+				alert(response.status)
+			}
 		}
+    	modal.hide()
+		handleNavigation("#profile")
 	}
-	catch {
-		alert("Error changing avatar")
+	catch (error) {
+		alert(error)
 	}
 }
 
