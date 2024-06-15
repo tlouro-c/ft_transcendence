@@ -1,3 +1,4 @@
+import { logoutUser } from "./auth.js";
 import { loadChatPage } from "./chat.js";
 import { loadGamePage } from "./game-page.js";
 import { loadHomePage } from "./home.js";
@@ -68,16 +69,6 @@ export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function getUserObj() {
-	try {
-		const user = JSON.parse(localStorage.getItem('user'));
-		return user ? user : {};
-	}
-	catch {
-		return {};
-	}
-}
-
 export function getTokensObj() {
 	try {
 		const tokens = JSON.parse(localStorage.getItem('tokens'));
@@ -86,6 +77,17 @@ export function getTokensObj() {
 	catch {
 		return {};
 	}
+}
+
+export function getUserIdFromToken() {
+	const token = getTokensObj().access;
+	if (token) {
+		const payload = token.split('.')[1];
+		const decoded = atob(payload);
+		const obj = JSON.parse(decoded);
+		return obj.user_id;
+	}
+	logoutUser();
 }
 
 export function closeSocket(socket) {
@@ -149,7 +151,7 @@ export function handleNavigation(path, pushState = true) {
 			loadSearchResults(emptyForm);
 			break;
 		case '#profile':
-			loadProfilePage(getUserObj().id)
+			loadProfilePage(getUserIdFromToken())
 			break;
         default:
 			loadHomePage();

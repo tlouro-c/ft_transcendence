@@ -1,6 +1,5 @@
 import { setupEventListeners } from './events.js';
 import { TokenVerification } from './jwt.js';
-import { loadHomePage } from './home.js';
 import { handleNavigation, initializeRouter } from './utils.js';
 
 

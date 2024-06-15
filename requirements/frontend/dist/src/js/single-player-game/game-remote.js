@@ -1,7 +1,5 @@
-import { gameDict, getUserObj, sockets } from "../utils.js";
-import { Key } from "./keyboard.js"
+import { sockets, getUserIdFromToken } from "../utils.js";
 import { InputHandler } from "./input.js"
-import { gameDictRemote } from "../utils.js"
 
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -292,7 +290,7 @@ export class RemoteGame{
 			"type": "ball",
 			"moveUp": moveUp,
 			"moveDown": moveDown,
-			"user_id": getUserObj().id
+			"user_id": getUserIdFromToken()
 		}
 		sockets.gameSocket.send(JSON.stringify(toSend))
 	}
@@ -408,14 +406,14 @@ export class RemoteGame{
 	{
 		if (data)
 		{
-			if (data["player1_id"] == getUserObj().id){
+			if (data["player1_id"] == getUserIdFromToken()){
 				this.paddle1.position.y = data["player1_paddle"];
 				this.ball.position.x = data["ball_x"];
 				this.paddle2.position.y = data["player2_paddle"];
 				this.score1 = data["player1_score"];
 				this.score2 = data["player2_score"];
 			}
-			else if (data["player2_id"] == getUserObj().id){
+			else if (data["player2_id"] == getUserIdFromToken()){
 				this.paddle2.position.y = data["player1_paddle"];
 				this.ball.position.x = data["ball_x"] * -1;
 				this.paddle1.position.y = data["player2_paddle"];

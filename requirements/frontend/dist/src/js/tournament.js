@@ -1,8 +1,8 @@
 import { logoutUser } from "./auth.js"
 import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote } from "./utils.js"
-import { getUserObj } from "./utils.js"
 import { monitorGame } from "./game-page.js"
 import { fetchAllUsers } from "./search.js"
+import { getUserIdFromToken } from "./utils.js";
 
 
 export async function monitorTournament() {
@@ -39,7 +39,7 @@ export async function monitorTournament() {
 						dynamicText.textContent = messageObj.info
 					} else {
 						const stage = messageObj.info
-						const userId = getUserObj().id
+						const userId = getUserIdFromToken()
 						if (userId == messageObj.game_1_user_1 || userId == messageObj.game_1_user_2) {
 							//* Connect to room with the id of the user 1 of game 1
 							if (userId == messageObj.game_1_user_2) {

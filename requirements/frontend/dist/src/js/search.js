@@ -4,7 +4,8 @@ import { acceptFriendRequest, blockUser, sendFriendRequest, unblockUser } from "
 import { TokenVerification } from "./jwt.js";
 import { loadProfilePage } from "./profile.js";
 import { API, elements, loadPage } from "./utils.js";
-import { getTokensObj, getUserObj } from "./utils.js";
+import { getTokensObj } from "./utils.js";
+import { getUserIdFromToken } from "./utils.js";
 
 
 export async function fetchAllUsers() {
@@ -38,7 +39,7 @@ export async function loadSearchResults(form) {
 	const searchData = new FormData(form);
 	const inputText = searchData.get('inputText').toLowerCase();
 	const users = await fetchAllUsers();
-	const currentUser = users.find((user) => user.id == getUserObj().id);
+	const currentUser = users.find((user) => user.id == getUserIdFromToken());
 
 	document.querySelectorAll(".tmp-entry").forEach((element) => element.remove());
 

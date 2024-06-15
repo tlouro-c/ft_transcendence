@@ -1,5 +1,5 @@
 import { fetchUser } from "../profile.js";
-import { gameDictTournament, getUserObj, API } from "../utils.js";
+import { gameDictTournament, getUserIdFromToken, API } from "../utils.js";
 import { Key } from "./keyboard.js"
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -229,7 +229,7 @@ export class TournamentGame{
 		//checkbox values
 
 		if (this.multiPlay == false) {
-			const user = await fetchUser(getUserObj().id);
+			const user = await fetchUser(getUserIdFromToken());
 			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
 			document.querySelector(".local-play-avatar .user-avatar").setAttribute('src', API + user.avatar)
 			document.querySelector(".local-play-avatar .username").textContent = user.username

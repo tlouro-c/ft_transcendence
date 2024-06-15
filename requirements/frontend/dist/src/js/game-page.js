@@ -1,10 +1,9 @@
-import { logoutUser } from "./auth.js"
 import { TokenVerification } from "./jwt.js"
 import { fetchAllUsers } from "./search.js"
 import { startRemoteGame } from "./single-player-game/game-remote.js"
 import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote } from "./utils.js"
-import { getUserObj } from "./utils.js"
-// import { update_game_data } from "./single-player-game/game-remote.js"
+import { getUserIdFromToken } from "./utils.js";
+
 
 
 export async function loadGamePage() {
@@ -15,7 +14,7 @@ export async function loadGamePage() {
 	const friendTemplate = oneVsOneList.querySelector("#game-friend-template")
 	const inviteTemplate = invitesList.querySelector("#invite-template")
 	const allUsers = await fetchAllUsers()
-	const userInfo = allUsers.find(user => user.id == getUserObj().id)
+	const userInfo = allUsers.find(user => user.id == getUserIdFromToken())
 
 
 	const pendingInvites = await fetchPendingInvites()
@@ -69,7 +68,7 @@ async function fetchPendingInvites() {
 
 	try {
 		await TokenVerification();
-		const response = await fetch(`https://localhost:5544/game/pending/${getUserObj().id}/`, {
+		const response = await fetch(`https://localhost:5544/game/pending/${getUserIdFromToken()}/`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
@@ -113,7 +112,7 @@ async function loadRealTimeGame(opponentId, ballOwner) {
 	}
 	
 	const allUsers = await fetchAllUsers()
-	const userInfo = allUsers.find(user => user.id == getUserObj().id)
+	const userInfo = allUsers.find(user => user.id == getUserIdFromToken())
 	const opponentInfo = allUsers.find(user => user.id == opponentId)
 
 	loadPage(elements.remotePlayPage);
@@ -195,7 +194,7 @@ export function monitorGame(roomId, modeHazard, invited, tournamentStage='') {
 							}, index * 1000);
 						})
 						setTimeout(() => {
-							const opponent = messageObj.user_1 == getUserObj().id ? messageObj.user_2 : messageObj.user_1
+							const opponent = messageObj.user_1 == getUserIdFromToken() ? messageObj.user_2 : messageObj.user_1
 							loadRealTimeGame(opponent, ballOwner)
 						}, 3000);
 					}
@@ -210,7 +209,7 @@ export function monitorGame(roomId, modeHazard, invited, tournamentStage='') {
 					loadPage(elements.waitingPageTournament)
 					const dynamicText = elements.waitingPageTournament.querySelector(".dynamic-text")
 
-					dynamicText.textContent = matchWinner == getUserObj().id ? "You won!" : "You lost!"
+					dynamicText.textContent = matchWinner == getUserIdFromToken() ? "You won!" : "You lost!"
 					if (tournamentStage == '') {
 						break
 					}

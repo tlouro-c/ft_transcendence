@@ -3,13 +3,13 @@ import { acceptFriendRequest, rejctFriendRequest, removeFriend } from "./friends
 import { fetchGameHistory } from "./game-page.js"
 import { TokenVerification } from "./jwt.js"
 import { fetchAllUsers } from "./search.js"
-import { capitalizeFirstLetter, elements, getTokensObj, getUserObj, loadPage, API, handleNavigation, ClearBackgroundResources } from "./utils.js"
-
+import { elements, getTokensObj, loadPage, API, handleNavigation, ClearBackgroundResources } from "./utils.js"
+import { getUserIdFromToken } from "./utils.js";
 
 export async function loadProfilePage(userId) {
 
 	const privateUtils = document.querySelectorAll(".private-profile")
-	if (userId != getUserObj().id) {
+	if (userId != getUserIdFromToken()) {
 		privateUtils.forEach((element) => { element.classList.add('d-none') })
 	} else {
 		privateUtils.forEach((element) => { element.classList.remove('d-none') })
@@ -139,7 +139,6 @@ export async function fetchUser(userId) {
 	}
 }
 
-
 export async function updateUser(form) {
 
 	const formData = new FormData(form)
@@ -176,7 +175,7 @@ export async function updateUser(form) {
 
 	try {
 		await TokenVerification()
-		const response = await fetch(`${API}/user_management/user/${getUserObj().id}/`, {
+		const response = await fetch(`${API}/user_management/user/${getUserIdFromToken()}/`, {
 			method: 'PATCH',
 			credentials: 'include',
 			headers: {
@@ -208,7 +207,7 @@ export async function updateUserAvatar() {
 
 	try {
 		await TokenVerification()
-		const response = fetch(`${API}/user_management/user/${getUserObj().id}/`, {
+		const response = fetch(`${API}/user_management/user/${getUserIdFromToken()}/`, {
 			method: 'PATCH',
 			credentials: 'include',
 			headers: {
@@ -222,7 +221,7 @@ export async function updateUserAvatar() {
 			const modalElement = document.getElementById('change-avatar')
             const modal = bootstrap.Modal.getInstance(modalElement)
             modal.hide()
-			loadProfilePage(getUserObj().id)
+			loadProfilePage(getUserIdFromToken())
 		}
 	}
 	catch {

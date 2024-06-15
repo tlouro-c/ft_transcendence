@@ -1,5 +1,5 @@
 import { fetchUser } from "../profile.js";
-import { gameDict, getUserObj, API } from "../utils.js";
+import { API, getUserIdFromToken } from "../utils.js";
 import { Key } from "./keyboard.js"
 
 const PLANEWIDTH = 640, PLANEHEIGHT = 360, PLANEQUALITY = 15;
@@ -229,7 +229,7 @@ export class Game{
 		this.hazardMode = document.getElementById("hazardMode").checked;
 
 		if (this.multiPlay == false) {
-			const user = await fetchUser(getUserObj().id);
+			const user = await fetchUser(getUserIdFromToken());
 			document.querySelectorAll(".local-play-avatar").forEach(element => element.classList.remove('d-none'))
 			document.querySelectorAll(".local-play-avatar img").forEach(element => element.classList.remove('d-none'))
 			document.querySelector(".local-play-avatar .user-avatar").setAttribute('src', API + user.avatar)

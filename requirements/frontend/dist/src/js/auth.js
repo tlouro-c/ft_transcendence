@@ -68,8 +68,6 @@ export async function loginUser(optionalForm) {
 	}
 	const tokens = { 'refresh': responseJson.refresh, 'access': responseJson.access };
 	window.localStorage.setItem('tokens', JSON.stringify(tokens));
-	const user = {'id': responseJson.user_id, 'username': responseJson.username };
-	window.localStorage.setItem('user', JSON.stringify(user));
 	handleNavigation('#home');
 	loginForm.querySelectorAll(".clear").forEach(element => {
 		element.value = ""

@@ -1,14 +1,12 @@
-import { elements, getUserObj, loadPage, closeAllSockets, gameDict, ClearBackgroundResources} from './utils.js'
+import { elements, loadPage, closeAllSockets, gameDict, ClearBackgroundResources} from './utils.js'
 import { loginUser, logoutUser, registerUser } from './auth.js'
 import { loadProfilePage, updateUser, updateUserAvatar } from './profile.js';
 import { loadSearchResults } from './search.js';
-import { loadChatPage } from './chat.js';
-import { loadGamePage } from './game-page.js';
 import { startGame } from './single-player-game/gameDouble.js';
-import { Game } from './single-player-game/gameDouble.js'
 import { monitorTournament } from './tournament.js';
-import { loadHomePage } from './home.js';
 import { startLocalTournament } from './single-player-game/localTournament.js';
+import { getUserIdFromToken } from "./utils.js";
+
 
 export function setupEventListeners() {
 
@@ -29,7 +27,7 @@ export function setupEventListeners() {
 	document.getElementById("sign-out-link").addEventListener("click", 
 		() => {ClearBackgroundResources(); logoutUser()});
 	document.getElementById("profile-link").addEventListener("click",
-		() => {ClearBackgroundResources(); loadProfilePage(getUserObj().id)});
+		() => {ClearBackgroundResources(); loadProfilePage(getUserIdFromToken())});
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();

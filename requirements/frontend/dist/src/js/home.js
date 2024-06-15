@@ -4,6 +4,7 @@ import { ClearBackgroundResources, elements, loadPage } from "./utils.js";
 import { API } from "./utils.js";
 
 
+
 export async function loadHomePage() {
 	ClearBackgroundResources()
 	loadPage(elements.homePage)

@@ -2,14 +2,14 @@ import { logoutUser } from "./auth.js";
 import { TokenVerification } from "./jwt.js";
 import { fetchUser } from "./profile.js";
 import { API, elements, getTokensObj, loadPage } from "./utils.js";
-import { getUserObj } from "./utils.js";
+import { getUserIdFromToken } from "./utils.js";
 import { sockets } from "./utils.js";
 
 export async function loadChatPage() {
 
 	document.getElementById("send-msg-form").classList.add('d-none');
 
-	const userInfo = await fetchUser(getUserObj().id);
+	const userInfo = await fetchUser(getUserIdFromToken());
 	const friends = userInfo.friends;
 	await loadPage(elements.chatPage);
 
@@ -135,7 +135,7 @@ async function enterChatRoom(roomId) {
 
 function generateMessage(senderId, message, time) {
 	let messageTemplate;
-	if (senderId == getUserObj().id) {
+	if (senderId == getUserIdFromToken()) {
 		messageTemplate = document.getElementById("current-user-message-template");
 	} else {
 		messageTemplate = document.getElementById("other-user-message-template");
