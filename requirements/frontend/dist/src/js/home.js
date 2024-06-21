@@ -59,6 +59,10 @@ async function loadDashboardEntry(user) {
 			wins++;
 		}
 	})
+	newEntry.querySelector(".dashboard-user-link") .addEventListener("click", (event) => {
+		event.preventDefault()
+		handleNavigation("#profile", user.id)
+	});
 	newEntry.querySelector(".friend-avatar").setAttribute('src', API + user.avatar)
 	newEntry.querySelector(".username").textContent = user.username
 	newEntry.querySelector(".user-wins").textContent = wins

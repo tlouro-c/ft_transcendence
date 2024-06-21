@@ -1,7 +1,7 @@
 import { TokenVerification } from "./jwt.js"
 import { fetchAllUsers } from "./search.js"
 import { startRemoteGame } from "./single-player-game/game-remote.js"
-import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote } from "./utils.js"
+import { API, elements, getTokensObj, loadPage, sockets, closeSocket, gameDictRemote, handleNavigation } from "./utils.js"
 import { getUserIdFromToken } from "./utils.js";
 
 
@@ -30,6 +30,10 @@ export async function loadGamePage() {
 		const inviteElement = inviteTemplate.cloneNode(true)
 		inviteElement.classList.remove("d-none")
 		inviteElement.classList.add("tmp")
+		inviteElement.querySelector(".invite-user-link").addEventListener("click", (event) => {
+			event.preventDefault()
+			handleNavigation("#profile", invited_by.id)
+		});
 		inviteElement.querySelector(".friend-username").textContent = invited_by.username
 		inviteElement.querySelector(".friend-avatar").setAttribute('src', API + invited_by.avatar)
 		inviteElement.querySelector("button").addEventListener("click", event => {
@@ -45,6 +49,10 @@ export async function loadGamePage() {
 			const friendElement = friendTemplate.cloneNode(true)
 			friendElement.classList.remove("d-none")
 			friendElement.classList.add("tmp")
+			friendElement.querySelector(".one-vs-one-user-link").addEventListener("click", (event) => {
+				event.preventDefault()
+				handleNavigation("#profile", friend.id)
+			});
 			friendElement.querySelector(".friend-username").textContent = friend.username
 			friendElement.querySelector(".friend-avatar").setAttribute('src', API + friend.avatar)
 			friendElement.querySelector("form").addEventListener("submit", function(event) {

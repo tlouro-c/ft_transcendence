@@ -279,9 +279,10 @@
 										</div>
 										<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center z-1">
 											<img src="" class="rounded-circle img-thumbnail object-fit-cover user-1-avatar m-2 friend-avatar" alt="...">
-											<a class="friend-link"><p class="m-0 user-1-username friend-username">User 1</p></a>
+											<a class="friend-link user-1-link"><p class="m-0 user-1-username friend-username">User 1</p></a>
 										</div>
 										<div class="d-flex justify-content-center align-items-center flex-column">
+											<p class="m-0 game-result">Result</p>
 											<div class="d-flex justify-content-center align-items-center z-1">
 												<h3 class="m-0 user-1-score">0</h3>
 												<h3 class="m-0"> - </h3>
@@ -290,7 +291,7 @@
 											<p class="m-0 game-date">Date</p>
 										</div>
 										<div class="d-flex flex-column-reverse flex-sm-row justify-content-end align-items-center z-1">
-											<a class="friend-link"><p class="m-0 user-2-username friend-username">User 2</p></a>
+											<a class="friend-link user-2-link"><p class="m-0 user-2-username friend-username">User 2</p></a>
 											<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar user-2-avatar m-2" alt="...">
 										</div>
 									</li>
@@ -358,7 +359,7 @@
 					<li class="list-group-item d-flex justify-content-between align-items-center w-100 d-none template" id="dashboard-entry-template">
 							<div class="d-flex justify-content-start align-items-center">
 								<img src="" class="rounded-circle img-thumbnail object-fit-cover user-1-avatar m-2 friend-avatar" alt="...">
-								<a class="friend-link"><p class="m-0 user-1-username username">User 1</p></a>
+								<a class="friend-link dashboard-user-link"><p class="m-0 user-1-username username">User 1</p></a>
 							</div>
 							<div class="d-flex justify-content-center align-items-center">
 								<h3 class="m-0 me-2 user-wins">0</h3>
@@ -405,6 +406,31 @@
 									<g id="SVGRepo_iconCarrier"> <circle cx="6" cy="6" r="6" fill="#b0b0b0"/> </g>
 								</svg>
 								<a href="" class="user-link fs-6 fw-semibold"></a>
+								<div class="d-flex align-items-center justify-content-center invite-on-chat">
+									<div class="dropdown">
+										<button type="button" class="btn btn-outline-success btn-sm m-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+										  Invite
+										</button>
+										<form class="dropdown-menu dropdown-menu-end p-2">
+											<ul class="p-0 m-0 fs-5">
+												<li class="p-2 d-flex align-items-center justify-content-between fs-6 fw-semibold">
+													<label class="form-check-label m-2 text-nowrap d-flex align-items-center justify-content-center">
+														<input class="form-check-input m-2" type="checkbox" value="" name="modeHazard"> Hazard Mode
+													</label>
+													<svg fill="#FEFEFA" width="25px" height="25px" viewBox="0 0 32 32" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" stroke="#FEFEFA" stroke-width="0.00032">
+														<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+														<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+														<g id="SVGRepo_iconCarrier"> <defs> <style> .cls-8 { fill: none; } </style> </defs> <circle cx="16" cy="20.5" r="1.5"/> <rect x="15" y="7" width="2" height="9"/> <path d="M16,30,7.5645,20.0513c-.0479-.0571-.3482-.4515-.3482-.4515A10.8888,10.8888,0,0,1,5,13a11,11,0,0,1,22,0,10.8844,10.8844,0,0,1-2.2148,6.5973l-.0015.0025s-.3.3944-.3447.4474ZM8.8125,18.395c.001.0007.2334.3082.2866.3744L16,26.9079l6.91-8.15c.0439-.0552.2783-.3649.2788-.3657A8.901,8.901,0,0,0,25,13,9,9,0,0,0,7,13a8.9054,8.9054,0,0,0,1.8125,5.395Z" transform="translate(0 0)"/> <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-8" width="32" height="32"/> </g>
+													</svg>
+												</li>
+											</ul>
+											<div class="d-flex justify-content-center w-100">
+												<button type="submit" class="btn btn-primary btn-sm mt-2">Send</button>
+											</div>
+										</form>
+									  </div>
+									
+								</div>
 							</div>
 						</div>
 						<div class="row d-flex flex-grow-1 p-4 position-relative overflow-hidden h-100">
@@ -468,7 +494,7 @@
 							<li class="ms-2 me-2 p-0 ps-3 pe-3 d-flex flex-sm-row flex-column justify-content-between align-items-center smooth-hover shadow rounded d-none" id="invite-template" style="width: 250px;">
 								<div class="d-flex flex-column flex-sm-row justify-content-start align-items-center">
 									<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
-									<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
+									<a class="friend-link invite-user-link"><p class="m-0 friend-username">Username</p></a>
 								</div>
 								<div class="d-flex align-items-center justify-content-center">
 									<button class="btn btn-outline-success btn-sm m-2 private btn-accept">
@@ -530,7 +556,7 @@
 								<li class="list-group-item d-flex justify-content-center align-items-center justify-content-between align-items-center d-none" id="game-friend-template">
 									<div class="d-flex justify-content-start align-items-center">
 										<img src="" class="rounded-circle img-thumbnail object-fit-cover friend-avatar m-2" alt="...">
-										<a class="friend-link"><p class="m-0 friend-username">Username</p></a>
+										<a class="friend-link one-vs-one-user-link"><p class="m-0 friend-username">Username</p></a>
 									</div>
 									<div class="d-flex align-items-center justify-content-center">
 										<div class="dropdown">

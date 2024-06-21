@@ -217,7 +217,7 @@ div.active {
 	flex: 1;
 }
 
-.game-date {
+.game-date, .game-result {
 	font-size: 0.6em;
 }
 

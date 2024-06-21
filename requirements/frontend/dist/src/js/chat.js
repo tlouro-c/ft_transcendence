@@ -1,4 +1,5 @@
 import { logoutUser } from "./auth.js";
+import { monitorGame } from "./game-page.js";
 import { TokenVerification } from "./jwt.js";
 import { fetchUser, loadProfilePage } from "./profile.js";
 import { API, elements, getTokensObj, handleNavigation, loadPage } from "./utils.js";
@@ -48,7 +49,15 @@ export async function loadChatPage() {
 					event.preventDefault()
 					handleNavigation("#profile", element.id);
 				})
-			
+				elements.chatPage.querySelector(".invite-on-chat").classList.remove('d-none');
+				elements.chatPage.querySelector(".invite-on-chat form").addEventListener("submit", event => {
+					event.preventDefault();
+					const formData = new FormData(this)
+				
+					const modeHazard = formData.get('modeHazard') == ''
+					
+					monitorGame(userInfo.id, modeHazard, element.id)
+				})
 				friend.classList.add("active");
 				enterChatRoom(userInfo.id + element.id);
 			}

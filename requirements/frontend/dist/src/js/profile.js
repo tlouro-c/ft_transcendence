@@ -97,7 +97,15 @@ export async function loadProfilePage(userId) {
 		matchElement.classList.remove('d-none')
 		matchElement.classList.add('tmp-game')
 		matchElement.querySelector('.game-date').textContent = new Date(match.finish_time).toLocaleString().split(',')[0]
+		matchElement.querySelector(".user-1-link").addEventListener("click", (event) => {	
+			event.preventDefault()
+			handleNavigation("#profile", user1.id)
+		});
 		matchElement.querySelector('.user-1-username').textContent = user1.username
+		matchElement.querySelector(".user-2-link").addEventListener("click", (event) => {	
+			event.preventDefault()
+			handleNavigation("#profile", user2.id)
+		});
 		matchElement.querySelector('.user-2-username').textContent = user2.username
 		matchElement.querySelector('.user-1-score').textContent = match.user1_score
 		matchElement.querySelector('.user-2-score').textContent = match.user2_score
@@ -105,9 +113,11 @@ export async function loadProfilePage(userId) {
 		matchElement.querySelector(".user-2-avatar").setAttribute('src', API + user2.avatar)
 		if (match.winner == userId) {
 			winCount++
+			matchElement.querySelector('.game-result').textContent = "Win"
 			matchElement.querySelector('.match-background').classList.add('bg-info')
 		} else {
 			lossCount++
+			matchElement.querySelector('.game-result').textContent = "Loss"
 			matchElement.querySelector('.match-background').classList.add('bg-danger')
 		}
 		matchHistoryList.appendChild(matchElement)
