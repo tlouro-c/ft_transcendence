@@ -11,13 +11,12 @@ export async function initialize() {
 
 	setupEventListeners();
 	if (await TokenVerification()) {
-   		handleNavigation("#home", true);
+   		handleNavigation("#home");
 
 		   document.querySelectorAll('a .my-link').forEach(anchor => {
 			anchor.addEventListener('click', event => {
 				event.preventDefault();
 				const path = anchor.getAttribute('href');
-				console.log(path);
 				handleNavigation(path);
 			});
 		});

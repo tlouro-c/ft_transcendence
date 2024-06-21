@@ -51,7 +51,7 @@ export async function loadProfilePage(userId) {
 		friend.querySelector(".friend-username").textContent = element.username
 		friend.querySelector(".friend-link").addEventListener("click", () => {
 			ClearBackgroundResources()
-			loadProfilePage(element.id)
+			handleNavigation("#profile", element.id)
 		})
 		friend.querySelector(".btn-remove").addEventListener("click", () => {
 			removeFriend(element.id)
@@ -71,7 +71,7 @@ export async function loadProfilePage(userId) {
 			pendingFriend.querySelector(".friend-avatar").setAttribute('src', API + element.avatar)
 			pendingFriend.querySelector(".friend-username").textContent = element.username
 			pendingFriend.querySelector(".friend-link").addEventListener("click", () => {
-				loadProfilePage(element.id)
+				handleNavigation("#profile", element.id)
 			})
 			pendingFriend.querySelector(".btn-reject").addEventListener("click", () => {
 				rejctFriendRequest(element.id)
@@ -159,7 +159,7 @@ export async function updateUser(form) {
 		if (username.trim().length == 0) {
 			alert("Invalid username")
 			modal.hide()
-			handleNavigation("#profile")
+			handleNavigation("#profile" , getUserIdFromToken())
 		}
 		formJson.username = username
 	}
@@ -167,7 +167,7 @@ export async function updateUser(form) {
 		if (password != confirmPassword) {
 			alert("The passwords don't match")
 			modal.hide()
-			handleNavigation("#profile")
+			handleNavigation("#profile" , getUserIdFromToken())
 			return
 		}
 		formJson.password = password
@@ -186,17 +186,20 @@ export async function updateUser(form) {
 		})
 		const json = await response.json()
 		if (response.status >= 400) {
+			if (json.detail) {
+				throw json.detail
+			}
 			const firstErrorKey = Object.keys(json)[0]
 			const firstError = json[firstErrorKey][0]
 			throw firstError
 		}
         modal.hide()
-		handleNavigation("#profile")
+		handleNavigation("#profile" , getUserIdFromToken())
 	}
 	catch (error) {
 		alert("Error: " + error)
 		modal.hide()
-		handleNavigation("#profile")
+		handleNavigation("#profile" , getUserIdFromToken())
 	}
 }
 
@@ -225,7 +228,7 @@ export async function updateUserAvatar() {
 			}
 		}
     	modal.hide()
-		handleNavigation("#profile")
+		handleNavigation("#profile", getUserIdFromToken())
 	}
 	catch (error) {
 		alert(error)

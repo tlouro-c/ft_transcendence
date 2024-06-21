@@ -35,6 +35,7 @@ async function proccessAuthForm(url, form, type) {
 			});
 
 			json = await response.json();
+			console.log(json);
 		}
 		if (errorText || json.detail || (response.status >= 400 && (json.username ||  json.password))) {
 			let errorP;

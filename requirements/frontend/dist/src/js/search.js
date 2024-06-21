@@ -3,7 +3,7 @@ import { logoutUser } from "./auth.js";
 import { acceptFriendRequest, blockUser, sendFriendRequest, unblockUser } from "./friends.js";
 import { TokenVerification } from "./jwt.js";
 import { loadProfilePage } from "./profile.js";
-import { API, elements, loadPage } from "./utils.js";
+import { API, elements, handleNavigation, loadPage } from "./utils.js";
 import { getTokensObj } from "./utils.js";
 import { getUserIdFromToken } from "./utils.js";
 
@@ -82,7 +82,7 @@ export async function loadSearchResults(form) {
 				userEntry.querySelector(".user-link").classList.add("my-link");
 			}
 			userEntry.querySelector(".user-link").addEventListener("click", () => {
-				loadProfilePage(user.id);
+				handleNavigation('#profile', user.id);
 			});
 
 			if (user != currentUser && !isFriend ) {

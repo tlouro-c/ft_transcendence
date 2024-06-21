@@ -1,4 +1,4 @@
-import { elements, loadPage, closeAllSockets, gameDict, ClearBackgroundResources} from './utils.js'
+import { elements, loadPage, closeAllSockets, gameDict, ClearBackgroundResources, handleNavigation} from './utils.js'
 import { loginUser, logoutUser, registerUser } from './auth.js'
 import { loadProfilePage, updateUser, updateUserAvatar } from './profile.js';
 import { loadSearchResults } from './search.js';
@@ -27,7 +27,7 @@ export function setupEventListeners() {
 	document.getElementById("sign-out-link").addEventListener("click", 
 		() => {ClearBackgroundResources(); logoutUser()});
 	document.getElementById("profile-link").addEventListener("click",
-		() => {ClearBackgroundResources(); loadProfilePage(getUserIdFromToken())});
+		() => {ClearBackgroundResources(); handleNavigation("#profile", getUserIdFromToken())});
 	
 	document.getElementById("change-avatar-form").addEventListener("submit", function(event) {
 		event.preventDefault();

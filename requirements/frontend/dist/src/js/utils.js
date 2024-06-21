@@ -127,14 +127,20 @@ export function initializeRouter() {
 		event.preventDefault();
 		const href = window.location.href.substring(window.location.href.indexOf('#')) || '';
 
-        handleNavigation(href, false);
+        handleNavigation(href, -1, false);
     });
 }
 
-export function handleNavigation(path, pushState = true) {
+export function handleNavigation(path, id = -1, pushState = true) {
 
+	if (path == '#profile' && id == -1) {
+		id = getUserIdFromToken();
+	} else if (path.substring(0, 9) == '#profile_') {
+		id = parseInt(path.split('_')[1]);
+		path = '#profile';
+	}
 	if (pushState) {
-		window.history.pushState({}, '', path);
+		window.history.pushState({}, '', path + (id != -1 ? `_${id}` : ''));
 	}
 
 	ClearBackgroundResources();
@@ -151,7 +157,7 @@ export function handleNavigation(path, pushState = true) {
 			loadSearchResults(emptyForm);
 			break;
 		case '#profile':
-			loadProfilePage(getUserIdFromToken())
+			loadProfilePage(id);
 			break;
         default:
 			loadHomePage();

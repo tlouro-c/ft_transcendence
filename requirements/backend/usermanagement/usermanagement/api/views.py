@@ -10,6 +10,7 @@ from .utils import user_id_from_token, set_last_action
 import datetime
 import os
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 
 
 class RegisterView(APIView):
