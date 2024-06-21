@@ -1,6 +1,6 @@
 import { logoutUser } from "./auth.js";
 import { TokenVerification } from "./jwt.js";
-import { fetchUser } from "./profile.js";
+import { fetchUser, loadProfilePage } from "./profile.js";
 import { API, elements, getTokensObj, loadPage } from "./utils.js";
 import { getUserIdFromToken } from "./utils.js";
 import { sockets } from "./utils.js";
@@ -42,8 +42,12 @@ export async function loadChatPage() {
 				} else {
 					elements.chatPage.querySelector(".offline").classList.remove('d-none');
 				}
-				elements.chatPage.querySelector(".header h5").classList.remove('d-none');
-				elements.chatPage.querySelector(".header h5").textContent = element.username;
+				elements.chatPage.querySelector(".header a").classList.remove('d-none');
+				elements.chatPage.querySelector(".header a").textContent = element.username;
+				elements.chatPage.querySelector(".header a").addEventListener("click", event => {
+					event.preventDefault()
+					loadProfilePage(element.id)
+				})
 			
 				friend.classList.add("active");
 				enterChatRoom(userInfo.id + element.id);
