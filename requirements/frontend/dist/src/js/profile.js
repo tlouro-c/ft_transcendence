@@ -166,10 +166,11 @@ export async function updateUser(form) {
     const modal = bootstrap.Modal.getInstance(modalElement)
 
 	if (username) {
-		if (username.trim().length == 0) {
-			alert("Invalid username")
+		if (/\s/.test(username)) {
+			alert("Username cannot contain spaces")
 			modal.hide()
 			handleNavigation("#profile" , getUserIdFromToken())
+			return
 		}
 		formJson.username = username
 	}

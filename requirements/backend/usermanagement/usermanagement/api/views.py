@@ -93,6 +93,9 @@ class UserView(APIView):
 			path = 'media/' + user.avatar.name
 			if (os.path.exists(path)):
 				os.remove(path)
+		if 'username' in self.request.data:
+			if not valid_username(self.request.data['username']):
+				return Response({'detail': 'username can only contain letters and _'}, 400)
 		serializer = serializers.UserSerializer(instance=user, data=request.data, partial=True)
 		serializer.is_valid(raise_exception=True)
 		serializer.save()
