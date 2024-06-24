@@ -76,22 +76,4 @@ class UserSerializer(serializers.ModelSerializer):
 		password = validated_data.get('password', None)
 		if username is not None:
 			if not valid_username(username):
-				raise serializers.ValidationError({'detail': "username contains invalid characters"})
-			instance.username = username
-		if password is not None:
-			try:
-				validate_password(password, user=instance)
-			except ValidationError as e:
-				raise serializers.ValidationError({'detail': e.messages})
-			instance.set_password(password)
-
-		instance.save()
-		return instance
-
-
-def valid_username(username):
-
-	for char in username:
-		if not (char.isalpha() or char == '_'):
-			return False
-	return True
+				raise

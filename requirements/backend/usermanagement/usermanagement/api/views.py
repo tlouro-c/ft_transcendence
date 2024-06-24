@@ -210,4 +210,4 @@ class UnblockUserView(APIView):
 			blocking.delete()
 			return Response({'Success':'User successfully unblocked'}, 201)
 		except:
-			return Response({'Error': 'You dont have this user blocked'}, 400)
+			return Response(
