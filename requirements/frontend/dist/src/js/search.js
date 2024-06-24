@@ -112,8 +112,4 @@ export async function loadSearchResults(form) {
 					});
 				}
 			}
-			resultsList.appendChild(userEntry);
-		}
-	});
-
-}
+			resultsList.appen

@@ -55,43 +55,27 @@ class UserSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 		password = validated_data.pop('password', None)
-		username = validated_data.pop('username', None)
 		user_instance = self.Meta.model(**validated_data)
-		if username is not None:
-			if not valid_username(username):
-				raise serializers.ValidationError({'detail': "username contains invalid characters"})
 		if password is not None:
 			try:
 				validate_password(password, user=user_instance)
 			except ValidationError as e:
-				raise serializers.ValidationError({'detail': e.messages})
+				raise serializers.ValidationError({'password': e.messages})
 			user_instance.set_password(password)
 		user_instance.save()
 		return user_instance
 
 	def update(self, instance, validated_data):
+		instance.username = validated_data.get('username', instance.username)
 		instance.avatar = validated_data.get('avatar', instance.avatar)
 		
-		username = validated_data.get('username', None)
 		password = validated_data.get('password', None)
-		if username is not None:
-			if not valid_username(username):
-				raise serializers.ValidationError({'detail': "username contains invalid characters"})
-			instance.username = username
 		if password is not None:
 			try:
 				validate_password(password, user=instance)
 			except ValidationError as e:
-				raise serializers.ValidationError({'detail': e.messages})
+				raise serializers.ValidationError({'password': e.messages})
 			instance.set_password(password)
 
 		instance.save()
 		return instance
-
-
-def valid_username(username):
-
-	for char in username:
-		if not (char.isalpha() or char == '_'):
-			return False
-	return True

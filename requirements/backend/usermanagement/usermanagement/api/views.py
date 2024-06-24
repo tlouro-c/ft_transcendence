@@ -15,6 +15,9 @@ from django.core.exceptions import ValidationError
 
 class RegisterView(APIView):
 	def post(self, request):
+		username = request.data.get('username')
+		if not valid_username(username):
+			return Response({'Error': 'username can only contain letters and _'}, 400)
 		new_user = serializers.UserSerializer(data=request.data)
 		new_user.is_valid(raise_exception=True)
 		new_user.save()
@@ -211,3 +214,11 @@ class UnblockUserView(APIView):
 			return Response({'Success':'User successfully unblocked'}, 201)
 		except:
 			return Response({'Error': 'You dont have this user blocked'}, 400)
+
+
+def valid_username(username):
+
+	for char in username:
+		if not (char.isalpha() or char == '_'):
+			return False
+	return True

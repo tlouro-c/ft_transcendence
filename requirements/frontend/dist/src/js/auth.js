@@ -3,10 +3,15 @@ import { elements, capitalizeFirstLetter, loadPage, getTokensObj, API, handleNav
 async function proccessAuthForm(url, form, type) {
 
 	const formData = new FormData(form);
-	const username = formData.get('username').trim();
+	const username = formData.get('username');
 	const password = formData.get('password');
 	const confirmPassword = formData.get('confirm-password');
+	let errorList = [];
 
+	if (/\s/.test(username)) {
+		alert("Username cannot contain spaces.");
+		return ;
+	}
 	if (username.length == 0 || password.length == 0 ||
 		(confirmPassword && confirmPassword.length == 0)) {
 			alert("Empty field(s).")
@@ -35,9 +40,17 @@ async function proccessAuthForm(url, form, type) {
 			});
 
 			json = await response.json();
-			console.log(json);
+			if (response.status >= 400) {
+				Object.keys(json).forEach(key => {
+					if (Array.isArray(json[key])) {
+						errorList.push(json[key][0]);
+					} else {
+						errorList.push(json[key]);
+					}
+				});
+			}
 		}
-		if (errorText || json.detail || (response.status >= 400 && (json.username ||  json.password))) {
+		if (errorText || response.status >= 400) {
 			let errorP;
 			const passwordBox = document.getElementById(type + '-password-box');
 			if (!document.querySelector('#' + type + '-password-box p')) {
@@ -45,8 +58,8 @@ async function proccessAuthForm(url, form, type) {
 			} else {
 				errorP = document.querySelector('#' + type + '-password-box p');
 			}
-			errorP.textContent = capitalizeFirstLetter(errorText || json.detail 
-				|| (json.username ? json.username[0] : json.password[0]));
+			errorP.textContent = capitalizeFirstLetter(errorText
+				|| errorList[0] || "An error occurred.");
 			errorP.classList.add("temporary-message");
 			errorP.classList.add("p-2");
 			errorP.classList.add("m-0");
