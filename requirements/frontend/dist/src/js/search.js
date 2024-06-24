@@ -112,4 +112,8 @@ export async function loadSearchResults(form) {
 					});
 				}
 			}
-			resultsList.appen
+			resultsList.appendChild(userEntry);
+		}
+	});
+
+}
