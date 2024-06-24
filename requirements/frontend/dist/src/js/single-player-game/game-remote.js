@@ -296,16 +296,9 @@ export class RemoteGame{
 	}
 
 	CheckKeyInputs() {
-		let moveDown = false;
-		let moveUp = false;
+		let moveDown = this.playerInput.down;
+		let moveUp = this.playerInput.up;
 
-		if (this.playerInput.keys.length > 0 )
-		{
-			if (this.playerInput.keys[0] == 'a')
-				moveUp = true;
-			if (this.playerInput.keys[0] == 'd')
-				moveDown = true
-		}
 		this.GameUpdate(moveUp,moveDown)
 	}
 
