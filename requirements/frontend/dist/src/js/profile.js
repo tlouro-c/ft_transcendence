@@ -232,4 +232,38 @@ export async function updateUserAvatar() {
 			body: formData
 		})
 		if (response.status >= 400) {
-			if (
+			if (response.status == 413) {
+				alert ("The image must be less than 1 Mb")
+			} else {
+				alert(response.status)
+			}
+		}
+    	modal.hide()
+		handleNavigation("#profile", getUserIdFromToken())
+	}
+	catch (error) {
+		alert(error)
+	}
+}
+
+export async function fetchUserAvatar(url) {
+
+	try {
+		await TokenVerification()
+		const response = await fetch(url, {
+			method: 'GET',
+			credentials: 'include',
+			headers: {
+				'Authorization': `Bearer ${getTokensObj().access}`,
+			},
+		})
+		if (response.status >= 400) {
+			return ('Not Found 404')
+		}
+		const img = await response.blob()
+		return URL.createObjectURL(img)
+	}
+	catch {
+		return ('Not Found 404')
+	}
+}

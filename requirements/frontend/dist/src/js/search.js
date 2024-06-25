@@ -112,4 +112,17 @@ export async function loadSearchResults(form) {
 					blockButton.classList.remove('d-none');
 				}
 			}
-			if
+			if (user != currentUser && !imBlocked && !isBlocked) {
+				if (isFriend) {
+					friendsText.classList.remove('d-none');
+				} else if (user.pending_friends.find((friend) => friend.id == currentUser.id)) {
+					sentText.classList.remove('d-none');
+				} else {
+					addFriendButton.classList.remove('d-none')
+				}
+			}
+			resultsList.appendChild(userEntry);
+		}
+	});
+
+}
