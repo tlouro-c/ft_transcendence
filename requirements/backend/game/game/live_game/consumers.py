@@ -273,15 +273,15 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 		)
 		await self.accept()
 
-		self.users_in_room.append(user)
-
-		user_count = len(self.users_in_room)
-		if self.available == False:
+		if self.__class__.available == False:
 			await self.send(text_data=json.dumps({
 				'type':'info',
 				'info':'Wait, the tournament has already started, try again later'
 	 		}))
-		elif user_count < 4:
+			return
+		self.users_in_room.append(user)
+		user_count = len(self.users_in_room)
+		if user_count < 4:
 			await self.channel_layer.group_send(self.group_room_name,
 			{
 				"type": "info",
@@ -315,7 +315,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 		if user in self.users_in_room:
 			self.users_in_room.remove(user)
 		user_count = len(self.users_in_room)
-		if self.available:
+		if self.__class__.available:
 			await self.channel_layer.group_send(self.group_room_name,
 			{
 				"type": "info",
