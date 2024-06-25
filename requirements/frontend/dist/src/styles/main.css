@@ -218,4 +218,6 @@ div.active {
 }
 
 .game-date, .game-result {
-	font-si
+	font-size: 0.6em;
+}
+
