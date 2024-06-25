@@ -88,11 +88,6 @@ class UserView(APIView):
 
 		if user.id != user_id_from_token(request):
 			return Response({'Error': 'Unauthorized'}, 401)
-		
-		if 'avatar' in self.request.data and user.avatar.name != 'avatars/default.jpg':
-			path = 'media/' + user.avatar.name
-			if (os.path.exists(path)):
-				os.remove(path)
 		if 'username' in self.request.data:
 			if not valid_username(self.request.data['username']):
 				return Response({'detail': 'username can only contain letters and _'}, 400)
