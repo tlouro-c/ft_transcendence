@@ -16,9 +16,8 @@ export async function friendFunction(userId, action, successFunction = () => {})
 			},
 		});
 		if (response.status >= 400) {
-			alert(response.status);
-		}
-		else {
+			alert(await response.json());
+		} else {
 			successFunction();
 		}
 	}
