@@ -410,4 +410,14 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 	
 	@database_sync_to_async
 	def set_final(self, winner):
-		tournament = Tournament.objec
+		tournament = Tournament.objects.get(id=self.tournament_db_id)
+		tournament.final_winner = winner
+		tournament.save()
+
+	@database_sync_to_async
+	def final_ready(self):
+		tournament = Tournament.objects.get(id=self.tournament_db_id)
+		if tournament.semi_final_1_winner is not None and tournament.semi_final_2_winner is not None:
+			return True
+		else:
+			return False

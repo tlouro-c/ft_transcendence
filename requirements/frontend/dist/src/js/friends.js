@@ -16,7 +16,12 @@ export async function friendFunction(userId, action, successFunction = () => {})
 			},
 		});
 		if (response.status >= 400) {
-			alert(await response.json());
+			if  (response.status == 404) {
+				alert("(User) / (Friend Request) not found.");
+			} else {
+				console.log(await response.json());
+				alert("An error occurred. Check the console.")
+			}
 		} else {
 			successFunction();
 		}
