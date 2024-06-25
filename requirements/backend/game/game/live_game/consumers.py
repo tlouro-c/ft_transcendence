@@ -315,13 +315,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 		if user in self.users_in_room:
 			self.users_in_room.remove(user)
 		user_count = len(self.users_in_room)
-		if self.__class__.available:
+		if self.__class__.available and 0 < user_count < 4:
 			await self.channel_layer.group_send(self.group_room_name,
 			{
 				"type": "info",
 				"info": f'Wait, you need {4 - user_count} more {"player" if user_count == 3 else "players"}',
 			})
-		if user_count == 0:
+		elif user_count == 0:
 			self.__class__.available = True
 
 	async def receive(self, text_data):
@@ -339,13 +339,22 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 				}))
 			else:
 				await self.set_semi_finals(winner)
-				if await self.final_ready():
+				if await self.final_ready() and len(self.users_in_room) > 1:
 					await self.channel_layer.group_send(self.group_room_name,
 					{
 						"type": "info",
 						"info": "final",
 						"game_1_user_1": self.users_in_room[0],
 						"game_1_user_2": self.users_in_room[1],
+					})
+				elif len(self.users_in_room) == 1:
+					winner = list(self.users_in_room)[0]
+					await self.set_final(winner)
+					await self.channel_layer.group_send(self.group_room_name,
+					{
+						"type": "info",
+						"info": "The tournament has ended",
+						"winner": winner
 					})
 				else:
 					await self.send(text_data=json.dumps({
