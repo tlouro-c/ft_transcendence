@@ -4,7 +4,7 @@ import { loadProfilePage } from "./profile.js";
 import { getUserIdFromToken } from "./utils.js";
 
 
-async function friendFunction(userId, action, successFunction = () => {}) {
+export async function friendFunction(userId, action, successFunction = () => {}) {
 
 	try {
 		await TokenVerification();

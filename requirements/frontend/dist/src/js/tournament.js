@@ -34,7 +34,7 @@ export async function monitorTournament() {
 						const dynamicText = elements.waitingPageTournament.querySelector(".dynamic-text")
 						dynamicText.textContent = messageObj.info
 					} else if (messageObj.info.startsWith("Wait")) {
-						loadPage(elements.waitingPageTournament)							
+						loadPage(elements.waitingPageTournament)						
 						const dynamicText = elements.waitingPageTournament.querySelector(".dynamic-text")
 						dynamicText.textContent = messageObj.info
 					} else {
