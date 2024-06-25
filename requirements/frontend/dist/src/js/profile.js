@@ -235,7 +235,7 @@ export async function updateUserAvatar() {
 			if (response.status == 413) {
 				alert ("The image must be less than 1 Mb")
 			} else {
-				alert(response.status)
+				alert ("An error occurred, invalid image.")
 			}
 		}
     	modal.hide()
