@@ -1,7 +1,7 @@
 # ft_transcendence
 
 ## Introduction
-Multiplayer FullStack Website.
+Multiplayer Pong FullStack Website, with User Login, Friends, Real Time Chat & Remote Pong.
 
 ## How to Run
 To run the project, follow these steps:
