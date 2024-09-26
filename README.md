@@ -1,7 +1,7 @@
 # ft_transcendence
 
 ## Introduction
-This project is a work in progress.
+Multiplayer FullStack Website.
 
 ## How to Run
 To run the project, follow these steps:
